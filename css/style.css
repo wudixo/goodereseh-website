@@ -245,80 +245,123 @@ nav a {
 
 }
 
-/* Artwork Detail Page */
+/* Luxury Artwork Detail Page */
 
 .artwork-detail {
     min-height: 100vh;
-    padding: 160px 80px 80px;
+    padding: 140px 8%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 70px;
     align-items: center;
+}
+
+
+/* Artwork Display */
+
+.artwork-image {
+    display: flex;
+    justify-content: center;
 }
 
 
 .artwork-image img {
     width: 100%;
-    max-height: 750px;
+    max-width: 700px;
+    max-height: 800px;
     object-fit: contain;
 }
 
 
+/* Artwork Information */
+
+.artwork-info {
+    max-width: 500px;
+}
+
+
 .artwork-info h1 {
-    font-size: 60px;
-    letter-spacing: 8px;
-    margin-bottom: 30px;
+    font-size: 64px;
+    font-weight: 300;
+    letter-spacing: 10px;
+    margin-bottom: 35px;
 }
 
 
 .artwork-info p {
     font-size: 18px;
-    line-height: 1.8;
-    color: #cccccc;
-    margin-bottom: 25px;
+    line-height: 1.9;
+    color: #d0d0d0;
 }
 
 
 .artwork-info h3 {
-    margin-top: 25px;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
-    font-size: 16px;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #999;
 }
 
 
+/* Purchase Button */
+
 .artwork-info button {
-    margin-top: 40px;
-    padding: 18px 45px;
+
+    margin-top: 45px;
+
+    padding: 18px 50px;
+
     background: transparent;
+
     border: 1px solid white;
+
     color: white;
-    font-size: 16px;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
     cursor: pointer;
-    transition: 0.3s;
+
+    transition: 0.4s;
+
 }
 
 
 .artwork-info button:hover {
+
     background: white;
+
     color: black;
+
 }
 
 
-/* Mobile Artwork Page */
+/* Mobile */
 
 @media (max-width: 900px) {
 
+
     .artwork-detail {
+
         grid-template-columns: 1fr;
-        padding: 130px 25px 60px;
-        gap: 40px;
+
+        padding: 120px 30px 60px;
+
+        gap: 50px;
+
     }
 
 
     .artwork-info h1 {
-        font-size: 40px;
-        letter-spacing: 4px;
+
+        font-size: 42px;
+
+        letter-spacing: 5px;
+
     }
+
 
 }
