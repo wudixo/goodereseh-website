@@ -249,51 +249,53 @@ nav a {
 
 .artwork-detail {
     min-height: 100vh;
-    padding: 130px 60px 70px;
+    padding: 160px 80px 80px;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 50px;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
     align-items: center;
 }
 
 
 .artwork-image img {
     width: 100%;
-    max-height: 650px;
+    max-height: 750px;
     object-fit: contain;
 }
 
 
 .artwork-info h1 {
-    font-size: 48px;
-    letter-spacing: 6px;
-    margin-bottom: 20px;
+    font-size: 60px;
+    letter-spacing: 8px;
+    margin-bottom: 30px;
 }
 
 
 .artwork-info p {
-    font-size: 17px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 1.8;
     color: #cccccc;
-    margin-bottom: 18px;
+    margin-bottom: 25px;
 }
 
 
 .artwork-info h3 {
-    margin-top: 18px;
-    margin-bottom: 5px;
-    letter-spacing: 1.5px;
-    font-size: 15px;
+    margin-top: 25px;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    font-size: 16px;
 }
 
 
 .artwork-info button {
-    margin-top: 30px;
-    padding: 15px 35px;
+    margin-top: 40px;
+    padding: 18px 45px;
     background: transparent;
     border: 1px solid white;
     color: white;
+    font-size: 16px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 
@@ -303,17 +305,20 @@ nav a {
 }
 
 
+/* Mobile Artwork Page */
+
 @media (max-width: 900px) {
 
     .artwork-detail {
         grid-template-columns: 1fr;
-        padding: 120px 25px 50px;
-        gap: 35px;
+        padding: 130px 25px 60px;
+        gap: 40px;
     }
 
 
     .artwork-info h1 {
-        font-size: 38px;
+        font-size: 40px;
+        letter-spacing: 4px;
     }
 
 }
