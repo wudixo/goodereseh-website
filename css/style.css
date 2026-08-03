@@ -15,10 +15,21 @@ body {
 /* Navigation */
 
 header {
-    position: absolute;
-    width: 100%;
+
+    position: fixed;
+
     top: 0;
-    z-index: 10;
+
+    width: 100%;
+
+    z-index: 1000;
+
+    background: rgba(0,0,0,0.75);
+
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
 }
 
 
@@ -31,8 +42,22 @@ nav {
 
 
 .logo {
+
     font-size: 24px;
-    letter-spacing: 4px;
+
+    letter-spacing: 5px;
+
+    font-weight: 600;
+
+}
+
+
+.logo a {
+
+    color: white;
+
+    text-decoration: none;
+
 }
 
 
@@ -44,12 +69,54 @@ nav ul {
 
 
 nav a {
+
     color: white;
+
     text-decoration: none;
+
     font-size: 15px;
-    letter-spacing: 1px;
+
+    letter-spacing: 2px;
+
+    position: relative;
+
+    transition: color 0.3s;
+
 }
 
+nav a::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -8px;
+
+    width: 0;
+
+    height: 2px;
+
+    background: #b89c5e;
+
+    transition: width 0.3s;
+
+}
+
+
+nav a:hover {
+
+    color: #b89c5e;
+
+}
+
+
+nav a:hover::after {
+
+    width: 100%;
+
+}
 
 /* Hero Section */
 
@@ -165,5 +232,775 @@ nav a {
     .buttons a {
         text-align: center;
     }
+
+}
+
+/* Gallery Page */
+
+.gallery-page {
+    padding: 160px 60px 80px;
+    background: #000;
+    min-height: 100vh;
+}
+
+
+.gallery-page h1 {
+    text-align: center;
+    font-size: 60px;
+    letter-spacing: 8px;
+    margin-bottom: 80px;
+}
+
+
+.art-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+
+.art-card {
+    background: #111;
+    padding-bottom: 30px;
+    transition: transform 0.4s;
+}
+
+
+.art-card:hover {
+    transform: translateY(-10px);
+}
+
+
+.art-card img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+
+.art-card h2 {
+    margin: 25px 25px 10px;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+
+.art-card p {
+    margin: 0 25px;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+
+/* Mobile gallery */
+
+@media (max-width: 900px) {
+
+    .art-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .gallery-page {
+        padding: 130px 25px 60px;
+    }
+
+
+    .gallery-page h1 {
+        font-size: 40px;
+    }
+
+}
+
+/* Luxury Artwork Detail Page */
+
+.artwork-detail {
+    min-height: 100vh;
+    padding: 140px 8%;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 70px;
+    align-items: center;
+}
+
+
+/* Artwork Display */
+
+.artwork-image {
+    display: flex;
+    justify-content: center;
+}
+
+
+.artwork-image img {
+    width: 100%;
+    max-width: 700px;
+    max-height: 800px;
+    object-fit: contain;
+}
+
+
+/* Artwork Information */
+
+.artwork-info {
+    max-width: 500px;
+}
+
+
+.artwork-info h1 {
+    font-size: 64px;
+    font-weight: 300;
+    letter-spacing: 10px;
+    margin-bottom: 35px;
+}
+
+
+.artwork-info p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #d0d0d0;
+}
+
+
+.artwork-info h3 {
+    margin-top: 35px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #999;
+}
+
+
+/* Purchase Button */
+
+.artwork-info button {
+
+    margin-top: 45px;
+
+    padding: 18px 50px;
+
+    background: transparent;
+
+    border: 1px solid white;
+
+    color: white;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.4s;
+
+}
+
+
+.artwork-info button:hover {
+
+    background: white;
+
+    color: black;
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 900px) {
+
+
+    .artwork-detail {
+
+        grid-template-columns: 1fr;
+
+        padding: 120px 30px 60px;
+
+        gap: 50px;
+
+    }
+
+
+    .artwork-info h1 {
+
+        font-size: 42px;
+
+        letter-spacing: 5px;
+
+    }
+
+
+}
+
+.purchase-button {
+
+    display: inline-block;
+
+    margin-top: 45px;
+
+    padding: 18px 50px;
+
+    background: transparent;
+
+    border: 1px solid white;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    transition: 0.4s;
+
+}
+
+
+.purchase-button:hover {
+
+    background: white;
+
+    color: black;
+
+}
+
+/* Contact Page */
+
+.contact-page {
+
+    min-height: 100vh;
+
+    padding: 160px 60px 80px;
+
+    display: flex;
+
+    justify-content: center;
+
+    background: #000;
+
+}
+
+
+.contact-container {
+
+    width: 100%;
+
+    max-width: 700px;
+
+}
+
+
+.contact-container h1 {
+
+    text-align: center;
+
+    font-size: 60px;
+
+    letter-spacing: 8px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.contact-container p {
+
+    text-align: center;
+
+    color: #cccccc;
+
+    line-height: 1.8;
+
+    margin-bottom: 50px;
+
+}
+
+
+
+.contact-container form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+
+
+.contact-container label {
+
+    font-size: 14px;
+
+    letter-spacing: 2px;
+
+    margin-top: 15px;
+
+}
+
+
+
+.contact-container input,
+
+.contact-container textarea {
+
+    width: 100%;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    color: white;
+
+    padding: 18px;
+
+    font-size: 16px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+
+.contact-container textarea {
+
+    min-height: 180px;
+
+    resize: vertical;
+
+}
+
+
+
+.contact-container input:focus,
+
+.contact-container textarea:focus {
+
+    outline: none;
+
+    border-color: white;
+
+}
+
+
+
+.contact-container button {
+
+    margin-top: 30px;
+
+    padding: 18px 45px;
+
+    background: transparent;
+
+    border: 1px solid white;
+
+    color: white;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
+
+
+.contact-container button:hover {
+
+    background: white;
+
+    color: black;
+
+}
+
+
+
+/* Mobile Contact Page */
+
+@media (max-width: 900px) {
+
+
+    .contact-page {
+
+        padding: 130px 25px 60px;
+
+    }
+
+
+    .contact-container h1 {
+
+        font-size: 40px;
+
+        letter-spacing: 5px;
+
+    }
+
+}
+
+.contact-container select {
+
+    width: 100%;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    color: white;
+
+    padding: 18px;
+
+    font-size: 16px;
+
+}
+
+
+.contact-container select:focus {
+
+    outline: none;
+
+    border-color: white;
+
+}
+
+/* Thank You Page */
+
+.thank-you-page {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 160px 30px 80px;
+
+    background: #000;
+
+}
+
+
+.thank-you-container {
+
+    max-width: 750px;
+
+    width: 100%;
+
+    background: #111;
+
+    border: 1px solid #2a2a2a;
+
+    padding: 80px 60px;
+
+    text-align: center;
+
+}
+
+
+.thank-you-container h1 {
+
+    font-size: 64px;
+
+    letter-spacing: 8px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.thank-you-container p {
+
+    font-size: 20px;
+
+    line-height: 1.8;
+
+    color: #bdbdbd;
+
+    margin-bottom: 20px;
+
+}
+
+
+.thank-you-container a {
+
+    display: inline-block;
+
+    margin-top: 40px;
+
+    padding: 18px 45px;
+
+    border: 1px solid white;
+
+    color: white;
+
+    text-decoration: none;
+
+    letter-spacing: 2px;
+
+    transition: 0.3s;
+
+}
+
+
+.thank-you-container a:hover {
+
+    background: white;
+
+    color: black;
+
+}
+
+/* Footer */
+
+footer {
+
+    background: #0a0a0a;
+
+    border-top: 1px solid #222;
+
+    margin-top: 100px;
+
+}
+
+
+.footer-container {
+
+    max-width: 1400px;
+
+    margin: auto;
+
+    padding: 70px 60px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 60px;
+
+}
+
+
+.footer-brand h2 {
+
+    font-size: 26px;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.footer-brand p,
+.footer-contact p {
+
+    color: #999;
+
+    line-height: 1.8;
+
+}
+
+
+.footer-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+.footer-links a {
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+
+}
+
+
+.footer-links a:hover {
+
+    color: #b89c5e;
+
+}
+
+
+.footer-bottom {
+
+    border-top: 1px solid #222;
+
+    text-align: center;
+
+    padding: 25px;
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .footer-container {
+
+        grid-template-columns: 1fr;
+
+        text-align: center;
+
+        padding: 50px 30px;
+
+    }
+
+}
+
+/* Footer Styling */
+
+footer {
+
+    background: #0a0a0a;
+
+    border-top: 1px solid #222;
+
+    margin-top: 100px;
+
+}
+
+
+
+.footer-container {
+
+    max-width: 1400px;
+
+    margin: auto;
+
+    padding: 70px 60px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 60px;
+
+}
+
+
+
+.footer-brand h2 {
+
+    font-size: 28px;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.footer-brand h2 a {
+
+    color: white;
+
+    text-decoration: none;
+
+}
+
+
+
+.footer-brand h2 a:hover {
+
+    color: #b89c5e;
+
+}
+
+
+
+.footer-brand p,
+.footer-contact p {
+
+    color: #999;
+
+    line-height: 1.8;
+
+}
+
+
+
+.footer-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+
+.footer-links a {
+
+    color: white;
+
+    text-decoration: none;
+
+    letter-spacing: 1px;
+
+    transition: 0.3s;
+
+}
+
+
+
+.footer-links a:hover {
+
+    color: #b89c5e;
+
+}
+
+
+
+.footer-bottom {
+
+    border-top: 1px solid #222;
+
+    text-align: center;
+
+    padding: 25px;
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+
+@media (max-width: 900px) {
+
+
+.footer-container {
+
+    grid-template-columns: 1fr;
+
+    text-align: center;
+
+    padding: 50px 30px;
+
+}
+
 
 }
