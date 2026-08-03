@@ -356,9 +356,17 @@ nav a:hover::after {
 
 
 .artwork-info p {
+
     font-size: 18px;
+
     line-height: 1.9;
-    color: #d0d0d0;
+
+    color: #cccccc;
+
+    margin-bottom: 35px;
+
+    max-width: 650px;
+
 }
 
 
