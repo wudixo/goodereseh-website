@@ -6,7 +6,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Contact | Good Ereseh</title>
+<title>
+Contact | Good Ereseh
+</title>
+
+<meta name="description" content="Contact Good Ereseh for original charcoal artwork purchases, limited edition prints and personalised portrait commissions.">
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -21,7 +25,11 @@
 <nav>
 
 <div class="logo">
-<a href="index.html">GOOD ERESEH</a>
+
+<a href="index.html">
+GOOD ERESEH
+</a>
+
 </div>
 
 
@@ -45,6 +53,11 @@
 
 
 
+
+
+<main>
+
+
 <section class="contact-page">
 
 
@@ -62,10 +75,13 @@ Interested in purchasing an artwork or requesting a commission? Send a message a
 
 
 
+
 <form id="contactForm" action="https://formspree.io/f/xdaqqeqv" method="POST">
 
 
-<input type="hidden" name="_next" value="https://wudixo.github.io/goodereseh-website/thank-you.html">
+<input type="hidden" name="_next" value="https://wudixo.github.io/goodereseh-website/contact-success.html">
+
+
 
 
 
@@ -73,11 +89,16 @@ Interested in purchasing an artwork or requesting a commission? Send a message a
 Name
 </label>
 
+
 <input 
 type="text" 
 name="name" 
-placeholder="Your name" 
+placeholder="Your name"
+autocomplete="name"
 required>
+
+
+
 
 
 
@@ -85,25 +106,44 @@ required>
 Artwork
 </label>
 
+
 <select id="artwork" name="artwork">
+
 
 <option value="">
 Select artwork
 </option>
 
-<option value="Reflections: Original Hyperrealistic Eye Drawing">
+
+<option value="Fela Kuti Original Hand-Drawn Portrait">
+Fela Kuti Original Portrait
+</option>
+
+
+<option value="The Stance Original Charcoal Portrait">
+The Stance
+</option>
+
+
+<option value="Reflections Original Hyperrealistic Eye Drawing">
 Reflections
 </option>
 
-<option value="Fragments of Thought: Abstract Charcoal Figure Study">
+
+<option value="Fragments of Thought Abstract Charcoal Figure Study">
 Fragments of Thought
 </option>
+
 
 <option value="Commission Request">
 Commission Request
 </option>
 
+
 </select>
+
+
+
 
 
 
@@ -111,11 +151,16 @@ Commission Request
 Email
 </label>
 
+
 <input 
 type="email" 
 name="email" 
-placeholder="Your email" 
+placeholder="Your email"
+autocomplete="email"
 required>
+
+
+
 
 
 
@@ -123,10 +168,15 @@ required>
 Phone Number (Optional)
 </label>
 
+
 <input 
 type="tel" 
 name="phone" 
-placeholder="Your phone number">
+placeholder="Your phone number"
+autocomplete="tel">
+
+
+
 
 
 
@@ -134,17 +184,24 @@ placeholder="Your phone number">
 Enquiry Type
 </label>
 
+
 <select name="enquiry_type">
+
 
 <option>
 Purchase Existing Artwork
 </option>
 
+
 <option>
 Commission New Artwork
 </option>
 
+
 </select>
+
+
+
 
 
 
@@ -152,29 +209,39 @@ Commission New Artwork
 Preferred Artwork Size
 </label>
 
+
 <select name="size">
+
 
 <option>
 A4
 </option>
 
+
 <option>
 A3
 </option>
+
 
 <option>
 A2
 </option>
 
+
 <option>
 A1
 </option>
+
 
 <option>
 Custom Size
 </option>
 
+
 </select>
+
+
+
 
 
 
@@ -182,25 +249,34 @@ Custom Size
 Budget Range
 </label>
 
+
 <select name="budget">
+
 
 <option>
 Under £250
 </option>
 
+
 <option>
 £250 - £500
 </option>
+
 
 <option>
 £500 - £1000
 </option>
 
+
 <option>
 £1000+
 </option>
 
+
 </select>
+
+
+
 
 
 
@@ -208,17 +284,22 @@ Under £250
 Message
 </label>
 
+
 <textarea 
-name="message" 
+name="message"
 placeholder="Tell me about your request"
 required>
 </textarea>
 
 
 
+
+
+
 <button type="submit">
 Send Enquiry
 </button>
+
 
 
 </form>
@@ -230,86 +311,119 @@ Send Enquiry
 </section>
 
 
+</main>
 
-<script src="js/app.js"></script>
+
+
 
 
 
 <footer>
+
 
 <div class="footer-container">
 
 
 <div class="footer-brand">
 
+
 <h2>
+
 <a href="index.html">
 GOOD ERESEH
 </a>
+
 </h2>
 
+
 <p>
-Hyperrealistic Charcoal and Graphite Pencil Artist
+Hyperrealistic charcoal and graphite artist creating original works focused on identity, emotion and human stories.
 </p>
 
+
 </div>
+
+
 
 
 
 <div class="footer-links">
 
+
 <a href="index.html">
 Home
 </a>
+
 
 <a href="gallery.html">
 Gallery
 </a>
 
+
 <a href="about.html">
 About
 </a>
+
 
 <a href="commissions.html">
 Commissions
 </a>
 
+
 <a href="contact.html">
 Contact
 </a>
 
+
 </div>
+
+
 
 
 
 <div class="footer-contact">
 
+
 <p>
 London, United Kingdom
 </p>
 
+
 <p>
-Email: art@goodereseh.com
+
+<a href="mailto:art@goodereseh.com">
+art@goodereseh.com
+</a>
+
 </p>
 
+
 </div>
 
 
 </div>
+
+
 
 
 
 <div class="footer-bottom">
 
+
 <p>
 © 2026 Good Ereseh. All Rights Reserved.
 </p>
+
 
 </div>
 
 
 </footer>
 
+
+
+
+<script src="js/app.js"></script>
 
 
 </body>
