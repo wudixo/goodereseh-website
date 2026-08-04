@@ -97,12 +97,10 @@ app.post("/create-checkout-session", async (req, res) => {
 
 
             success_url:
-            "http://127.0.0.1:5500/success.html",
+"https://goodereseh.com/success.html",
 
-
-
-            cancel_url:
-            "http://127.0.0.1:5500/purchase/purchase.html"
+cancel_url:
+"https://goodereseh.com/cancel.html"
 
 
 
