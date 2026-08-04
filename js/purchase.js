@@ -167,7 +167,7 @@ try{
 
 const response = await fetch(
 
-"http://localhost:3000/create-checkout-session",
+"goodereseh-website-production.up.railway.app",
 
 {
 
