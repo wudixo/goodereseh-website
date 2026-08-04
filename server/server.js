@@ -77,7 +77,6 @@ async function sendOrderEmails(order) {
         });
 
 
-
         console.log("Order emails sent successfully");
 
 
@@ -95,8 +94,7 @@ async function sendOrderEmails(order) {
 
 /*
 Stripe Webhook
-IMPORTANT:
-This must come before express.json()
+Must come before express.json()
 */
 
 app.post(
@@ -106,7 +104,6 @@ app.post(
 
 
         const signature = req.headers["stripe-signature"];
-
 
         let event;
 
@@ -138,7 +135,6 @@ app.post(
                 `Webhook Error: ${error.message}`
             );
 
-
         }
 
 
@@ -161,19 +157,26 @@ app.post(
 
 
                 name:
-                session.metadata.name,
+                session.metadata.name ||
+                session.customer_details?.name ||
+                "Customer",
 
 
                 email:
-                session.metadata.email,
+                session.metadata.email ||
+                session.customer_details?.email,
 
 
                 phone:
-                session.metadata.phone,
+                session.metadata.phone ||
+                session.customer_details?.phone ||
+                "Not provided",
 
 
                 address:
-                session.metadata.address
+                session.metadata.address ||
+                session.customer_details?.address?.line1 ||
+                "Not provided"
 
 
             };
@@ -188,7 +191,9 @@ app.post(
 
 
         res.json({
+
             received:true
+
         });
 
 
@@ -216,6 +221,7 @@ app.get("/", (req,res)=>{
 
 
 });
+
 
 
 
@@ -290,7 +296,24 @@ app.post("/create-checkout-session", async(req,res)=>{
 
 
 
+
             mode:"payment",
+
+
+
+            customer_email: email,
+
+
+
+            billing_address_collection:"required",
+
+
+
+            phone_number_collection:{
+
+                enabled:true
+
+            },
 
 
 
@@ -298,10 +321,15 @@ app.post("/create-checkout-session", async(req,res)=>{
 
 
                 artwork,
+
                 price,
+
                 name,
+
                 email,
+
                 phone,
+
                 address
 
 
@@ -324,6 +352,7 @@ app.post("/create-checkout-session", async(req,res)=>{
 
 
 
+
         res.json({
 
             url:session.url
@@ -332,10 +361,12 @@ app.post("/create-checkout-session", async(req,res)=>{
 
 
 
+
     } catch(error){
 
 
         console.log(error);
+
 
 
         res.status(500).json({
@@ -349,6 +380,7 @@ app.post("/create-checkout-session", async(req,res)=>{
 
 
 });
+
 
 
 
