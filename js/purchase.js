@@ -166,9 +166,7 @@ try{
 
 
 const response = await fetch(
-
-"goodereseh-website-production.up.railway.app",
-
+"https://goodereseh-website-production.up.railway.app/create-checkout-session",
 {
 
 
