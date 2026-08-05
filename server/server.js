@@ -20,9 +20,21 @@ const sendOrderEmails = require("./services/email");
 
 app.use(
     cors({
-        origin: "https://goodereseh.com",
+        origin: [
+            "https://goodereseh.com",
+            "https://www.goodereseh.com"
+        ],
+        methods: [
+            "GET",
+            "POST",
+            "OPTIONS"
+        ],
+        allowedHeaders: [
+            "Content-Type"
+        ]
     })
 );
+
 
 // ---------------------------------------------------------------------------
 // Stripe webhook MUST be mounted before express.json().
