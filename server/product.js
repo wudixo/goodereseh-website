@@ -24,15 +24,34 @@ document.getElementById("checkout-button");
 
 
 /*
-Display basic product information
+Product information
 
-The real price will come from the server.
-Do not display a price from the URL.
+The server controls:
+- artwork name
+- artwork type
+- price
+
+The browser only sends productId.
 */
 
 
+const productNames = {
+
+    lion_original:
+    "Lion",
+
+    freedom_original:
+    "Freedom",
+
+    hope_original:
+    "Hope"
+
+};
+
+
+
 artworkTitle.innerText =
-productId || "Artwork";
+productNames[productId] || "Artwork";
 
 
 artworkType.innerText =
@@ -40,11 +59,12 @@ artworkType.innerText =
 
 
 artworkSize.innerText =
-"Artwork purchase";
+"Artwork Purchase";
 
 
 artworkPrice.innerText =
 "Price calculated securely at checkout";
+
 
 
 
@@ -144,7 +164,6 @@ method:
 "POST",
 
 
-
 headers:
 {
 
@@ -154,7 +173,6 @@ headers:
 },
 
 
-
 body:
 JSON.stringify(order)
 
@@ -162,6 +180,8 @@ JSON.stringify(order)
 }
 
 );
+
+
 
 
 
@@ -209,6 +229,7 @@ console.error(session);
 
 }
 
+
 catch(error){
 
 
@@ -227,7 +248,6 @@ alert(
 
 checkoutButton.innerText =
 "Proceed To Secure Payment";
-
 
 
 checkoutButton.disabled =
