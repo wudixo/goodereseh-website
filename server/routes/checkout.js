@@ -34,6 +34,12 @@ router.post(
 
             const product = products[productId];
 
+            if (!product.available) {
+    return res.status(400).json({
+        error: "This artwork has already been sold."
+    });
+}
+
 
 
             if(!product){
@@ -148,24 +154,3 @@ router.post(
                 "Checkout error:",
                 error
             );
-
-
-            res.status(500).json({
-
-                error:error.message
-
-            });
-
-
-        }
-
-
-    }
-
-);
-
-
-return router;
-
-
-};
