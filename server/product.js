@@ -4,7 +4,6 @@ const params = new URLSearchParams(window.location.search);
 const productId = params.get("productId");
 
 
-
 const artworkTitle =
 document.getElementById("artwork-title");
 
@@ -37,14 +36,65 @@ The browser only sends productId.
 
 const productNames = {
 
-    lion_original:
-    "Lion",
+    fragments_original:
+    "Fragments of Thought Original Artwork",
 
-    freedom_original:
-    "Freedom",
+    fragments_print_A4:
+    "Fragments of Thought Fine Art Print A4",
 
-    hope_original:
-    "Hope"
+    fragments_print_A3:
+    "Fragments of Thought Fine Art Print A3",
+
+    fragments_print_A2:
+    "Fragments of Thought Fine Art Print A2",
+
+    fragments_print_A1:
+    "Fragments of Thought Fine Art Print A1",
+
+
+    reflections_original:
+    "Reflections Original Artwork",
+
+    reflections_print_A4:
+    "Reflections Fine Art Print A4",
+
+    reflections_print_A3:
+    "Reflections Fine Art Print A3",
+
+    reflections_print_A2:
+    "Reflections Fine Art Print A2",
+
+    reflections_print_A1:
+    "Reflections Fine Art Print A1",
+
+
+    fela_original:
+    "Fela Kuti Original Hand Drawn Portrait",
+
+    fela_print_A4:
+    "Fela Kuti Fine Art Print A4",
+
+    fela_print_A3:
+    "Fela Kuti Fine Art Print A3",
+
+    fela_print_A2:
+    "Fela Kuti Fine Art Print A2",
+
+    fela_print_A1:
+    "Fela Kuti Fine Art Print A1",
+
+
+    the_stance_print_A4:
+    "The Stance Fine Art Print A4",
+
+    the_stance_print_A3:
+    "The Stance Fine Art Print A3",
+
+    the_stance_print_A2:
+    "The Stance Fine Art Print A2",
+
+    the_stance_print_A1:
+    "The Stance Fine Art Print A1"
 
 };
 
@@ -55,11 +105,11 @@ productNames[productId] || "Artwork";
 
 
 artworkType.innerText =
-"Original Artwork";
+"Fine Art Purchase";
 
 
 artworkSize.innerText =
-"Artwork Purchase";
+"Size selected at checkout";
 
 
 artworkPrice.innerText =
@@ -80,7 +130,6 @@ document.getElementById("purchase-form");
 
 const formData =
 new FormData(form);
-
 
 
 
@@ -105,7 +154,6 @@ formData.get("phone"),
 
 address:
 formData.get("address")
-
 
 };
 

@@ -57,12 +57,4 @@ app.use(express.json({
 }));
 app.use(checkoutRoutes(stripe));
 
-app.get("/", (req, res) => {
-    res.send("Good Ereseh Stripe Server is Running");
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Good Ereseh Stripe server running on port ${PORT}`);
-});
+app.g

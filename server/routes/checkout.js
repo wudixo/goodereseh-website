@@ -76,30 +76,22 @@ router.post(
 
                     {
 
-                        price_data:{
+ price_data:{
 
+    currency:"gbp",
 
-                            currency:"gbp",
+    product_data:{
+        name: product.artwork,
+        description: product.type,
+        images:[
+            product.image
+        ]
+    },
 
+    unit_amount:
+        product.price * 100
 
-                            product_data:{
-
-
-                                name: product.artwork,
-
-
-                                description: product.type
-
-
-                            },
-
-
-                            unit_amount:
-
-                            product.price * 100
-
-
-                        },
+},
 
 
                         quantity:1

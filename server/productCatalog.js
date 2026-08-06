@@ -1,156 +1,155 @@
 module.exports = {
 
-    lion_original: {
-        artwork: "Lion",
-        type: "Original Artwork",
-        price: 12000
-    },
-
-
-    freedom_original: {
-        artwork: "Freedom",
-        type: "Original Artwork",
-        price: 25000
-    },
-
-
-    hope_original: {
-        artwork: "Hope",
-        type: "Original Artwork",
-        price: 30000
-    },
-
 
     fragments_original: {
         artwork: "Fragments of Thought",
         type: "Original Abstract Charcoal Artwork",
-        price: 400
+        price: 400,
+        image: "https://goodereseh.com/images/artwork/abstract.jpg"
     },
 
 
     fragments_print_A4: {
         artwork: "Fragments of Thought Fine Art Print A4",
         type: "Limited Edition Fine Art Print",
-        price: 50
+        price: 50,
+        image: "https://goodereseh.com/images/artwork/abstract.jpg"
     },
 
 
     fragments_print_A3: {
         artwork: "Fragments of Thought Fine Art Print A3",
         type: "Limited Edition Fine Art Print",
-        price: 95
+        price: 95,
+        image: "https://goodereseh.com/images/artwork/abstract.jpg"
     },
 
 
     fragments_print_A2: {
         artwork: "Fragments of Thought Fine Art Print A2",
         type: "Limited Edition Fine Art Print",
-        price: 175
+        price: 175,
+        image: "https://goodereseh.com/images/artwork/abstract.jpg"
     },
 
 
     fragments_print_A1: {
         artwork: "Fragments of Thought Fine Art Print A1",
         type: "Limited Edition Fine Art Print",
-        price: 300
+        price: 300,
+        image: "https://goodereseh.com/images/artwork/abstract.jpg"
     },
 
 
     reflections_original: {
         artwork: "Reflections",
         type: "Original Hyperrealistic Eye Drawing",
-        price: 3000
+        price: 3000,
+        image: "https://goodereseh.com/images/artwork/eye.jpg"
     },
 
 
     reflections_print_A4: {
         artwork: "Reflections Fine Art Print A4",
         type: "Limited Edition Fine Art Print",
-        price: 85
+        price: 85,
+        image: "https://goodereseh.com/images/artwork/eye.jpg"
     },
 
 
     reflections_print_A3: {
         artwork: "Reflections Fine Art Print A3",
         type: "Limited Edition Fine Art Print",
-        price: 150
+        price: 150,
+        image: "https://goodereseh.com/images/artwork/eye.jpg"
     },
 
 
     reflections_print_A2: {
         artwork: "Reflections Fine Art Print A2",
         type: "Limited Edition Fine Art Print",
-        price: 275
+        price: 275,
+        image: "https://goodereseh.com/images/artwork/eye.jpg"
     },
 
 
     reflections_print_A1: {
         artwork: "Reflections Fine Art Print A1",
         type: "Limited Edition Fine Art Print",
-        price: 500
+        price: 500,
+        image: "https://goodereseh.com/images/artwork/eye.jpg"
     },
 
 
     fela_original: {
         artwork: "Fela Kuti",
         type: "Original Hand Drawn Portrait",
-        price: 4500
+        price: 4500,
+        image: "https://goodereseh.com/images/artwork/fela.jpg"
     },
 
 
     fela_print_A4: {
         artwork: "Fela Kuti Fine Art Print A4",
         type: "Limited Edition Fine Art Print",
-        price: 95
+        price: 95,
+        image: "https://goodereseh.com/images/artwork/fela.jpg"
     },
 
 
     fela_print_A3: {
         artwork: "Fela Kuti Fine Art Print A3",
         type: "Limited Edition Fine Art Print",
-        price: 175
+        price: 175,
+        image: "https://goodereseh.com/images/artwork/fela.jpg"
     },
 
 
     fela_print_A2: {
         artwork: "Fela Kuti Fine Art Print A2",
         type: "Limited Edition Fine Art Print",
-        price: 325
+        price: 325,
+        image: "https://goodereseh.com/images/artwork/fela.jpg"
     },
 
 
     fela_print_A1: {
         artwork: "Fela Kuti Fine Art Print A1",
         type: "Limited Edition Fine Art Print",
-        price: 550
+        price: 550,
+        image: "https://goodereseh.com/images/artwork/fela.jpg"
     },
 
 
     the_stance_print_A4: {
         artwork: "The Stance Fine Art Print A4",
         type: "Limited Edition Fine Art Print",
-        price: 95
+        price: 95,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg"
     },
 
 
     the_stance_print_A3: {
         artwork: "The Stance Fine Art Print A3",
         type: "Limited Edition Fine Art Print",
-        price: 175
+        price: 175,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg"
     },
 
 
     the_stance_print_A2: {
         artwork: "The Stance Fine Art Print A2",
         type: "Limited Edition Fine Art Print",
-        price: 325
+        price: 325,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg"
     },
 
 
     the_stance_print_A1: {
         artwork: "The Stance Fine Art Print A1",
         type: "Limited Edition Fine Art Print",
-        price: 550
+        price: 550,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg"
     }
 
 };
