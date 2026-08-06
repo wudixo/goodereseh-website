@@ -81,6 +81,7 @@ module.exports = function (stripe, sendOrderEmails) {
                         artwork: metadata.artwork || "",
                         price: metadata.price || "",
                         type: metadata.type || "",
+                        image: metadata.image || "",
                         name: metadata.name || customer.name || "",
                         email: metadata.email || customer.email || "",
                         phone: metadata.phone || customer.phone || "",

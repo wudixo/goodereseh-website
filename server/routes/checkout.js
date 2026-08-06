@@ -102,34 +102,17 @@ router.post(
 
 
 
-                metadata:{
-
-
-                    productId,
-
-
-                    artwork:product.artwork,
-
-
-                    type:product.type,
-
-
-                    price:String(product.price),
-
-
-                    name,
-
-
-                    email,
-
-
-                    phone,
-
-
-                    address:String(address || "")
-
-
-                },
+               metadata:{
+    productId,
+    artwork:product.artwork,
+    type:product.type,
+    price:String(product.price),
+    image:product.image,
+    name,
+    email,
+    phone,
+    address:String(address || "")
+},
 
 
 

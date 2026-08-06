@@ -37,6 +37,7 @@ async function sendOrderEmails(order) {
         artwork: escapeHtml(order.artwork),
         type: escapeHtml(order.type),
         price: escapeHtml(order.price),
+        image: escapeHtml(order.image),
         address: escapeHtml(order.address),
     };
 
@@ -55,8 +56,12 @@ async function sendOrderEmails(order) {
 
             <h3>Artwork Details</h3>
             <p><strong>Artwork:</strong> ${safe.artwork}</p>
+            <strong>Artwork Image:</strong><br>
+<img src="${safe.image}" width="300">
+</p>
             <p><strong>Type:</strong> ${safe.type}</p>
             <p><strong>Amount:</strong> £${safe.price}</p>
+            
 
             <h3>Shipping Address</h3>
             <p>${safe.address}</p>
