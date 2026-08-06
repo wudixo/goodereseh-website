@@ -8,8 +8,6 @@ dotenv.config({
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Basic HTML-escaping so order fields (which ultimately come from customer
-// input at checkout) can't inject markup/HTML into emails we send.
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, (char) => {
         switch (char) {
@@ -84,7 +82,6 @@ async function sendOrderEmails(order) {
         `,
     });
 
-    // Send both independently so one failing doesn't stop/hide the other.
     const [ownerResult, customerResult] = await Promise.allSettled([
         ownerEmail,
         customerEmail,
@@ -103,8 +100,6 @@ async function sendOrderEmails(order) {
     }
 
     if (failures.length > 0) {
-        // Rethrow so the caller (webhook handler) actually knows something
-        // failed, instead of silently swallowing it here.
         throw new Error(`Failed to send email(s) to: ${failures.join(", ")}`);
     }
 
