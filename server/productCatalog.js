@@ -154,4 +154,21 @@ module.exports = {
     },
 
 
-    the_sta
+    the_stance_print_A2: {
+        artwork: "The Stance Fine Art Print A2",
+        type: "Limited Edition Fine Art Print",
+        price: 325,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg",
+        available: true
+    },
+
+
+    the_stance_print_A1: {
+        artwork: "The Stance Fine Art Print A1",
+        type: "Limited Edition Fine Art Print",
+        price: 550,
+        image: "https://goodereseh.com/images/artwork/fela2.jpg",
+        available: true
+    }
+
+};

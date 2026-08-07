@@ -1,4 +1,5 @@
 const express = require("express");
+const supabase = require("../supabase");
 
 const router = express.Router();
 
@@ -51,6 +52,20 @@ module.exports = function (stripe, sendOrderEmails) {
                     const metadata = session.metadata || {};
                     const customer = session.customer_details || {};
                     const shipping = session.shipping_details || {};
+                    const productId = metadata.productId || "";
+
+                    if (productId.endsWith("_original")) {
+                        const { error: availError } = await supabase
+                            .from("artworks")
+                            .update({ available: false })
+                            .eq("id", productId);
+
+                        if (availError) {
+                            console.error("Failed to mark artwork as sold:", availError);
+                        } else {
+                            console.log("Marked original as sold:", productId);
+                        }
+                    }
 
                     let metadataAddress = "";
                     if (metadata.address) {
@@ -72,6 +87,31 @@ module.exports = function (stripe, sendOrderEmails) {
                         phone: metadata.phone || customer.phone || "",
                         address: metadataAddress || formatAddress(shipping.address),
                     };
+
+                    const { error: insertError } = await supabase.from("orders").insert({
+                        stripe_session_id: session.id,
+                        stripe_event_id: event.id,
+                        product_id: productId,
+                        artwork: order.artwork,
+                        type: order.type,
+                        price: order.price,
+                        customer_name: order.name,
+                        customer_email: order.email,
+                        customer_phone: order.phone,
+                        customer_address: order.address,
+                        payment_status: "paid",
+                    });
+
+                    if (insertError) {
+                        if (insertError.code === "23505") {
+                            console.log("Order already stored for this event — skipping email resend:", event.id);
+                            markProcessed(event.id);
+                            return res.json({ received: true });
+                        }
+                        console.error("Failed to store order in Supabase:", insertError);
+                    } else {
+                        console.log("Order stored in Supabase:", event.id);
+                    }
 
                     console.log("Completed order:", {
                         artwork: order.artwork,
