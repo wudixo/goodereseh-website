@@ -28,7 +28,9 @@ app.use(
         origin: [
             "https://goodereseh.com",
             "https://www.goodereseh.com",
-            "https://goodereseh-website.pages.dev"
+            "https://goodereseh-website.pages.dev",
+            "http://127.0.0.1:5500",
+            "http://localhost:5500"
         ],
         methods: ["GET", "POST", "OPTIONS"],
         allowedHeaders: ["Content-Type"]

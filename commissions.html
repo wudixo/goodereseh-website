@@ -155,7 +155,7 @@ html,body{height:100%;overflow:hidden;}
 var RAIL = 'https://goodereseh-website-production.up.railway.app';
 var SYS = "You are the commission assistant for Good Ereseh, a hyperrealistic charcoal portrait artist in London. Be warm, professional, and concise.\n\nIMPORTANT: When giving options, always format them exactly like this so buttons appear:\nA) Option text\nB) Option text\n\nCOMMISSION FLOW - follow this order:\n1. Ask what type of commission:\nA) Personal Portrait\nB) Family Artwork\nC) Memorial Piece\n\n2. Ask who the portrait is of and details about them.\n\n3. Ask what mood the artwork should communicate. Offer 5 options labelled A-E.\n\n4. Ask about size:\nA) A4 Portrait - from 250 GBP\nB) A3 Portrait - from 500 GBP\nC) A2 Collector Piece - from 900 GBP\nD) Large Custom - from 1500 GBP\n\n5. Ask for a description or reference photo.\n\n6. When you have enough, write GENERATE_CONCEPT on its own line, then PROMPT: followed by a detailed charcoal portrait prompt.\n\n7. After concept shown ask if they are happy. When satisfied write COLLECT_DETAILS on its own line.";
 
-var history     = [];
+var chatHistory     = [];
 var imgB64      = null, imgType = null, imgName = '';
 var imgAnalysis = '';
 var lastGenUrl  = null;
@@ -220,17 +220,17 @@ async function callAI(userText, b64, type){
   if(userText) content.push({type:'text',text:userText});
   if(!content.length) return null;
 
-  history.push({ role:'user', content: content.length===1&&content[0].type==='text' ? userText : content });
+  chatHistory.push({ role:'user', content: content.length===1&&content[0].type==='text' ? userText : content });
 
   try{
     var res=await fetch(RAIL+'/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ system:SYS, messages:history })
+      body:JSON.stringify({ system:SYS, messages:chatHistory })
     });
     var data=await res.json();
     if(!res.ok) throw new Error(data.error||'Error');
-    history.push({role:'assistant',content:data.text});
+    chatHistory.push({role:'assistant',content:data.text});
     return data.text;
   }catch(err){
     console.error('callAI error:', err.message);
@@ -376,7 +376,7 @@ async function submitBrief(){
   var err=document.getElementById('bfErr'), btn=document.querySelector('.bf-btn');
   if(!name||!email){err.textContent='Please enter name and email.';err.style.display='block';return;}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Invalid email.';err.style.display='block';return;}
-  var summary=history.filter(function(m){return m.role==='assistant';}).slice(-5).map(function(m){return typeof m.content==='string'?m.content:'';}).join('\n');
+  var summary=chatHistory.filter(function(m){return m.role==='assistant';}).slice(-5).map(function(m){return typeof m.content==='string'?m.content:'';}).join('\n');
   btn.textContent='Sending\u2026'; btn.disabled=true; err.style.display='none';
   try{
     var res=await fetch(RAIL+'/commission',{method:'POST',headers:{'Content-Type':'application/json'},
