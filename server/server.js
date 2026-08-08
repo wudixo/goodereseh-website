@@ -41,7 +41,9 @@ app.use(
 // ---------------------------------------------------------------------------
 app.use(webhookRoutes(stripe, sendOrderEmails));
 
-app.use(express.json({ limit: "100kb" }));
+app.use(express.json({ limit: "5mb" }));
+const chatRoute = require('./routes/chat');
+chatRoute(app);
 
 app.use(checkoutRoutes(stripe));
 app.use(orderDetailsRoutes(stripe));

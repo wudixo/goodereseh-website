@@ -10,615 +10,626 @@
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
 html,body{height:100%;overflow:hidden;}
-.c-page{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--ink);}
+.cp{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--ink);}
+#nav{position:relative;flex-shrink:0;z-index:10;}
+.ch{flex-shrink:0;border-bottom:1px solid rgba(189,179,168,.07);}
+.ch-in{max-width:680px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:11px;}
+.av{width:32px;height:32px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:11px;color:var(--g3);position:relative;flex-shrink:0;}
+.av::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#06b6d4,#7c3aed,#6366f1);animation:sp 5s linear infinite;z-index:-1;filter:blur(3px);opacity:.55;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.ch-name{font-family:var(--serif);font-size:14px;font-weight:300;color:var(--p2);}
+.ch-sub{font-size:9px;color:var(--g1);letter-spacing:.08em;margin-top:1px;}
+.ch-dot{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--g1);margin-left:auto;}
+.ch-dot i{width:6px;height:6px;border-radius:50%;background:#10b981;display:block;}
+.cm-out{flex:1;overflow-y:auto;}
+.cm-out::-webkit-scrollbar{width:3px;}
+.cm-out::-webkit-scrollbar-thumb{background:var(--g0);border-radius:2px;}
+.cm-in{max-width:680px;margin:0 auto;padding:18px 20px 8px;display:flex;flex-direction:column;gap:12px;}
+.msg{display:flex;gap:9px;align-items:flex-start;animation:mi .35s ease forwards;opacity:0;}
+@keyframes mi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg.u{flex-direction:row-reverse;}
+.mav{width:27px;height:27px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:10px;color:var(--g3);flex-shrink:0;margin-top:2px;position:relative;}
+.mav::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#6366f1);animation:sp 3s linear infinite;z-index:-1;filter:blur(2px);opacity:.35;}
+.bbl{padding:10px 14px;font-size:13.5px;line-height:1.72;border-radius:14px;color:var(--p1);}
+.msg.ai .bbl{background:var(--c1);border:1px solid rgba(189,179,168,.07);border-top-left-radius:3px;max-width:78%;}
+.msg.u  .bbl{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.2);border-top-right-radius:3px;max-width:80%;margin-left:auto;}
+.bbl p{margin:0;}.bbl p+p{margin-top:6px;}
+.bbl strong{font-weight:500;color:var(--p2);}
 
-/* NAV */
-#nav{position:relative;flex-shrink:0;}
+/* CLICKABLE OPTIONS parsed from AI */
+.opt-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;margin-top:5px;background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--g2);font-family:var(--sans);font-size:13px;text-align:left;cursor:none;border-radius:9px;transition:border-color .2s,color .2s;width:100%;}
+.opt-btn:hover:not(:disabled){border-color:#6366f1;color:var(--p1);}
+.opt-btn:disabled{opacity:.45;pointer-events:none;}
+.opt-btn.sel{border-color:#0ea5e9;color:var(--p1);}
+.ol{width:21px;height:21px;border-radius:50%;background:rgba(189,179,168,.08);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--g3);flex-shrink:0;}
 
-/* HEADER */
-.c-head{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 20px;
-  border-bottom:1px solid rgba(189,179,168,.07);background:var(--ink);}
-.c-av{width:34px;height:34px;border-radius:50%;background:var(--c2);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:12px;color:var(--g3);
-  position:relative;flex-shrink:0;}
-.c-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;
-  background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#06b6d4,#7c3aed,#6366f1);
-  animation:spin 5s linear infinite;z-index:-1;filter:blur(3px);opacity:.65;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.c-head-info{flex:1;}
-.c-head-name{font-family:var(--serif);font-size:15px;font-weight:300;color:var(--p2);line-height:1;}
-.c-head-sub{font-size:9px;color:var(--g1);letter-spacing:.1em;margin-top:2px;}
-.c-head-dot{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--g1);}
-.c-head-dot span{width:6px;height:6px;border-radius:50%;background:#10b981;display:block;animation:glow 2s ease infinite;}
-@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
+/* TYPING */
+.ty{display:flex;gap:4px;padding:5px 2px;align-items:center;}
+.ty span{width:6px;height:6px;border-radius:50%;background:var(--g1);animation:td 1.2s ease-in-out infinite;}
+.ty span:nth-child(2){animation-delay:.2s;}.ty span:nth-child(3){animation-delay:.4s;}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
 
-/* MESSAGES */
-.c-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;}
-.c-msgs::-webkit-scrollbar{width:3px;}
-.c-msgs::-webkit-scrollbar-thumb{background:var(--g0);border-radius:2px;}
+/* CONCEPT & REF IMAGES */
+.img-block{animation:mi .35s ease forwards;opacity:0;max-width:680px;}
+.img-wrap{max-width:220px;border-radius:8px;overflow:hidden;border:1px solid rgba(189,179,168,.1);margin-left:36px;}
+.img-wrap img{width:100%;display:block;}
+.img-note{padding:7px 11px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;}
 
-.msg{display:flex;gap:10px;align-items:flex-start;animation:msgIn .35s ease forwards;opacity:0;}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.msg.user{flex-direction:row-reverse;}
+/* REF IMAGE IN USER MSG */
+.ref-thumb{max-width:160px;border-radius:8px;overflow:hidden;margin-bottom:6px;}
+.ref-thumb img{width:100%;display:block;}
 
-.m-av{width:28px;height:28px;border-radius:50%;background:var(--c2);
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:10px;color:var(--g3);margin-top:2px;position:relative;}
-.m-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;
-  background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#6366f1);
-  animation:spin 3s linear infinite;z-index:-1;filter:blur(2px);opacity:.4;}
+/* BRIEF FORM */
+.bf-block{animation:mi .35s ease forwards;opacity:0;}
+.bf-card{background:var(--c1);border:1px solid rgba(189,179,168,.08);border-radius:10px;padding:15px;max-width:320px;margin-left:36px;display:flex;flex-direction:column;gap:8px;}
+.bf-inp{background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;font-weight:300;padding:10px 13px;outline:none;border-radius:7px;transition:border-color .25s;}
+.bf-inp:focus{border-color:#0ea5e9;}
+.bf-inp::placeholder{color:var(--g0);}
+.bf-btn{padding:11px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:none;border-radius:7px;transition:opacity .25s;}
+.bf-btn:hover{opacity:.88;}.bf-btn:disabled{opacity:.35;}
+.bf-err{font-size:11px;color:#f87171;display:none;}
+.pay-btn{display:block;text-align:center;padding:12px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;border-radius:7px;text-decoration:none;margin-top:4px;border:none;cursor:none;width:100%;}
+.pay-btn:hover{opacity:.88;}
 
-.m-body{display:flex;flex-direction:column;gap:8px;max-width:74%;}
-.bubble{padding:11px 15px;font-size:13.5px;line-height:1.7;border-radius:14px;color:var(--p1);}
-.msg.ai .bubble{background:var(--c1);border:1px solid rgba(189,179,168,.07);border-top-left-radius:3px;}
-.msg.user .bubble{background:rgba(99,102,241,.16);border:1px solid rgba(99,102,241,.2);border-top-right-radius:3px;margin-left:auto;}
-.bubble p{margin:0;}.bubble p+p{margin-top:7px;}
-
-/* Clickable options inside AI message */
-.opt-btn{display:flex;align-items:center;gap:10px;width:100%;
-  padding:9px 13px;margin-top:5px;
-  background:var(--c2);border:1px solid rgba(189,179,168,.1);
-  color:var(--g2);font-family:var(--sans);font-size:13px;
-  text-align:left;cursor:none;border-radius:8px;
-  transition:border-color .2s,color .2s,background .2s;}
-.opt-btn:hover{border-color:#6366f1;color:var(--p1);background:rgba(99,102,241,.06);}
-.opt-letter{width:22px;height:22px;border-radius:50%;background:rgba(189,179,168,.1);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:500;color:var(--g3);flex-shrink:0;letter-spacing:0;}
-
-/* Typing indicator */
-.typing{display:flex;gap:4px;padding:5px 2px;align-items:center;}
-.typing span{width:6px;height:6px;border-radius:50%;background:var(--g1);
-  animation:tdot 1.2s ease-in-out infinite;}
-.typing span:nth-child(2){animation-delay:.2s;}
-.typing span:nth-child(3){animation-delay:.4s;}
-@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
-
-/* Image in chat */
-.chat-img{max-width:200px;border-radius:10px;overflow:hidden;margin-top:4px;}
-.chat-img img{width:100%;display:block;}
-.gen-img-wrap{max-width:240px;border-radius:10px;overflow:hidden;border:1px solid rgba(189,179,168,.1);margin-top:4px;}
-.gen-img-wrap img{width:100%;display:block;filter:brightness(.92) contrast(1.1) grayscale(10%);}
-.gen-img-note{padding:8px 12px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;}
-
-/* Image preview above input */
-.img-preview{display:none;padding:8px 16px;background:var(--c1);
-  border-top:1px solid rgba(189,179,168,.07);}
-.img-preview.show{display:flex;align-items:center;gap:10px;}
-.img-preview img{width:48px;height:48px;object-fit:cover;border-radius:6px;}
-.img-preview-name{font-size:11px;color:var(--g2);flex:1;}
-.img-preview-rm{background:none;border:none;color:var(--g1);cursor:none;font-size:16px;padding:4px;}
+/* IMAGE PREVIEW STRIP */
+.ip{display:none;border-top:1px solid rgba(189,179,168,.06);}
+.ip.on{display:block;}
+.ip-in{max-width:680px;margin:0 auto;padding:6px 20px;display:flex;align-items:center;gap:9px;}
+.ip-th{width:40px;height:40px;object-fit:cover;border-radius:5px;flex-shrink:0;}
+.ip-nm{font-size:11px;color:var(--g2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ip-rm{background:none;border:none;color:var(--g1);cursor:none;font-size:16px;padding:2px 6px;}
+.ip-badge{font-size:9px;color:var(--g1);background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);padding:2px 8px;border-radius:10px;white-space:nowrap;}
 
 /* INPUT BAR */
-.c-input{flex-shrink:0;padding:10px 14px 16px;background:var(--ink);
-  border-top:1px solid rgba(189,179,168,.07);}
-.c-input-box{display:flex;align-items:flex-end;gap:8px;
-  background:var(--c1);border:1px solid rgba(189,179,168,.1);
-  border-radius:14px;padding:8px 8px 8px 12px;
-  transition:border-color .25s;}
-.c-input-box:focus-within{border-color:rgba(99,102,241,.4);}
-.c-icon-btn{width:34px;height:34px;border-radius:50%;background:none;border:none;
-  color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;
-  transition:color .2s,background .2s;flex-shrink:0;}
-.c-icon-btn:hover{color:var(--p1);background:rgba(189,179,168,.06);}
-.c-icon-btn.active{color:#6366f1;}
-.c-textarea{flex:1;background:none;border:none;outline:none;
-  color:var(--p1);font-family:var(--sans);font-size:14px;font-weight:300;
-  resize:none;line-height:1.5;min-height:22px;max-height:140px;
-  overflow-y:auto;padding:6px 0;caret-color:#6366f1;}
-.c-textarea::placeholder{color:var(--g0);}
-.c-send{width:34px;height:34px;border-radius:50%;
-  background:rgba(189,179,168,.1);border:none;
-  color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:all .2s;}
-.c-send.ready{background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;}
-.c-send.ready:hover{opacity:.88;transform:scale(1.05);}
-
-/* Voice recording pulse */
-.c-icon-btn.recording{color:#ef4444;animation:recPulse 1s ease-in-out infinite;}
-@keyframes recPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.ib-out{flex-shrink:0;padding:8px 20px 14px;}
+.ib-in{max-width:680px;margin:0 auto;}
+.ib-box{display:flex;align-items:flex-end;gap:6px;background:var(--c1);border:1px solid rgba(189,179,168,.12);border-radius:14px;padding:6px 6px 6px 12px;transition:border-color .25s;}
+.ib-box:focus-within{border-color:rgba(99,102,241,.35);}
+.ib-ic{width:30px;height:30px;border-radius:50%;background:none;border:none;color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .2s;}
+.ib-ic:hover{color:var(--p1);}
+.ib-ic.rc{color:#ef4444;animation:rp 1s ease-in-out infinite;}
+@keyframes rp{0%,100%{opacity:1;}50%{opacity:.4;}}
+.ib-ta{flex:1;background:none;border:none;outline:none;color:var(--p1);font-family:var(--sans);font-size:13.5px;font-weight:300;resize:none;line-height:1.5;min-height:20px;max-height:120px;overflow-y:auto;padding:4px 0;caret-color:#6366f1;}
+.ib-ta::placeholder{color:var(--g0);}
+.ib-ta:disabled{opacity:.45;}
+.ib-up{width:30px;height:30px;border-radius:50%;background:rgba(189,179,168,.08);border:none;color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.ib-up.on{background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;}
+.ib-up.on:hover{opacity:.88;transform:scale(1.05);}
+.ib-hint{font-size:9px;color:var(--g0);text-align:center;margin-top:5px;min-height:12px;}
 
 /* GENERATION OVERLAY */
-.gen-ov{position:fixed;inset:0;background:rgba(15,13,11,.97);z-index:9999;
-  display:none;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
-.gen-ov.on{display:flex;}
-.gen-fr{position:relative;width:200px;height:250px;background:var(--c2);border-radius:4px;overflow:hidden;}
-.gen-fr::before{content:"";position:absolute;inset:0;z-index:1;
-  background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);
-  background-size:14px 14px;}
-.gen-scan{position:absolute;left:0;right:0;height:2px;z-index:3;
-  background:linear-gradient(90deg,transparent,#6366f1,#0ea5e9,#6366f1,transparent);
-  animation:gscan 1.5s ease-in-out infinite;box-shadow:0 0 14px rgba(99,102,241,.9);}
-@keyframes gscan{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
-.gc{position:absolute;width:12px;height:12px;z-index:4;}
+.go{position:fixed;inset:0;background:rgba(15,13,11,.97);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;}
+.go.on{display:flex;}
+.gf{position:relative;width:190px;height:238px;background:var(--c2);border-radius:4px;overflow:hidden;}
+.gf::before{content:"";position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);background-size:13px 13px;}
+.gs{position:absolute;left:0;right:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,#6366f1,#0ea5e9,#6366f1,transparent);animation:gsc 1.5s ease-in-out infinite;box-shadow:0 0 13px rgba(99,102,241,.9);}
+@keyframes gsc{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
+.gc{position:absolute;width:11px;height:11px;z-index:4;}
 .gc.tl{top:6px;left:6px;border-top:1px solid #6366f1;border-left:1px solid #6366f1;}
 .gc.tr{top:6px;right:6px;border-top:1px solid #6366f1;border-right:1px solid #6366f1;}
 .gc.bl{bottom:6px;left:6px;border-bottom:1px solid #6366f1;border-left:1px solid #6366f1;}
 .gc.br{bottom:6px;right:6px;border-bottom:1px solid #6366f1;border-right:1px solid #6366f1;}
-.gen-noise{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s;}
-.gen-pic{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s;}
-.gen-bar-wrap{width:200px;height:1px;background:rgba(255,255,255,.06);}
-.gen-bar-fill{height:100%;background:linear-gradient(90deg,#6366f1,#0ea5e9);width:0%;transition:width 1s ease;}
-.gen-label{font-family:var(--serif);font-size:13px;color:var(--g3);letter-spacing:.1em;text-align:center;margin-bottom:8px;}
-.gen-status{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);text-align:center;transition:opacity .4s;}
-.gen-ldots{display:flex;gap:5px;justify-content:center;margin-top:8px;}
-.gen-ldots span{width:4px;height:4px;border-radius:50%;background:#6366f1;animation:tdot 1.2s ease-in-out infinite;}
-.gen-ldots span:nth-child(2){animation-delay:.2s;}.gen-ldots span:nth-child(3){animation-delay:.4s;}
+.gn{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s;}
+.gp{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s;}
+.gb{width:190px;height:1px;background:rgba(255,255,255,.06);}
+.gbf{height:100%;background:linear-gradient(90deg,#6366f1,#0ea5e9);width:0%;transition:width .9s ease;}
+.gi{text-align:center;}
+.gl{font-family:var(--serif);font-size:12px;color:var(--g3);letter-spacing:.1em;margin-bottom:7px;}
+.gst{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);transition:opacity .4s;}
+.gd{display:flex;gap:5px;justify-content:center;margin-top:7px;}
+.gd span{width:3px;height:3px;border-radius:50%;background:#6366f1;animation:td 1.2s ease-in-out infinite;}
+.gd span:nth-child(2){animation-delay:.2s;}.gd span:nth-child(3){animation-delay:.4s;}
 
-@media(max-width:600px){.c-msgs{padding:14px;}.c-input{padding:8px 10px 14px;}.m-body{max-width:85%;}}
+@media(max-width:600px){.cm-in{padding:12px 12px 6px;}.ib-out{padding:6px 12px 12px;}.bf-card,.img-wrap{margin-left:0;}}
 </style>
 </head>
 <body>
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cDot"></div>
+<div class="cursor-ring" id="cRing"></div>
 
-<!-- Generation overlay -->
-<div class="gen-ov" id="genOv">
-  <div class="gen-fr">
+<div class="go" id="genOv">
+  <div class="gf">
     <div class="gc tl"></div><div class="gc tr"></div>
     <div class="gc bl"></div><div class="gc br"></div>
-    <div class="gen-scan"></div>
-    <div class="gen-noise" id="gNoise"></div>
-    <img class="gen-pic" id="gPic" src="" alt="">
+    <div class="gs"></div>
+    <div class="gn" id="gNoise"></div>
+    <img class="gp" id="gPic" src="" alt="">
   </div>
-  <div class="gen-bar-wrap"><div class="gen-bar-fill" id="gFill"></div></div>
-  <div>
-    <div class="gen-label">Good Ereseh &middot; Commission Assistant</div>
-    <div class="gen-status" id="gStatus">Analysing your description</div>
-    <div class="gen-ldots"><span></span><span></span><span></span></div>
+  <div class="gb"><div class="gbf" id="gFill"></div></div>
+  <div class="gi">
+    <div class="gl">Good Ereseh &middot; Commission Assistant</div>
+    <div class="gst" id="gStat">Analysing your description</div>
+    <div class="gd"><span></span><span></span><span></span></div>
   </div>
 </div>
 
-<div class="c-page">
+<div class="cp">
   <nav id="nav">
     <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
     <ul class="nav-links">
-      <li><a href="/gallery">Gallery</a></li>
-      <li><a href="/about">About</a></li>
+      <li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li>
       <li><a href="/commissions" class="active">Commissions</a></li>
       <li><a href="/contact">Contact</a></li>
       <li><a href="/commissions" class="nav-commission">Commission</a></li>
     </ul>
   </nav>
 
-  <div class="c-head">
-    <div class="c-av">G</div>
-    <div class="c-head-info">
-      <div class="c-head-name">Commission Assistant</div>
-      <div class="c-head-sub">Good Ereseh &middot; Charcoal &amp; Graphite &middot; London</div>
+  <div class="ch">
+    <div class="ch-in">
+      <div class="av">G</div>
+      <div style="flex:1;">
+        <div class="ch-name">Commission Assistant</div>
+        <div class="ch-sub">Good Ereseh &middot; Claude AI &middot; London</div>
+      </div>
+      <div class="ch-dot"><i></i>Online</div>
     </div>
-    <div class="c-head-dot"><span></span>Online</div>
   </div>
 
-  <div class="c-msgs" id="cMsgs"></div>
-
-  <!-- Image preview strip -->
-  <div class="img-preview" id="imgPreview">
-    <img id="previewImg" src="" alt="">
-    <span class="img-preview-name" id="previewName"></span>
-    <button class="img-preview-rm" onclick="clearImage()" title="Remove">&#x2715;</button>
+  <div class="cm-out" id="cmOut">
+    <div class="cm-in" id="cmIn"></div>
   </div>
 
-  <!-- Input bar -->
-  <div class="c-input">
-    <div class="c-input-box">
-      <!-- Image upload -->
-      <button class="c-icon-btn" onclick="document.getElementById('fileIn').click()" title="Attach image">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-      </button>
-      <input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+  <div class="ip" id="imgStrip">
+    <div class="ip-in">
+      <img class="ip-th" id="ipThumb" src="" alt="">
+      <span class="ip-nm" id="ipName"></span>
+      <span class="ip-badge">Analysing\u2026</span>
+      <button class="ip-rm" onclick="clearImg()">&#x2715;</button>
+    </div>
+  </div>
 
-      <!-- Text input -->
-      <textarea class="c-textarea" id="cIn"
-        placeholder="Describe your portrait, or type A / B / C to select an option&hellip;"
-        rows="1"></textarea>
-
-      <!-- Voice -->
-      <button class="c-icon-btn" id="micBtn" onclick="toggleVoice()" title="Voice input">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
-          <line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
-      </button>
-
-      <!-- Send (up arrow) -->
-      <button class="c-send" id="cSend" onclick="handleSend()" disabled title="Send">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
-        </svg>
-      </button>
+  <div class="ib-out">
+    <div class="ib-in">
+      <div class="ib-box">
+        <button class="ib-ic" onclick="document.getElementById('fIn').click()" title="Attach reference photo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <input type="file" id="fIn" accept="image/*" style="display:none" onchange="onFile(this)">
+        <textarea class="ib-ta" id="ibTa" rows="1" placeholder="Message\u2026"></textarea>
+        <button class="ib-ic" id="micBtn" onclick="toggleMic()" title="Voice input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <button class="ib-up" id="ibUp" onclick="doSend()" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
+      <div class="ib-hint" id="ibHint"></div>
     </div>
   </div>
 </div>
 
 <script>
-var API_RAIL = 'https://goodereseh-website-production.up.railway.app';
+var RAIL = 'https://goodereseh-website-production.up.railway.app';
 
-/* ---- STATE ---- */
-var history = [];
-var uploadedB64 = null, uploadedType = null, uploadedName = '';
-var recognition = null, isRecording = false;
-var lastGenUrl = null;
-var briefCollected = false;
+/* ── STATE ─────────────────────────────────────── */
+var history     = [];     // Claude conversation history
+var imgB64      = null;   // compressed reference image
+var imgType     = null;
+var imgName     = '';
+var imgAnalysis = '';     // Claude's description of reference photo
+var lastGenUrl  = null;
+var waitingForImage = false; // flag: image upload in progress
+var recog=null, recOn=false;
+var collecting  = false;  // showing brief form
 
-/* ---- SYSTEM PROMPT ---- */
-var SYSTEM = "You are the commission assistant for Good Ereseh, a hyperrealistic charcoal and graphite portrait artist based in London. You help customers commission a portrait through natural, friendly conversation.\n\nKEY RULES:\n1. When presenting options, ALWAYS format them EXACTLY like this (so they become clickable buttons):\nA) Option text here\nB) Option text here\nC) Option text here\n\n2. Users can type a letter (A/B/C/D) to select, or click the button, or type freely\n3. If a user says they made a mistake or wants to change something, re-present the relevant options\n4. Keep responses concise - 1-2 sentences then show options if needed\n5. Never say 'continue' - just naturally flow to the next question\n6. If user uploads an image, acknowledge it warmly and use what you can see to inform the brief\n\nCOMMISSION FLOW:\n1. Greet warmly (1-2 sentences). Ask what type of commission using options:\nA) Personal Portrait - capturing an individual from reference photos\nB) Family Artwork - multiple loved ones in one composition\nC) Memorial Piece - honouring someone's memory with care\n\n2. Ask who the portrait is of and any details (name, age, relationship to customer)\n\n3. Ask about mood/feeling using options (pick 5-6):\nA) Strength and dignity\nB) Warmth and tenderness\nC) Joy and playfulness\nD) Nostalgia and reflection\nE) Elegance and grace\nF) Mystery and depth\n\n4. Ask about size and investment:\nA) A4 Portrait - from £250 (210x297mm, ideal for intimate subjects)\nB) A3 Portrait - from £500 (297x420mm, most popular size)\nC) A2 Collector Piece - from £900 (420x594mm, prominent statement)\nD) Large Custom - from £1,500 (any size above A2)\n\n5. Ask for any final details or reference image description. If they uploaded an image, describe what you see and confirm it will be sent directly to Good Ereseh.\n\n6. When you have enough information, say you are ready to generate a concept. Then on a NEW LINE write exactly: GENERATE_CONCEPT\nThen on the next line write: PROMPT: followed by a detailed image generation prompt for a hyperrealistic charcoal portrait based on everything discussed.\n\n7. After the image is generated, ask if it captures what they had in mind. If not, ask what to change and adjust. Keep refining until they are happy.\n\n8. When customer is satisfied with the concept, say you will now collect their details to send the brief. Then write exactly: COLLECT_DETAILS\n\nIMPORTANT: The customer's reference photo (if uploaded) will be sent directly to Good Ereseh without any alteration. Mention this.\n\nProcess info (share when relevant):\n- 50% deposit required before work begins\n- Regular progress updates throughout\n- Final artwork delivered in a black presentation box with Certificate of Authenticity and wax seal\n- Good Ereseh responds within 2 business days";
+/* ── SYSTEM PROMPT ──────────────────────────────── */
+var SYS = "You are the commission assistant for Good Ereseh, a hyperrealistic charcoal and graphite portrait artist in London.\n\nGuide customers warmly through commissioning a portrait. Sound like a real, knowledgeable assistant \u2014 not a script.\n\nWHEN PRESENTING OPTIONS always format them exactly like this (each option on its own line):\nA) Option text\nB) Option text\nC) Option text\n\nThis formatting creates clickable buttons for the user.\n\nCOMMISSION FLOW:\n1. Greet briefly. Ask what type of commission:\nA) Personal Portrait\nB) Family Artwork\nC) Memorial Piece\n\n2. Ask who the portrait is of and about them.\n\n3. Ask what mood/feeling the artwork should communicate. Offer 6 options like Strength, Tenderness, Joy, Nostalgia, Elegance, Mystery etc labelled A-F.\n\n4. Ask about size and investment:\nA) A4 Portrait \u2014 from \u00a3250\nB) A3 Portrait \u2014 from \u00a3500\nC) A2 Collector Piece \u2014 from \u00a3900\nD) Large Custom \u2014 from \u00a31,500\n\n5. Ask for a detailed description or reference photo (they can use the image button below). If they uploaded a reference photo, reassure them it will be sent directly to Good Ereseh UNALTERED \u2014 it will not be modified in any way.\n\n6. When you have enough information, write on its own line: GENERATE_CONCEPT\nThen on the next line: PROMPT: [a detailed artistic prompt for generating a charcoal portrait concept in Pollinations.ai \u2014 include subject description, mood, lighting, style, medium]\n\n7. After the concept image is generated and shown, ask if it captures their vision. If they want changes, ask what to adjust. When they are happy, write on its own line: COLLECT_DETAILS\n\nIMPORTANT NOTES:\n- If the user uploads a reference photo, you will receive an image analysis. Use those specific physical details (face shape, features, expression, lighting) to make the PROMPT highly accurate.\n- Keep responses concise \u2014 2-3 sentences + options when needed.\n- Commission turnaround is 4-8 weeks. 50% deposit upfront, balance on completion.\n- Work is delivered in a black presentation box with Certificate of Authenticity.";
 
-/* ---- HELPERS ---- */
-var cMsgs = document.getElementById('cMsgs');
-var cIn   = document.getElementById('cIn');
-var cSend = document.getElementById('cSend');
+/* ── DOM ─────────────────────────────────────────── */
+var cmIn = document.getElementById('cmIn');
+var cmOut= document.getElementById('cmOut');
+var ibTa = document.getElementById('ibTa');
+var ibUp = document.getElementById('ibUp');
+var hint = document.getElementById('ibHint');
 
-function wait(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
-function sb(){ setTimeout(function(){ cMsgs.scrollTop = cMsgs.scrollHeight; },60); }
+/* ── HELPERS ─────────────────────────────────────── */
+function wait(ms){ return new Promise(function(r){setTimeout(r,ms);}); }
+function sb(){ setTimeout(function(){ cmOut.scrollTop=cmOut.scrollHeight; },60); }
+function esc(s){ return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
 
-function ac(el){
-  el.querySelectorAll('button,input,textarea').forEach(function(e){
-    e.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
-    e.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
-  });
+function cur(el){ el.querySelectorAll('button,input,textarea').forEach(function(e){
+  e.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
+  e.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
+}); }
+
+/* ── ADD MESSAGES ────────────────────────────────── */
+function addAI(html){
+  var d=document.createElement('div'); d.className='msg ai';
+  d.innerHTML='<div class="mav">G</div><div class="bbl">'+html+'</div>';
+  cmIn.appendChild(d); sb(); cur(d); return d;
+}
+function addUser(text, previewUrl){
+  var d=document.createElement('div'); d.className='msg u';
+  var imgHtml=previewUrl?'<div class="ref-thumb"><img src="'+previewUrl+'" alt="Reference"></div>':'';
+  d.innerHTML='<div class="bbl">'+imgHtml+(text?'<p>'+esc(text)+'</p>':'')+'</div>';
+  cmIn.appendChild(d); sb(); return d;
+}
+async function aiTyping(ms){
+  var t=document.createElement('div'); t.className='msg ai';
+  t.innerHTML='<div class="mav">G</div><div class="bbl"><div class="ty"><span></span><span></span><span></span></div></div>';
+  cmIn.appendChild(t); sb();
+  await wait(ms||800);
+  t.remove();
+  return true;
 }
 
-/* ---- RENDER AI TEXT (parse options into buttons) ---- */
-function renderAI(text){
-  // Split into lines
-  var lines = text.split('\n');
-  var out = [];
-  var inOptions = false;
-
+/* ── PARSE AI RESPONSE ───────────────────────────── */
+function renderAIText(text){
+  // Parse A) B) C) options into clickable buttons
+  var lines=text.split('\n');
+  var html='';
+  var inP=false;
   lines.forEach(function(line){
-    var optMatch = line.match(/^([A-F])\)\s+(.+)$/);
-    if(optMatch){
-      inOptions = true;
-      out.push('<button class="opt-btn" onclick="pickOpt(\'' + optMatch[1] + '\',this)">' +
-        '<span class="opt-letter">' + optMatch[1] + '</span>' +
-        optMatch[2] +
-        '</button>');
+    var m=line.match(/^([A-F])\)\s+(.+)$/);
+    if(m){
+      if(inP){html+='</p>';inP=false;}
+      html+='<button class="opt-btn" data-letter="'+m[1]+'" onclick="pickOpt(this)">' +
+        '<span class="ol">'+m[1]+'</span>' +
+        esc(m[2])+
+        '</button>';
     } else {
-      if(line.trim() === 'GENERATE_CONCEPT' || line.trim().startsWith('PROMPT:') || line.trim() === 'COLLECT_DETAILS') return;
-      if(line.trim()){
-        out.push('<p>' + line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</p>');
-      } else if(out.length && out[out.length-1] !== '<br>'){
-        out.push('<br>');
+      var stripped=line.trim();
+      if(stripped==='GENERATE_CONCEPT'||stripped.startsWith('PROMPT:')||stripped==='COLLECT_DETAILS') return;
+      if(stripped){
+        if(!inP){html+='<p>';inP=true;}
+        else{html+=' ';}
+        html+=esc(stripped);
+      } else {
+        if(inP){html+='</p>';inP=false;}
       }
     }
   });
-  return out.join('');
+  if(inP)html+='</p>';
+  return html;
 }
 
-/* ---- ADD MESSAGES ---- */
-function addAI(html){
-  var d = document.createElement('div');
-  d.className = 'msg ai';
-  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble">' + html + '</div></div>';
-  cMsgs.appendChild(d);
-  sb(); ac(d); return d;
+/* ── CALL CLAUDE VIA RAILWAY ─────────────────────── */
+async function callAI(userText, imgB64Param, imgTypeParam){
+  // Build message content
+  var content=[];
+  if(imgB64Param&&imgTypeParam){
+    content.push({type:'image',source:{type:'base64',media_type:imgTypeParam,data:imgB64Param}});
+  }
+  if(userText) content.push({type:'text',text:userText});
+  if(!content.length) return null;
+
+  history.push({ role:'user', content: content.length===1&&content[0].type==='text' ? userText : content });
+
+  try{
+    var res=await fetch(RAIL+'/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ system:SYS, messages:history })
+    });
+    if(!res.ok){ var e=await res.json(); throw new Error(e.error||'Chat error'); }
+    var data=await res.json();
+    var text=data.text||'';
+    history.push({role:'assistant',content:text});
+    return text;
+  }catch(err){
+    return 'Sorry, I had a connection issue. Please try again or email art@goodereseh.com.';
+  }
 }
 
-function addUser(html, imgUrl){
-  var imgHtml = imgUrl ? '<div class="chat-img"><img src="' + imgUrl + '" alt="Reference"></div>' : '';
-  var d = document.createElement('div');
-  d.className = 'msg user';
-  d.innerHTML = '<div class="m-body">' + imgHtml + '<div class="bubble"><p>' + html + '</p></div></div>';
-  cMsgs.appendChild(d);
-  sb(); return d;
+/* ── PROCESS AI RESPONSE ─────────────────────────── */
+async function processAI(aiText){
+  if(!aiText) return;
+
+  if(aiText.includes('COLLECT_DETAILS')){
+    var clean=aiText.replace('COLLECT_DETAILS','').trim();
+    if(clean) addAI(renderAIText(clean));
+    await wait(400);
+    showBriefForm();
+    return;
+  }
+
+  if(aiText.includes('GENERATE_CONCEPT')){
+    var promptMatch=aiText.match(/PROMPT:\s*(.+)/s);
+    var clean=aiText.split('GENERATE_CONCEPT')[0].trim();
+    if(clean) addAI(renderAIText(clean));
+    if(promptMatch){
+      await wait(400);
+      await runGen(promptMatch[1].trim());
+    }
+    return;
+  }
+
+  addAI(renderAIText(aiText));
 }
 
-function showTyping(){
-  var d = document.createElement('div');
-  d.className = 'msg ai';
-  d.id = 'typing';
-  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>';
-  cMsgs.appendChild(d); sb(); return d;
-}
-
-/* ---- OPTION CLICK ---- */
-function pickOpt(letter, btn){
-  // Grey out all sibling option buttons
-  var body = btn.closest('.m-body');
-  if(body) body.querySelectorAll('.opt-btn').forEach(function(b){ b.disabled=true; b.style.opacity='.45'; });
-  // Get full option text
-  var text = letter + ') ' + btn.textContent.trim();
-  addUser(letter);
+/* ── OPTION CLICK ────────────────────────────────── */
+function pickOpt(btn){
+  if(btn.disabled||collecting) return;
+  var siblings=btn.closest('.bbl').querySelectorAll('.opt-btn');
+  siblings.forEach(function(b){b.disabled=true;});
+  btn.classList.add('sel');
+  var letter=btn.dataset.letter;
+  var text=btn.textContent.trim();
+  addUser(letter+') '+text);
+  disableInput();
   sendToAI(letter, null, null);
 }
 
-/* ---- INPUT HANDLING ---- */
-cIn.addEventListener('input', function(){
-  cIn.style.height = 'auto';
-  cIn.style.height = Math.min(cIn.scrollHeight, 140) + 'px';
-  var hasText = cIn.value.trim().length > 0;
-  cSend.disabled = !hasText;
-  cSend.classList.toggle('ready', hasText);
+/* ── SEND ────────────────────────────────────────── */
+function doSend(){
+  if(collecting) return;
+  var text=ibTa.value.trim();
+  var hasImg=!!imgB64;
+  if(!text&&!hasImg) return;
+
+  var captB64=imgB64, captType=imgType, captName=imgName;
+  var previewUrl=captB64?'data:'+captType+';base64,'+captB64:null;
+
+  ibTa.value=''; ibTa.style.height='auto'; refreshSend();
+  if(hasImg) clearImg();
+
+  addUser(text, previewUrl);
+  disableInput();
+  sendToAI(text||'I have attached a reference photo.', captB64, captType);
+}
+
+async function sendToAI(text, b64, type){
+  if(collecting) return;
+  await aiTyping(900);
+  var aiText=await callAI(text, b64, type);
+  await processAI(aiText);
+  enableInput();
+}
+
+/* ── INPUT CONTROLS ──────────────────────────────── */
+ibTa.addEventListener('input',function(){
+  ibTa.style.height='auto';
+  ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px';
+  refreshSend();
 });
-
-cIn.addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && !e.shiftKey && !cSend.disabled){
-    e.preventDefault(); handleSend();
-  }
+ibTa.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey&&!ibUp.disabled){ e.preventDefault(); doSend(); }
 });
+function refreshSend(){
+  var ok=ibTa.value.trim().length>0||!!imgB64;
+  ibUp.disabled=!ok; ibUp.classList.toggle('on',ok);
+}
+function enableInput(){ ibTa.disabled=false; hint.textContent=''; setTimeout(function(){ibTa.focus();},80); }
+function disableInput(){ ibTa.disabled=true; ibUp.disabled=true; ibUp.classList.remove('on'); hint.textContent=''; }
 
-function handleSend(){
-  var text = cIn.value.trim();
-  if(!text && !uploadedB64) return;
-  var b64 = uploadedB64, type = uploadedType;
-  var previewSrc = uploadedB64 ? 'data:' + uploadedType + ';base64,' + uploadedB64 : null;
-  clearImage();
-  cIn.value = ''; cIn.style.height = 'auto';
-  cSend.disabled = true; cSend.classList.remove('ready');
-  addUser(text || '(image attached)', previewSrc);
-  sendToAI(text || 'I have uploaded a reference image.', b64, type);
+/* ── IMAGE UPLOAD + COMPRESS + ANALYSE ──────────── */
+function onFile(input){
+  var file=input.files[0]; if(!file) return;
+  compressImage(file, 800, 800, 0.78, function(dataUrl){
+    var b64=dataUrl.split(',')[1];
+    imgB64=b64; imgType='image/jpeg'; imgName=file.name;
+    document.getElementById('ipThumb').src=dataUrl;
+    document.getElementById('ipName').textContent=file.name;
+    document.getElementById('imgStrip').classList.add('on');
+    refreshSend();
+    // Immediately send to Claude for visual analysis (silent)
+    analyseImage(b64);
+  });
 }
 
-/* ---- IMAGE UPLOAD ---- */
-function handleFile(file){
-  if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var dataUrl = e.target.result;
-    uploadedB64   = dataUrl.split(',')[1];
-    uploadedType  = file.type;
-    uploadedName  = file.name;
-    var prev = document.getElementById('imgPreview');
-    document.getElementById('previewImg').src = dataUrl;
-    document.getElementById('previewName').textContent = file.name;
-    prev.classList.add('show');
-    // Enable send
-    cSend.disabled = false; cSend.classList.add('ready');
+function compressImage(file, maxW, maxH, quality, cb){
+  var canvas=document.createElement('canvas');
+  var ctx=canvas.getContext('2d');
+  var img=new Image();
+  img.onload=function(){
+    var w=img.width, h=img.height;
+    if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+    if(h>maxH){w=Math.round(w*maxH/h);h=maxH;}
+    canvas.width=w; canvas.height=h;
+    ctx.drawImage(img,0,0,w,h);
+    cb(canvas.toDataURL('image/jpeg',quality));
   };
-  reader.readAsDataURL(file);
+  img.src=URL.createObjectURL(file);
 }
 
-function clearImage(){
-  uploadedB64 = null; uploadedType = null; uploadedName = '';
-  document.getElementById('imgPreview').classList.remove('show');
-  document.getElementById('fileIn').value = '';
-  if(!cIn.value.trim()){ cSend.disabled=true; cSend.classList.remove('ready'); }
-}
-
-/* ---- VOICE ---- */
-function toggleVoice(){
-  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRec){ addAI('<p>Voice input is not supported in this browser. Please try Chrome.</p>'); return; }
-  var micBtn = document.getElementById('micBtn');
-  if(isRecording){
-    if(recognition) recognition.stop();
-    isRecording = false; micBtn.classList.remove('recording'); return;
-  }
-  recognition = new SpeechRec();
-  recognition.lang = 'en-GB'; recognition.continuous = false; recognition.interimResults = true;
-  recognition.onstart = function(){ isRecording=true; micBtn.classList.add('recording'); };
-  recognition.onresult = function(e){
-    var t = Array.from(e.results).map(function(r){ return r[0].transcript; }).join('');
-    cIn.value = t;
-    cIn.style.height='auto'; cIn.style.height=Math.min(cIn.scrollHeight,140)+'px';
-    cSend.disabled=false; cSend.classList.add('ready');
-  };
-  recognition.onend = function(){ isRecording=false; micBtn.classList.remove('recording'); };
-  recognition.onerror = function(){ isRecording=false; micBtn.classList.remove('recording'); };
-  recognition.start();
-}
-
-/* ---- CLAUDE API ---- */
-async function sendToAI(userText, imgB64, imgType){
-  // Build message content
-  var content = [];
-  if(imgB64 && imgType){
-    content.push({ type:'image', source:{ type:'base64', media_type:imgType, data:imgB64 }});
-  }
-  if(userText) content.push({ type:'text', text:userText });
-  if(content.length === 0) return;
-
-  history.push({ role:'user', content: content.length===1 && content[0].type==='text' ? userText : content });
-
-  var t = showTyping();
-  cIn.disabled = true; cSend.disabled = true;
-
-  try {
-    var res = await fetch('https://api.anthropic.com/v1/messages',{
+async function analyseImage(b64){
+  // Ask Claude to describe the reference photo
+  try{
+    var res=await fetch(RAIL+'/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system: SYSTEM,
-        messages: history
+      body:JSON.stringify({
+        system:'You are an art consultant. Analyse this reference photo for a charcoal portrait commission. Describe: face shape, distinctive features, hair, expression, lighting, any notable characteristics. Be specific and concise (3-4 sentences). This will be used to guide image generation.',
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+          {type:'text',text:'Please analyse this reference photo for a charcoal portrait commission.'}
+        ]}]
       })
     });
-    var data = await res.json();
-    var aiText = data.content && data.content[0] ? data.content[0].text : 'Something went wrong. Please try again.';
-    history.push({ role:'assistant', content: aiText });
-    t.remove();
-
-    // Check for special triggers
-    if(aiText.includes('COLLECT_DETAILS')){
-      var cleanText = aiText.replace('COLLECT_DETAILS','').trim();
-      if(cleanText) addAI(renderAI(cleanText));
-      showBriefForm();
-    } else if(aiText.includes('GENERATE_CONCEPT')){
-      var promptMatch = aiText.match(/PROMPT:\s*(.+)/s);
-      var cleanText = aiText.split('GENERATE_CONCEPT')[0].trim();
-      if(cleanText) addAI(renderAI(cleanText));
-      if(promptMatch) await generateImage(promptMatch[1].trim());
-    } else {
-      addAI(renderAI(aiText));
+    if(res.ok){
+      var data=await res.json();
+      imgAnalysis=data.text||'';
+      // Update the badge to show analysis is ready
+      var badge=document.querySelector('.ip-badge');
+      if(badge){ badge.textContent='Analysed \u2713'; badge.style.borderColor='rgba(16,185,129,.4)'; badge.style.color='#10b981'; }
     }
-  } catch(err){
-    t.remove();
-    addAI('<p>Sorry, something went wrong. Please try again or email art@goodereseh.com.</p>');
-  }
-
-  cIn.disabled = false;
-  setTimeout(function(){ cIn.focus(); },100);
+  }catch(e){ /* silent fail */ }
 }
 
-/* ---- IMAGE GENERATION ---- */
-async function generateImage(prompt){
-  var overlay = document.getElementById('genOv');
-  var status  = document.getElementById('gStatus');
-  var fill    = document.getElementById('gFill');
-  var pic     = document.getElementById('gPic');
-  var noise   = document.getElementById('gNoise');
+function clearImg(){
+  imgB64=null; imgType=null; imgName=''; imgAnalysis='';
+  document.getElementById('imgStrip').classList.remove('on');
+  document.getElementById('fIn').value='';
+  refreshSend();
+}
+
+/* ── GENERATION ──────────────────────────────────── */
+async function runGen(basePrompt){
+  var ov=document.getElementById('genOv');
+  var st=document.getElementById('gStat');
+  var fill=document.getElementById('gFill');
+  var pic=document.getElementById('gPic');
+  var noise=document.getElementById('gNoise');
+
+  // Enhance prompt with image analysis if available
+  var fullPrompt='hyperrealistic charcoal graphite portrait drawing, ';
+  if(imgAnalysis) fullPrompt+=imgAnalysis+', ';
+  fullPrompt+=basePrompt+', black and white fine art, heavy cotton paper, dramatic studio lighting, detailed eyes, professional artist';
+
+  var seed=Math.floor(Math.random()*99999);
+  var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(fullPrompt)+'?width=520&height=650&nologo=true&seed='+seed;
+  lastGenUrl=url;
 
   pic.style.opacity='0'; noise.style.opacity='1'; fill.style.width='0%';
-  overlay.classList.add('on');
+  ov.classList.add('on');
+  pic.src=url;
 
   var phases=[
-    {t:'Analysing your description',p:18},
-    {t:'Composing portrait structure',p:42},
-    {t:'Rendering charcoal textures',p:68},
-    {t:'Finalising concept',p:94}
+    {t:'Reading your reference',p:15},
+    {t:'Composing portrait structure',p:40},
+    {t:'Rendering charcoal textures',p:66},
+    {t:'Adding depth and detail',p:88},
+    {t:'Finalising',p:96}
   ];
-
-  var fullPrompt = 'hyperrealistic charcoal graphite portrait drawing, black and white fine art, ' +
-    'heavy cotton paper texture, dramatic studio lighting, detailed eyes and skin, ' + prompt;
-  var seed = Math.floor(Math.random()*99999);
-  var imageUrl = 'https://image.pollinations.ai/prompt/' +
-    encodeURIComponent(fullPrompt) + '?width=520&height=650&nologo=true&seed=' + seed;
-
-  pic.src = imageUrl;
-  lastGenUrl = imageUrl;
-
   for(var i=0;i<phases.length;i++){
-    status.style.opacity='0'; await wait(200);
-    status.textContent=phases[i].t; status.style.opacity='1';
+    st.style.opacity='0'; await wait(200);
+    st.textContent=phases[i].t; st.style.opacity='1';
     fill.style.width=phases[i].p+'%'; await wait(1100);
   }
 
-  await new Promise(function(resolve){
-    if(pic.complete&&pic.naturalWidth>0){resolve();return;}
-    pic.onload=resolve; pic.onerror=resolve; setTimeout(resolve,30000);
+  await new Promise(function(r){
+    if(pic.complete&&pic.naturalWidth>0){r();return;}
+    pic.onload=r; pic.onerror=r; setTimeout(r,30000);
   });
 
-  status.textContent='Concept ready'; fill.style.width='100%';
+  st.textContent='Concept ready'; fill.style.width='100%';
   noise.style.opacity='0'; pic.style.opacity='1';
-  await wait(2000);
-  overlay.classList.remove('on');
+  await wait(2000); ov.classList.remove('on');
 
-  // Show image in chat
-  var imgMsg = document.createElement('div');
-  imgMsg.className = 'msg ai';
-  imgMsg.style.animation = 'msgIn .4s ease forwards';
-  imgMsg.style.opacity = '0';
-  imgMsg.innerHTML = '<div class="m-av">G</div><div class="m-body">' +
-    '<div class="gen-img-wrap">' +
-      '<img src="' + imageUrl + '" alt="Portrait Concept">' +
-      '<div class="gen-img-note">AI concept based on your description. The actual charcoal drawing will be far richer \u2014 built entirely by hand.</div>' +
-    '</div></div>';
-  cMsgs.appendChild(imgMsg);
-  sb();
+  var blk=document.createElement('div'); blk.className='img-block';
+  blk.innerHTML='<div class="img-wrap"><img src="'+url+'" alt="Portrait Concept"'+
+    ' onerror="this.style.display=\'none\'"><div class="img-note">AI concept based on your description'+(imgAnalysis?' and reference photo':'')+'.</div></div>';
+  cmIn.appendChild(blk); sb();
 
-  // Ask AI to follow up
-  history.push({ role:'user', content:'[System: The portrait concept image has been generated and shown to the customer. Please ask them what they think of it and whether it captures what they had in mind. If not, ask what they would like to change.]' });
-  var t = showTyping();
-  try{
-    var res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM,messages:history})
-    });
-    var data = await res.json();
-    var txt = data.content[0].text;
-    history.push({role:'assistant',content:txt});
-    t.remove(); addAI(renderAI(txt));
-  } catch(e){ t.remove(); addAI('<p>What do you think of this concept? Does it capture what you had in mind?</p>'); }
+  await wait(500);
+  await aiTyping(700);
+  var followUp=await callAI('[The portrait concept image has just been generated and shown to the customer. Ask them if it captures their vision. If not, what to change. When satisfied, write COLLECT_DETAILS.]', null, null);
+  addAI(renderAIText(followUp));
+  enableInput();
 }
 
-/* ---- BRIEF FORM ---- */
+/* ── BRIEF FORM ──────────────────────────────────── */
 function showBriefForm(){
-  briefCollected = true;
-  var d = document.createElement('div');
-  d.className = 'msg ai';
-  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble" style="padding:16px;">' +
-    '<p style="margin-bottom:12px;font-size:13px;">Please enter your details to send your commission brief and receive your deposit invoice.</p>' +
-    '<div style="display:flex;flex-direction:column;gap:8px;" id="briefFormInner">' +
-      '<input type="text"  id="bfName"  placeholder="Full name"      style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
-      '<input type="email" id="bfEmail" placeholder="Email address"  style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
-      '<input type="tel"   id="bfPhone" placeholder="Phone number"   style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
-      '<button onclick="submitBrief()" style="padding:12px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:none;border-radius:7px;transition:opacity .25s;" id="submitBriefBtn">Send Brief &amp; Receive Deposit Invoice &#8250;</button>' +
-      '<div id="briefErr" style="font-size:11px;color:#f87171;display:none;"></div>' +
-    '</div>' +
-    '<div id="briefDone" style="display:none;padding:14px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:13px;color:var(--p1);line-height:1.75;">' +
-      '<strong style="font-family:var(--serif);font-size:16px;font-weight:300;color:var(--p2);">Brief received.</strong><br><br>' +
-      'Good Ereseh will be in touch within two business days with your deposit invoice and start date.' +
-    '</div>' +
-  '</div></div>';
-  cMsgs.appendChild(d);
-  sb(); ac(d);
+  collecting=true;
+  var blk=document.createElement('div'); blk.className='bf-block';
+  blk.innerHTML=
+    '<div class="bf-card" id="bfCard">'+
+      '<input class="bf-inp" type="text"  id="bfN" placeholder="Full name"     autocomplete="name">'+
+      '<input class="bf-inp" type="email" id="bfE" placeholder="Email address" autocomplete="email">'+
+      '<input class="bf-inp" type="tel"   id="bfP" placeholder="Phone number"  autocomplete="tel">'+
+      '<button class="bf-btn" onclick="submitBrief()">Send Brief &rarr;</button>'+
+      '<div class="bf-err" id="bfErr"></div>'+
+    '</div>'+
+    '<div id="payWrap" style="display:none;"></div>';
+  cmIn.appendChild(blk); sb(); cur(blk);
+  disableInput();
 }
 
 async function submitBrief(){
-  var name  = document.getElementById('bfName').value.trim();
-  var email = document.getElementById('bfEmail').value.trim();
-  var phone = document.getElementById('bfPhone').value.trim();
-  var errEl = document.getElementById('briefErr');
-  var btn   = document.getElementById('submitBriefBtn');
+  var name =document.getElementById('bfN').value.trim();
+  var email=document.getElementById('bfE').value.trim();
+  var phone=document.getElementById('bfP').value.trim();
+  var err  =document.getElementById('bfErr');
+  var btn  =document.querySelector('.bf-btn');
 
-  if(!name||!email){ errEl.textContent='Please enter name and email.'; errEl.style.display='block'; return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent='Invalid email.'; errEl.style.display='block'; return; }
+  if(!name||!email){err.textContent='Please enter name and email.';err.style.display='block';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Invalid email.';err.style.display='block';return;}
 
-  // Build brief from conversation
-  var convSummary = history.filter(function(m){return m.role==='assistant';}).slice(-6)
-    .map(function(m){ return typeof m.content==='string'?m.content:''; }).join('\n');
+  btn.textContent='Sending\u2026'; btn.disabled=true; err.style.display='none';
 
-  var message = ['COMMISSION BRIEF VIA AI ASSISTANT','================================',
-    'Name:  '+name,'Email: '+email,'Phone: '+(phone||'Not provided'),'',
-    'CONVERSATION SUMMARY:',convSummary,'',
-    (uploadedName ? 'NOTE: Customer uploaded a reference photo: '+uploadedName+'. Please request this file from them directly at art@goodereseh.com.' : ''),
-    (lastGenUrl ? 'AI Concept generated: '+lastGenUrl : '')].join('\n');
-
-  btn.textContent='Sending\u2026'; btn.disabled=true; errEl.style.display='none';
+  // Build summary from conversation
+  var summary=history.filter(function(m){return m.role==='assistant';})
+    .slice(-5).map(function(m){return typeof m.content==='string'?m.content:'';}).join('\n');
 
   try{
-    var res = await fetch(API_RAIL+'/commission',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,
-        'commission-type':'AI Assistant Commission',size:'',message:message})
+    var res=await fetch(RAIL+'/commission',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:name, email:email, phone:phone,
+        'commission-type':'AI Commission Assistant',
+        size:'',
+        message:summary,
+        imageB64:imgB64||undefined,      // original reference photo
+        imageType:imgType||undefined,
+        conceptUrl:lastGenUrl||undefined  // AI generated concept
+      })
     });
-    var data = await res.json();
+    var data=await res.json();
     if(!res.ok) throw new Error(data.error||'Something went wrong.');
-    document.getElementById('briefFormInner').style.display='none';
-    document.getElementById('briefDone').style.display='block';
+
+    document.getElementById('bfCard').style.display='none';
+    var pw=document.getElementById('payWrap');
+    pw.style.display='block';
+
+    if(data.paymentUrl){
+      pw.innerHTML=
+        '<p style="font-size:13px;color:var(--p1);line-height:1.7;margin-bottom:10px;">'+
+        'Brief received. To confirm your slot, please pay the \u00a350 booking deposit via Stripe:</p>'+
+        '<a href="'+data.paymentUrl+'" class="pay-btn" target="_blank">Pay \u00a350 Booking Deposit \u2192 Stripe</a>'+
+        '<p style="font-size:10px;color:var(--g1);margin-top:8px;">Good Ereseh will confirm your full quote within two business days.</p>';
+    } else {
+      pw.innerHTML=
+        '<p style="font-size:13px;color:var(--p1);line-height:1.7;">'+
+        '<strong style="font-family:var(--serif);font-size:16px;font-weight:300;color:var(--p2);">Brief received.</strong><br><br>'+
+        'Good Ereseh will be in touch within two business days with your invoice and deposit details.</p>';
+    }
     sb();
-  } catch(err){
-    errEl.textContent=err.message||'Error. Please email art@goodereseh.com';
-    errEl.style.display='block';
-    btn.textContent='Send Brief & Receive Deposit Invoice \u203a'; btn.disabled=false;
+  }catch(e){
+    err.textContent=e.message||'Error. Please email art@goodereseh.com';
+    err.style.display='block';
+    btn.textContent='Send Brief \u2192'; btn.disabled=false;
   }
 }
 
-/* ---- NAV / CURSOR ---- */
-var nav=document.getElementById('nav');
-window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
-var dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+/* ── VOICE ───────────────────────────────────────── */
+function toggleMic(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var micBtn=document.getElementById('micBtn');
+  if(!SR){ addAI('<p>Voice input requires Chrome or iOS Safari.</p>'); return; }
+  if(recOn){ if(recog)recog.stop(); recOn=false; micBtn.classList.remove('rc'); return; }
+  recog=new SR(); recog.lang='en-GB'; recog.continuous=false; recog.interimResults=true;
+  recog.onstart=function(){recOn=true;micBtn.classList.add('rc');};
+  recog.onresult=function(e){
+    var t=Array.from(e.results).map(function(r){return r[0].transcript;}).join('');
+    ibTa.value=t; ibTa.style.height='auto';
+    ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px'; refreshSend();
+  };
+  recog.onend=function(){recOn=false;micBtn.classList.remove('rc');};
+  recog.onerror=function(){recOn=false;micBtn.classList.remove('rc');};
+  recog.start();
+}
+
+/* ── NAV / CURSOR ────────────────────────────────── */
+var navEl=document.getElementById('nav');
+window.addEventListener('scroll',function(){navEl.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
+var cdot=document.getElementById('cDot'),cring=document.getElementById('cRing');
 if(window.matchMedia('(pointer: fine)').matches){
   var mx=0,my=0,rx=0,ry=0,tt=0;
   document.addEventListener('mousemove',function(e){
-    mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';
+    mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';
     clearTimeout(tt);tt=setTimeout(function(){
       var t=document.createElement('div');t.className='cursor-trail';
       t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);
       t.addEventListener('animationend',function(){t.remove();});},16);
   });
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(loop);})();
   document.querySelectorAll('a,button').forEach(function(el){
     el.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
     el.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
   });
 }
 
-/* ---- START ---- */
-window.addEventListener('DOMContentLoaded', function(){
-  // Kick off the AI conversation
-  history.push({ role:'user', content:'Hello, I would like to commission a portrait.' });
-  sendToAI('Hello, I would like to commission a portrait.', null, null);
-  // Remove the first user message from display (it's the init trigger)
-  setTimeout(function(){ var first=cMsgs.querySelector('.msg.user'); if(first) first.remove(); },200);
+/* ── START ───────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', async function(){
+  await aiTyping(600);
+  var opening=await callAI('Hello, I would like to commission a portrait.', null, null);
+  addAI(renderAIText(opening));
+  // Remove the init message from history so it looks clean
+  history=history.filter(function(m){
+    return !(m.role==='user'&&m.content==='Hello, I would like to commission a portrait.');
+  });
+  enableInput();
 });
 </script>
 </body>
