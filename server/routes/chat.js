@@ -30,44 +30,76 @@ module.exports = function (app) {
             }
 
 
-            const input = [];
+            const contents = [];
 
 
             for (const message of messages) {
 
                 const role =
                     message.role === "assistant"
-                        ? "Assistant"
-                        : "User";
+                        ? "model"
+                        : "user";
 
+                const parts =
+                    convertParts(message.content);
 
-                const parts = normalizeContent(
-                    message.content,
-                    role
-                );
-
-
-                input.push(...parts);
+                if (parts.length) {
+                    contents.push({
+                        role: role,
+                        parts: parts
+                    });
+                }
             }
 
 
-            const body = {
-                model: "gemini-3.5-flash",
+            /*
+            Gemini requires the final conversation turn
+            to be a user message.
+            */
+            while (
+                contents.length &&
+                contents[contents.length - 1].role === "model"
+            ) {
+                contents.pop();
+            }
 
-                input: input,
 
-                system_instruction:
-                    system || undefined,
+            if (!contents.length) {
+                return res.status(400).json({
+                    error: "No valid conversation content"
+                });
+            }
 
-                generation_config: {
-                    max_output_tokens: 1000,
-                    thinking_level: "minimal"
+
+            const requestBody = {
+
+                contents: contents,
+
+                generationConfig: {
+                    maxOutputTokens: 1000,
+                    thinkingConfig: {
+                        thinkingLevel: "low"
+                    }
                 }
+
             };
 
 
+            if (system) {
+
+                requestBody.system_instruction = {
+                    parts: [
+                        {
+                            text: system
+                        }
+                    ]
+                };
+
+            }
+
+
             const response = await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/interactions",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
                 {
                     method: "POST",
 
@@ -77,12 +109,15 @@ module.exports = function (app) {
                             process.env.GOOGLE_API_KEY
                     },
 
-                    body: JSON.stringify(body)
+                    body: JSON.stringify(
+                        requestBody
+                    )
                 }
             );
 
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
 
             if (!response.ok) {
@@ -99,17 +134,23 @@ module.exports = function (app) {
                         data?.error?.message ||
                         "Gemini request failed"
                 });
+
             }
+
+
+            console.log(
+                "[CHAT] Gemini response received"
+            );
 
 
             const text =
                 extractText(data);
 
 
-            if (!text || !text.trim()) {
+            if (!text) {
 
                 console.error(
-                    "[CHAT] No output text:",
+                    "[CHAT] Gemini returned no readable text:",
                     JSON.stringify(data)
                 );
 
@@ -117,6 +158,7 @@ module.exports = function (app) {
                     error:
                         "Gemini returned no text"
                 });
+
             }
 
 
@@ -153,45 +195,36 @@ module.exports = function (app) {
 
 
 
-function normalizeContent(
-    content,
-    role
-) {
-
-    const parts = [];
-
+function convertParts(content) {
 
     if (!content) {
-        return parts;
+        return [];
     }
 
 
     if (typeof content === "string") {
 
-        parts.push({
-            type: "text",
-            text:
-                role +
-                ": " +
-                content
-        });
+        return [
+            {
+                text: content
+            }
+        ];
 
-        return parts;
     }
 
 
     if (!Array.isArray(content)) {
 
-        parts.push({
-            type: "text",
-            text:
-                role +
-                ": " +
-                String(content)
-        });
+        return [
+            {
+                text: String(content)
+            }
+        ];
 
-        return parts;
     }
+
+
+    const parts = [];
 
 
     for (const item of content) {
@@ -202,11 +235,7 @@ function normalizeContent(
         ) {
 
             parts.push({
-                type: "text",
-                text:
-                    role +
-                    ": " +
-                    item.text
+                text: item.text
             });
 
         }
@@ -219,14 +248,18 @@ function normalizeContent(
         ) {
 
             parts.push({
-                type: "image",
 
-                data:
-                    item.source.data,
+                inline_data: {
 
-                mime_type:
-                    item.source.media_type ||
-                    "image/jpeg"
+                    mime_type:
+                        item.source.media_type ||
+                        "image/jpeg",
+
+                    data:
+                        item.source.data
+
+                }
+
             });
 
         }
@@ -243,66 +276,44 @@ function normalizeContent(
 function extractText(data) {
 
     if (
-        typeof data.output_text ===
-        "string"
+        !data ||
+        !Array.isArray(data.candidates) ||
+        !data.candidates.length
     ) {
-        return data.output_text;
+        return "";
     }
+
+
+    const candidate =
+        data.candidates[0];
 
 
     if (
-        Array.isArray(data.outputs)
+        !candidate.content ||
+        !Array.isArray(
+            candidate.content.parts
+        )
     ) {
-
-        const textParts = [];
-
-
-        for (const output of data.outputs) {
-
-            if (
-                output &&
-                typeof output.text ===
-                "string"
-            ) {
-
-                textParts.push(
-                    output.text
-                );
-
-            }
-
-
-            if (
-                output &&
-                Array.isArray(output.content)
-            ) {
-
-                for (
-                    const part of output.content
-                ) {
-
-                    if (
-                        part &&
-                        typeof part.text ===
-                        "string"
-                    ) {
-
-                        textParts.push(
-                            part.text
-                        );
-
-                    }
-
-                }
-
-            }
-
-        }
-
-
-        return textParts.join("\n");
+        return "";
     }
 
 
-    return "";
+    return candidate.content.parts
+        .filter(function (part) {
+
+            return (
+                part &&
+                typeof part.text === "string" &&
+                !part.thought
+            );
+
+        })
+        .map(function (part) {
+
+            return part.text;
+
+        })
+        .join("\n")
+        .trim();
+
 }
