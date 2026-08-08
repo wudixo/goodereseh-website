@@ -1,5 +1,3 @@
-const { GoogleGenAI } = require("@google/genai");
-
 module.exports = function (app) {
 
     app.get("/chat-test", function (req, res) {
@@ -38,24 +36,19 @@ module.exports = function (app) {
             }
 
 
-            const ai = new GoogleGenAI({
-                apiKey: process.env.GOOGLE_API_KEY
-            });
-
-
             const contents = [];
 
 
-            for (const msg of messages) {
+            for (const message of messages) {
 
                 const role =
-                    msg.role === "assistant"
+                    message.role === "assistant"
                         ? "model"
                         : "user";
 
 
                 const parts =
-                    convertParts(msg.content);
+                    convertParts(message.content);
 
 
                 if (parts.length) {
@@ -70,28 +63,61 @@ module.exports = function (app) {
             }
 
 
-            const response =
-                await ai.models.generateContent({
+            const body = {
 
-                    model: "gemini-3.6-flash",
+                model: "gemini-3.6-flash",
 
-                    contents: contents,
+                input: buildInteractionInput(contents),
 
-                    config: {
+                system_instruction:
+                    system || undefined,
 
-                        systemInstruction:
-                            system || undefined,
+                generation_config: {
+                    max_output_tokens: 1000
+                }
 
-                        maxOutputTokens:
-                            1000
+            };
 
-                    }
 
+            const response = await fetch(
+                "https://generativelanguage.googleapis.com/v1beta/interactions",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": process.env.GOOGLE_API_KEY
+                    },
+
+                    body: JSON.stringify(body)
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                console.error(
+                    "[CHAT] Gemini API error:",
+                    data
+                );
+
+                return res.status(
+                    response.status
+                ).json({
+                    error:
+                        data?.error?.message ||
+                        "Gemini request failed"
                 });
+
+            }
 
 
             const text =
-                response.text ||
+                extractText(data) ||
                 "Thank you. Could you tell me a little more about what you have in mind for this commission?";
 
 
@@ -105,7 +131,6 @@ module.exports = function (app) {
                 text: text
             });
 
-
         }
 
         catch (error) {
@@ -117,11 +142,9 @@ module.exports = function (app) {
 
 
             res.status(500).json({
-
                 error:
                     error.message ||
                     "AI request failed"
-
             });
 
         }
@@ -129,6 +152,7 @@ module.exports = function (app) {
     });
 
 };
+
 
 
 function convertParts(content) {
@@ -141,6 +165,7 @@ function convertParts(content) {
     if (typeof content === "string") {
 
         return [{
+            type: "text",
             text: content
         }];
 
@@ -150,6 +175,7 @@ function convertParts(content) {
     if (!Array.isArray(content)) {
 
         return [{
+            type: "text",
             text: String(content)
         }];
 
@@ -167,6 +193,7 @@ function convertParts(content) {
         ) {
 
             parts.push({
+                type: "text",
                 text: item.text
             });
 
@@ -181,9 +208,11 @@ function convertParts(content) {
 
             parts.push({
 
-                inlineData: {
+                type: "image",
 
-                    mimeType:
+                inline_data: {
+
+                    mime_type:
                         item.source.media_type ||
                         "image/jpeg",
 
@@ -200,5 +229,97 @@ function convertParts(content) {
 
 
     return parts;
+
+}
+
+
+
+function buildInteractionInput(contents) {
+
+    const input = [];
+
+
+    for (const message of contents) {
+
+        for (const part of message.parts) {
+
+            if (
+                part.type === "text"
+            ) {
+
+                input.push({
+                    type: "text",
+                    text:
+                        message.role === "model"
+                            ? "Assistant: " + part.text
+                            : "User: " + part.text
+                });
+
+            }
+
+
+            if (
+                part.type === "image"
+            ) {
+
+                input.push({
+                    type: "image",
+                    inline_data:
+                        part.inline_data
+                });
+
+            }
+
+        }
+
+    }
+
+
+    return input;
+
+}
+
+
+
+function extractText(data) {
+
+    if (
+        typeof data.output_text ===
+        "string"
+    ) {
+
+        return data.output_text;
+
+    }
+
+
+    if (
+        Array.isArray(data.outputs)
+    ) {
+
+        const pieces = [];
+
+        for (const output of data.outputs) {
+
+            if (
+                output &&
+                typeof output.text ===
+                "string"
+            ) {
+
+                pieces.push(
+                    output.text
+                );
+
+            }
+
+        }
+
+        return pieces.join("\n");
+
+    }
+
+
+    return "";
 
 }
