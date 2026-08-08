@@ -20,7 +20,7 @@ module.exports = function(app) {
       }
 
       var genAI  = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-      var config = { model: 'gemini-1.5-flash' };
+      var config = { model: 'gemini-2.5-flash' };
       if (system) config.systemInstruction = system;
       var model  = genAI.getGenerativeModel(config);
 
