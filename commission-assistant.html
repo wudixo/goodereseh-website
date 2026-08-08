@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Start your commission — tell Good Ereseh about your portrait and see an AI concept before you commit.">
+<title>Commission Assistant — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+
+/* ── ASSISTANT LAYOUT ────────────────────────────────────── */
+.assistant {
+  min-height: 100vh;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Progress bar */
+.assist-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--c2);
+  z-index: 300;
+}
+
+.assist-progress-fill {
+  height: 100%;
+  background: var(--g3);
+  transition: width .6s var(--ease);
+}
+
+/* Step container */
+.assist-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 64px 80px;
+  position: relative;
+}
+
+.step {
+  width: 100%;
+  max-width: 680px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+  position: absolute;
+  pointer-events: none;
+}
+
+.step.active {
+  opacity: 1;
+  transform: translateY(0);
+  position: relative;
+  pointer-events: all;
+}
+
+.step-counter {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--g0);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-counter::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--g0);
+}
+
+.step-q {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin-bottom: 10px;
+}
+
+.step-q em { font-style: italic; color: var(--g3); }
+
+.step-hint {
+  font-size: 13px;
+  color: var(--g1);
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+/* Text input */
+.assist-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(189,179,168,.2);
+  color: var(--p1);
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  padding: 12px 0;
+  outline: none;
+  transition: border-color .3s;
+  caret-color: var(--g3);
+}
+
+.assist-input:focus { border-bottom-color: var(--g3); }
+.assist-input::placeholder { color: var(--g0); }
+
+/* Textarea */
+.assist-textarea {
+  width: 100%;
+  background: var(--c1);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 300;
+  padding: 20px 24px;
+  outline: none;
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.8;
+  transition: border-color .3s;
+}
+
+.assist-textarea:focus { border-color: rgba(189,179,168,.25); }
+.assist-textarea::placeholder { color: var(--g0); }
+
+/* Option buttons */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+  margin-bottom: 40px;
+}
+
+.option-grid.cols-1 { grid-template-columns: 1fr; }
+.option-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+.opt-btn {
+  padding: 20px 24px;
+  background: var(--c1);
+  border: 1px solid rgba(189,179,168,.06);
+  color: var(--g2);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-align: left;
+  cursor: none;
+  transition: border-color .3s, background .3s, color .3s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.opt-btn .opt-label { font-size: 13px; color: var(--p1); }
+.opt-btn .opt-sub   { font-size: 10px; color: var(--g0); letter-spacing: .08em; }
+
+.opt-btn:hover {
+  border-color: rgba(189,179,168,.2);
+  background: var(--c2);
+  color: var(--p1);
+}
+
+.opt-btn.selected {
+  border-color: var(--g3);
+  background: var(--c2);
+  color: var(--p2);
+}
+
+.opt-btn.selected .opt-label { color: var(--p2); }
+
+/* Multi-select mood chips */
+.mood-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.mood-chip {
+  padding: 10px 20px;
+  background: var(--c1);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--g2);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: border-color .3s, background .3s, color .3s;
+  font-family: var(--sans);
+}
+
+.mood-chip:hover { border-color: rgba(189,179,168,.2); color: var(--p1); }
+.mood-chip.selected { border-color: var(--g3); background: var(--c2); color: var(--p2); }
+
+/* Next / back buttons */
+.assist-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 32px;
+  background: var(--p2);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: background .3s;
+}
+
+.btn-next:hover { background: var(--g3); }
+.btn-next:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-back {
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--g1);
+  background: none;
+  border: none;
+  cursor: none;
+  transition: color .3s;
+  font-family: var(--sans);
+}
+
+.btn-back:hover { color: var(--g3); }
+
+/* ── RESULT STEP ─────────────────────────────────────────── */
+.result-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  width: 100%;
+  max-width: 1000px;
+  align-items: start;
+}
+
+.concept-panel { position: relative; }
+
+.concept-img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  display: block;
+  filter: brightness(.9) contrast(1.1) grayscale(20%);
+  background: var(--c2);
+}
+
+.concept-loading {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: var(--c2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.concept-loading-bar {
+  width: 120px;
+  height: 1px;
+  background: var(--c3);
+  overflow: hidden;
+}
+
+.concept-loading-fill {
+  height: 100%;
+  background: var(--g2);
+  animation: loadBar 2s var(--ease) infinite;
+}
+
+@keyframes loadBar {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.concept-loading-text {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--g0);
+}
+
+.concept-note {
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--g0);
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+.brief-panel {}
+
+.brief-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+
+.brief-rows {
+  border-top: 1px solid rgba(189,179,168,.07);
+  margin-bottom: 32px;
+}
+
+.brief-row {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.brief-label {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g0);
+  width: 80px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.brief-value {
+  font-size: 13px;
+  color: var(--p1);
+  line-height: 1.6;
+}
+
+/* Contact fields */
+.brief-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 20px;
+}
+
+.brief-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brief-field label {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.brief-field input {
+  background: var(--c1);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color .3s;
+}
+
+.brief-field input:focus { border-color: rgba(189,179,168,.28); }
+.brief-field input::placeholder { color: var(--g0); }
+
+.btn-send {
+  width: 100%;
+  padding: 16px;
+  background: var(--p2);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: background .3s;
+}
+
+.btn-send:hover { background: var(--g3); }
+.btn-send:disabled { opacity: .5; }
+
+.send-success {
+  display: none;
+  padding: 20px 24px;
+  background: rgba(100,180,100,.06);
+  border: 1px solid rgba(100,180,100,.15);
+  font-size: 13px;
+  color: var(--p1);
+  line-height: 1.7;
+}
+
+.error-msg {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(200,80,80,.08);
+  border: 1px solid rgba(200,80,80,.2);
+  font-size: 11px;
+  color: #d48888;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .assist-body { padding: 100px 28px 60px; }
+  .option-grid { grid-template-columns: 1fr; }
+  .option-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+  .result-layout { grid-template-columns: 1fr; gap: 40px; }
+  .assist-body { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Progress bar -->
+<div class="assist-progress">
+  <div class="assist-progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<nav id="nav">
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions" class="active">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
+</nav>
+
+<div class="assistant">
+  <div class="assist-body" id="assistBody">
+
+    <!-- Step 1: Subject -->
+    <div class="step active" id="step1">
+      <p class="step-counter">Step 1 of 5</p>
+      <h2 class="step-q">Who is this portrait <em>of?</em></h2>
+      <p class="step-hint">A name, a relationship, or a description. There are no wrong answers here.</p>
+      <input class="assist-input" id="s1Input" type="text" placeholder="e.g. My grandmother Rose, aged 80..." maxlength="200" autocomplete="off">
+      <div class="assist-nav">
+        <span></span>
+        <button class="btn-next" id="s1Next" onclick="goTo(2)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Occasion -->
+    <div class="step" id="step2">
+      <p class="step-counter">Step 2 of 5</p>
+      <h2 class="step-q">What is this <em>for?</em></h2>
+      <p class="step-hint">The occasion shapes everything — the weight, the mood, the detail.</p>
+      <div class="option-grid cols-1">
+        <button class="opt-btn" data-s2="Gift for someone special" onclick="selectOpt(this,'s2')">
+          <span class="opt-label">A gift for someone special</span>
+        </button>
+        <button class="opt-btn" data-s2="Memorial piece" onclick="selectOpt(this,'s2')">
+          <span class="opt-label">A memorial — preserving someone's memory</span>
+        </button>
+        <button class="opt-btn" data-s2="Family artwork" onclick="selectOpt(this,'s2')">
+          <span class="opt-label">A family artwork for the home</span>
+        </button>
+        <button class="opt-btn" data-s2="Personal collector piece" onclick="selectOpt(this,'s2')">
+          <span class="opt-label">A personal collector piece — for myself</span>
+        </button>
+        <button class="opt-btn" data-s2="Other" onclick="selectOpt(this,'s2')">
+          <span class="opt-label">Something else</span>
+        </button>
+      </div>
+      <div class="assist-nav">
+        <button class="btn-back" onclick="goTo(1)">← Back</button>
+        <button class="btn-next" id="s2Next" onclick="goTo(3)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Mood -->
+    <div class="step" id="step3">
+      <p class="step-counter">Step 3 of 5</p>
+      <h2 class="step-q">What should it <em>communicate?</em></h2>
+      <p class="step-hint">Choose everything that feels right. These inform how the drawing is approached.</p>
+      <div class="mood-grid" id="moodGrid">
+        <button class="mood-chip" onclick="toggleMood(this)">Strength</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Tenderness</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Joy</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Nostalgia</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Power</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Serenity</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Elegance</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Warmth</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Gravity</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Playfulness</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Mystery</button>
+        <button class="mood-chip" onclick="toggleMood(this)">Legacy</button>
+      </div>
+      <div class="assist-nav">
+        <button class="btn-back" onclick="goTo(2)">← Back</button>
+        <button class="btn-next" id="s3Next" onclick="goTo(4)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Size -->
+    <div class="step" id="step4">
+      <p class="step-counter">Step 4 of 5</p>
+      <h2 class="step-q">What <em>size</em> are you thinking?</h2>
+      <p class="step-hint">All prices are starting points — final quote after consultation.</p>
+      <div class="option-grid">
+        <button class="opt-btn" data-s4="A4 Portrait (from £250)" onclick="selectOpt(this,'s4')">
+          <span class="opt-label">A4 Portrait</span>
+          <span class="opt-sub">210 × 297mm · From £250</span>
+        </button>
+        <button class="opt-btn" data-s4="A3 Portrait (from £500)" onclick="selectOpt(this,'s4')">
+          <span class="opt-label">A3 Portrait</span>
+          <span class="opt-sub">297 × 420mm · From £500</span>
+        </button>
+        <button class="opt-btn" data-s4="A2 Collector Piece (from £900)" onclick="selectOpt(this,'s4')">
+          <span class="opt-label">A2 Collector Piece</span>
+          <span class="opt-sub">420 × 594mm · From £900</span>
+        </button>
+        <button class="opt-btn" data-s4="Large Custom Artwork (from £1,500)" onclick="selectOpt(this,'s4')">
+          <span class="opt-label">Large Custom</span>
+          <span class="opt-sub">Above A2 · From £1,500</span>
+        </button>
+      </div>
+      <div class="assist-nav">
+        <button class="btn-back" onclick="goTo(3)">← Back</button>
+        <button class="btn-next" id="s4Next" onclick="goTo(5)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Details -->
+    <div class="step" id="step5">
+      <p class="step-counter">Step 5 of 5</p>
+      <h2 class="step-q">Anything else I should <em>know?</em></h2>
+      <p class="step-hint">Describe the person — how they carry themselves, what makes them them. The more you give, the more the drawing can hold.</p>
+      <textarea class="assist-textarea" id="s5Input" placeholder="e.g. She has kind eyes and always wore her silver hair up. She laughed easily and loved her garden. I want the portrait to feel warm but dignified..." maxlength="800"></textarea>
+      <div class="assist-nav">
+        <button class="btn-back" onclick="goTo(4)">← Back</button>
+        <button class="btn-next" onclick="generateConcept()">See your concept →</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Result -->
+    <div class="step" id="step6">
+      <div class="result-layout">
+
+        <!-- Concept image -->
+        <div class="concept-panel">
+          <div class="concept-loading" id="conceptLoading">
+            <div class="concept-loading-bar"><div class="concept-loading-fill"></div></div>
+            <div class="concept-loading-text">Generating your concept</div>
+          </div>
+          <img class="concept-img" id="conceptImg" src="" alt="AI concept sketch" style="display:none" onload="conceptLoaded()" onerror="conceptFailed()">
+          <p class="concept-note">This is an AI-generated concept based on your description. The actual charcoal drawing will be a unique handmade artwork — far richer in detail and character.</p>
+        </div>
+
+        <!-- Brief + form -->
+        <div class="brief-panel">
+          <h2 class="brief-title">Your commission brief</h2>
+
+          <div class="brief-rows" id="briefRows"></div>
+
+          <div class="brief-fields">
+            <div class="brief-field">
+              <label for="briefName">Your Name *</label>
+              <input type="text" id="briefName" placeholder="Full name" required>
+            </div>
+            <div class="brief-field">
+              <label for="briefEmail">Email Address *</label>
+              <input type="email" id="briefEmail" placeholder="your@email.com" required>
+            </div>
+          </div>
+
+          <button class="btn-send" id="sendBtn" onclick="submitBrief()">Send this brief to Good Ereseh</button>
+          <div class="error-msg" id="sendError"></div>
+
+          <div class="send-success" id="sendSuccess">
+            <strong style="font-family:var(--serif);font-size:18px;font-weight:300;color:var(--p2)">Brief received.</strong><br><br>
+            Thank you — I'll review your commission brief and respond within two business days to discuss the next steps.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+    </a>
+    <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/benjamin">In God We Trust</a></li><li><a href="/artworks/lips">Unspoken</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
+</footer>
+
+<script>
+const API = 'https://goodereseh-website-production.up.railway.app';
+
+/* ── State ── */
+const answers = { subject:'', occasion:'', moods:[], size:'', details:'' };
+
+/* ── Progress ── */
+const STEPS = 6;
+function setProgress(n) {
+  document.getElementById('progressFill').style.width = ((n-1)/(STEPS-1)*100) + '%';
+}
+
+/* ── Navigation ── */
+function goTo(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const next = document.getElementById('step'+n);
+  setTimeout(() => next.classList.add('active'), 10);
+  setProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Step 1: subject input ── */
+const s1 = document.getElementById('s1Input');
+const s1Btn = document.getElementById('s1Next');
+s1.addEventListener('input', () => {
+  answers.subject = s1.value.trim();
+  s1Btn.disabled = answers.subject.length < 2;
+});
+s1.addEventListener('keydown', e => { if (e.key === 'Enter' && answers.subject.length >= 2) goTo(2); });
+
+/* ── Step 2: occasion ── */
+function selectOpt(btn, key) {
+  btn.closest('.option-grid').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[key] = btn.dataset[key];
+  document.getElementById(key === 's2' ? 's2Next' : 's4Next').disabled = false;
+}
+
+/* ── Step 3: moods ── */
+function toggleMood(btn) {
+  btn.classList.toggle('selected');
+  answers.moods = [...document.querySelectorAll('.mood-chip.selected')].map(c => c.textContent.trim());
+  document.getElementById('s3Next').disabled = answers.moods.length === 0;
+}
+
+/* ── Step 5: details ── */
+document.getElementById('s5Input').addEventListener('input', function() {
+  answers.details = this.value.trim();
+});
+
+/* ── Generate concept ── */
+function generateConcept() {
+  answers.details = document.getElementById('s5Input').value.trim();
+  goTo(6);
+
+  // Build brief rows
+  const briefData = [
+    { label: 'Subject',   value: answers.subject },
+    { label: 'Occasion',  value: answers.s2 || answers.occasion },
+    { label: 'Mood',      value: answers.moods.join(', ') },
+    { label: 'Size',      value: answers.s4 || answers.size },
+    { label: 'Details',   value: answers.details || '—' },
+  ];
+
+  const rows = briefData.map(r => `
+    <div class="brief-row">
+      <span class="brief-label">${r.label}</span>
+      <span class="brief-value">${r.value}</span>
+    </div>`).join('');
+  document.getElementById('briefRows').innerHTML = rows;
+
+  // Build Pollinations.ai prompt
+  const mood = answers.moods.slice(0,3).join(' ') || 'dignified';
+  const prompt = `hyperrealistic charcoal graphite portrait drawing ${answers.subject} ${mood} black and white fine art pencil on paper dramatic lighting detailed`;
+  const seed = Math.floor(Math.random() * 9999);
+  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=480&height=600&nologo=true&seed=${seed}`;
+
+  const img = document.getElementById('conceptImg');
+  img.src = imageUrl;
+}
+
+function conceptLoaded() {
+  document.getElementById('conceptLoading').style.display = 'none';
+  document.getElementById('conceptImg').style.display = 'block';
+}
+
+function conceptFailed() {
+  document.getElementById('conceptLoading').innerHTML = `
+    <div style="font-size:11px;color:var(--g1);text-align:center;padding:20px;line-height:1.7">
+      Concept image unavailable right now.<br>Your brief has all the detail we need.
+    </div>`;
+}
+
+/* ── Submit brief ── */
+async function submitBrief() {
+  const name  = document.getElementById('briefName').value.trim();
+  const email = document.getElementById('briefEmail').value.trim();
+  const errEl = document.getElementById('sendError');
+  const btn   = document.getElementById('sendBtn');
+
+  errEl.style.display = 'none';
+
+  if (!name || !email) {
+    errEl.textContent = 'Please enter your name and email.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const message = [
+    `Subject: ${answers.subject}`,
+    `Occasion: ${answers.s2 || ''}`,
+    `Mood: ${answers.moods.join(', ')}`,
+    `Size: ${answers.s4 || ''}`,
+    `Details: ${answers.details || 'None provided'}`,
+  ].join('\n');
+
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/commission`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        'commission-type': answers.s2 || 'From assistant',
+        size: answers.s4 || '',
+        message,
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+    btn.style.display = 'none';
+    document.getElementById('sendSuccess').style.display = 'block';
+  } catch (err) {
+    errEl.textContent = err.message || 'Something went wrong. Please email art@goodereseh.com directly.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Send this brief to Good Ereseh';
+    btn.disabled = false;
+  }
+}
+
+/* ── Nav / cursor ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    clearTimeout(tt);
+    tt=setTimeout(()=>{
+      const t=document.createElement('div');
+      t.className='cursor-trail';
+      t.style.left=mx+'px'; t.style.top=my+'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend',()=>t.remove());
+    },16);
+  });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+}
+</script>
+</body>
+</html>
