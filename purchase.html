@@ -356,17 +356,27 @@
       </div>
     </div>
 
-    <!-- Optional: name + email for Stripe pre-fill -->
+    <!-- Customer details -->
     <div class="optional-fields">
-      <p class="optional-label">Your details <span style="color:var(--g0)">(optional — speeds up checkout)</span></p>
+      <p class="optional-label">Your details</p>
       <div class="field-row">
         <div class="field-group">
-          <label for="customerName">Name</label>
-          <input type="text" id="customerName" placeholder="Full name" autocomplete="name">
+          <label for="customerName">Full Name *</label>
+          <input type="text" id="customerName" placeholder="Full name" autocomplete="name" required>
         </div>
         <div class="field-group">
-          <label for="customerEmail">Email</label>
-          <input type="email" id="customerEmail" placeholder="your@email.com" autocomplete="email">
+          <label for="customerEmail">Email Address *</label>
+          <input type="email" id="customerEmail" placeholder="your@email.com" autocomplete="email" required>
+        </div>
+      </div>
+      <div class="field-row" style="margin-top:3px">
+        <div class="field-group">
+          <label for="customerPhone">Phone Number</label>
+          <input type="tel" id="customerPhone" placeholder="+44 7700 000000" autocomplete="tel">
+        </div>
+        <div class="field-group">
+          <label for="customerAddress">Delivery Address</label>
+          <input type="text" id="customerAddress" placeholder="Street, City, Postcode" autocomplete="street-address">
         </div>
       </div>
     </div>
@@ -468,19 +478,38 @@ if (product) {
 async function proceedToPayment() {
   if (!product) return;
 
-  const btn  = document.getElementById('payBtn');
-  const errEl = document.getElementById('errorMsg');
-  const name  = document.getElementById('customerName').value.trim();
-  const email = document.getElementById('customerEmail').value.trim();
+  const btn     = document.getElementById('payBtn');
+  const errEl   = document.getElementById('errorMsg');
+  const name    = document.getElementById('customerName').value.trim();
+  const email   = document.getElementById('customerEmail').value.trim();
+  const phone   = document.getElementById('customerPhone').value.trim();
+  const address = document.getElementById('customerAddress').value.trim();
 
-  btn.textContent = 'Redirecting...';
-  btn.disabled = true;
+  // Validate required fields
+  if (!name || !email) {
+    errEl.textContent   = 'Please enter your name and email address to continue.';
+    errEl.style.display = 'block';
+    if (!name)  document.getElementById('customerName').focus();
+    else        document.getElementById('customerEmail').focus();
+    return;
+  }
+
+  // Basic email format check
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent   = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    document.getElementById('customerEmail').focus();
+    return;
+  }
+
   errEl.style.display = 'none';
+  btn.innerHTML   = 'Redirecting...';
+  btn.disabled    = true;
 
   try {
-    const body = { productId };
-    if (name)  body.name  = name;
-    if (email) body.email = email;
+    const body = { productId, name, email };
+    if (phone)   body.phone   = phone;
+    if (address) body.address = address;
 
     const res  = await fetch(`${API}/create-checkout-session`, {
       method: 'POST',
