@@ -3,20 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Fragments of Thought — an original abstract charcoal artwork on cotton paper by Good Ereseh.">
-<title>Fragments of Thought — Good Ereseh</title>
+<meta name="description" content="Unspoken — a charcoal and white ink study by Good Ereseh. Original and fine art prints available.">
+<title>Unspoken — Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
+/* Landscape hero — wider crop for the lips image */
 .artwork-hero{height:80vh;min-height:600px;position:relative;overflow:hidden;background:var(--c2);}
-.artwork-hero img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.88) contrast(1.06);}
-.artwork-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,13,11,.4) 0%,transparent 30%,transparent 60%,rgba(15,13,11,.96) 100%);}
+.artwork-hero img{width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(.88) contrast(1.08);}
+.artwork-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,13,11,.35) 0%,transparent 25%,transparent 55%,rgba(15,13,11,.97) 100%);}
 .artwork-hero-info{position:absolute;bottom:60px;left:64px;z-index:2;}
 .artwork-hero-info .tag{margin-bottom:14px;}
-.artwork-hero-title{font-family:var(--serif);font-size:clamp(44px,7vw,88px);font-weight:300;color:var(--p2);line-height:.95;letter-spacing:-.02em;}
+.artwork-hero-title{font-family:var(--serif);font-size:clamp(52px,8vw,100px);font-weight:300;color:var(--p2);line-height:.95;letter-spacing:-.02em;}
 .artwork-hero-title em{font-style:italic;color:var(--g3);display:block;}
+
 .artwork-body{display:grid;grid-template-columns:1fr 420px;gap:80px;padding:100px 64px;align-items:start;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07);}
 .artwork-desc h2{font-family:var(--serif);font-size:clamp(28px,3vw,40px);font-weight:300;color:var(--p2);margin-bottom:24px;line-height:1.2;}
 .artwork-desc p{font-size:15px;color:var(--g2);line-height:1.9;margin-bottom:16px;}
@@ -24,6 +26,7 @@
 .meta-item{padding:20px 0;border-bottom:1px solid rgba(189,179,168,.07);}
 .meta-label{font-size:8px;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:var(--g1);margin-bottom:6px;}
 .meta-value{font-size:13px;color:var(--p1);letter-spacing:.02em;}
+
 .purchase-sidebar{position:sticky;top:100px;}
 .purchase-sidebar h3{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p2);margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid rgba(189,179,168,.07);}
 .purchase-options{display:flex;flex-direction:column;gap:2px;}
@@ -39,6 +42,7 @@
 .purchase-note{margin-top:24px;padding-top:24px;border-top:1px solid rgba(189,179,168,.07);font-size:11px;color:var(--g1);line-height:1.8;}
 .purchase-note a{color:var(--g2);text-decoration:underline;}
 .error-msg{display:none;margin-top:16px;padding:14px 18px;background:rgba(200,80,80,.08);border:1px solid rgba(200,80,80,.2);font-size:11px;color:#d48888;line-height:1.6;}
+
 .related{padding:100px 64px;background:var(--c1);}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:48px;}
 .related-card{display:block;position:relative;overflow:hidden;background:var(--c2);}
@@ -48,6 +52,7 @@
 .related-card-info{padding:18px 0 20px;}
 .related-card-name{font-family:var(--serif);font-size:20px;font-weight:300;color:var(--p1);margin-bottom:4px;}
 .related-card-sub{font-size:9px;color:var(--g1);letter-spacing:.15em;text-transform:uppercase;}
+
 @media(max-width:960px){.artwork-hero-info{left:28px;bottom:40px;}.artwork-body{grid-template-columns:1fr;padding:60px 28px;gap:48px;}.purchase-sidebar{position:static;}.related{padding:60px 28px;}.related-grid{grid-template-columns:1fr;}.purchase-option{flex-wrap:wrap;gap:12px;}.option-price{margin:0;}}
 </style>
 </head>
@@ -67,29 +72,29 @@
 </nav>
 
 <div class="artwork-hero">
-  <img src="https://goodereseh.com/images/artwork/abstract.jpg" alt="Fragments of Thought — Abstract Charcoal Artwork by Good Ereseh">
+  <img src="/images/artwork/lips.jpg" alt="Unspoken — Charcoal and White Ink Study by Good Ereseh">
   <div class="artwork-hero-info">
-    <span class="tag">Abstract Charcoal Artwork</span>
-    <h1 class="artwork-hero-title">Fragments<br><em>of Thought</em></h1>
+    <span class="tag">Charcoal &amp; White Ink Study</span>
+    <h1 class="artwork-hero-title"><em>Unspoken</em></h1>
   </div>
 </div>
 
 <section class="artwork-body">
   <div class="artwork-desc reveal">
-    <h2>What charcoal does when freed from representation.</h2>
+    <h2>Words on the lips. Not yet said.</h2>
     <p>
-      All of the portrait work asks charcoal to represent something — a face, an eye, a gesture. <em>Fragments of Thought</em> asks a different question: what does charcoal do when it isn't representing anything at all?
+      A close-up study of lips drawn in charcoal, with white ink calligraphy written directly onto the surface of the work. The words are present — physically there, on the lips — but they are marks, not speech. At the distance you view a framed piece, they are illegible. You know something is written. You cannot read it.
     </p>
     <p>
-      The marks accumulate. Layers build. What emerges is neither purely structured nor purely dissolved — it exists somewhere between the two, the way a thought exists before it becomes a sentence. There is rhythm in it. There is weight. But it resists description.
+      The tension between language and silence is what this piece inhabits. The mouth is the instrument of speech. Here it is closed, adorned with words it hasn't said. Whether that is restraint, or secrecy, or simply a thought not yet formed — the work doesn't decide. You do.
     </p>
     <p>
-      Drawn in compressed charcoal stick on 300gsm cotton paper. The original shows the surface texture of the paper working with the charcoal — a material conversation that fine art prints on archival cotton paper faithfully reproduce.
+      The most technically complex piece in the collection: charcoal realism built over multiple sessions, with white ink mark-making applied on top. The two materials work in opposition and in concert — darkness and light, permanence and gesture, control and release.
     </p>
     <div class="artwork-meta">
-      <div class="meta-item"><div class="meta-label">Medium</div><div class="meta-value">Charcoal stick</div></div>
+      <div class="meta-item"><div class="meta-label">Medium</div><div class="meta-value">Charcoal &amp; white ink</div></div>
       <div class="meta-item"><div class="meta-label">Surface</div><div class="meta-value">Heavy cotton paper</div></div>
-      <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">Abstract study</div></div>
+      <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">Mixed media study</div></div>
       <div class="meta-item"><div class="meta-label">Edition</div><div class="meta-value">1 original · 4 print sizes</div></div>
     </div>
   </div>
@@ -99,33 +104,33 @@
     <div class="purchase-options">
       <div class="purchase-option">
         <div class="option-info"><div class="option-name">Original Artwork</div><div class="option-sub">One of a kind · Signed · Certificate</div></div>
-        <div class="option-price">£400</div>
-        <a href="/purchase?product=fragments_original" class="option-buy">Purchase</a>
+        <div class="option-price">£3,500</div>
+        <a href="/purchase?product=unspoken_original" class="option-buy">Purchase</a>
       </div>
       <div class="purchase-option">
         <div class="option-info"><div class="option-name">Fine Art Print A4</div><div class="option-sub">210 × 297mm · Archival · Limited</div></div>
-        <div class="option-price">£50</div>
-        <a href="/purchase?product=fragments_print_A4" class="option-buy">Purchase</a>
+        <div class="option-price">£85</div>
+        <a href="/purchase?product=unspoken_print_A4" class="option-buy">Purchase</a>
       </div>
       <div class="purchase-option">
         <div class="option-info"><div class="option-name">Fine Art Print A3</div><div class="option-sub">297 × 420mm · Archival · Limited</div></div>
-        <div class="option-price">£95</div>
-        <a href="/purchase?product=fragments_print_A3" class="option-buy">Purchase</a>
+        <div class="option-price">£150</div>
+        <a href="/purchase?product=unspoken_print_A3" class="option-buy">Purchase</a>
       </div>
       <div class="purchase-option">
         <div class="option-info"><div class="option-name">Fine Art Print A2</div><div class="option-sub">420 × 594mm · Archival · Limited</div></div>
-        <div class="option-price">£175</div>
-        <a href="/purchase?product=fragments_print_A2" class="option-buy">Purchase</a>
+        <div class="option-price">£275</div>
+        <a href="/purchase?product=unspoken_print_A2" class="option-buy">Purchase</a>
       </div>
       <div class="purchase-option">
         <div class="option-info"><div class="option-name">Fine Art Print A1</div><div class="option-sub">594 × 841mm · Archival · Limited</div></div>
-        <div class="option-price">£300</div>
-        <a href="/purchase?product=fragments_print_A1" class="option-buy">Purchase</a>
+        <div class="option-price">£500</div>
+        <a href="/purchase?product=unspoken_print_A1" class="option-buy">Purchase</a>
       </div>
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <p class="purchase-note">
-      All prints produced on archival cotton paper. The original is signed and delivered in a black presentation box with wax seal and Certificate of Authenticity.<br><br>
+      All prints produced on archival cotton paper and reproduce the white ink detail faithfully. The original is signed and delivered in a black presentation box with wax seal and Certificate of Authenticity.<br><br>
       Questions? <a href="mailto:art@goodereseh.com">art@goodereseh.com</a>
     </p>
   </div>
@@ -137,9 +142,9 @@
     <a href="/gallery" class="btn-ghost"><span class="arr">→</span> Full collection</a>
   </div>
   <div class="related-grid">
-    <a href="/artworks/eye" class="related-card reveal d1"><div class="related-card-img"><img src="https://goodereseh.com/images/artwork/eye.jpg" alt="Reflections"></div><div class="related-card-info"><div class="related-card-name">Reflections</div><div class="related-card-sub">Hyperrealistic Eye Study</div></div></a>
-    <a href="/artworks/fela" class="related-card reveal d2"><div class="related-card-img"><img src="https://goodereseh.com/images/artwork/fela.jpg" alt="Fela Kuti"></div><div class="related-card-info"><div class="related-card-name">Fela Kuti</div><div class="related-card-sub">Original Graphite Portrait</div></div></a>
-    <a href="/artworks/fela2" class="related-card reveal d3"><div class="related-card-img"><img src="https://goodereseh.com/images/artwork/fela2.jpg" alt="The Stance"></div><div class="related-card-info"><div class="related-card-name">The Stance</div><div class="related-card-sub">Charcoal Portrait Study</div></div></a>
+    <a href="/artworks/eye" class="related-card reveal d1"><div class="related-card-img"><img src="/images/artwork/eye.jpg" alt="Reflections"></div><div class="related-card-info"><div class="related-card-name">Reflections</div><div class="related-card-sub">Hyperrealistic Eye Study</div></div></a>
+    <a href="/artworks/benjamin" class="related-card reveal d2"><div class="related-card-img"><img src="/images/artwork/benjamin.jpeg" alt="In God We Trust"></div><div class="related-card-info"><div class="related-card-name">In God We Trust</div><div class="related-card-sub">Charcoal &amp; Graphite Portrait</div></div></a>
+    <a href="/artworks/fela2" class="related-card reveal d3"><div class="related-card-img"><img src="/images/artwork/fela2.jpg" alt="The Stance"></div><div class="related-card-info"><div class="related-card-name">The Stance</div><div class="related-card-sub">Charcoal Portrait Study</div></div></a>
   </div>
 </section>
 
@@ -147,7 +152,7 @@
   <div class="footer-glyph" aria-hidden="true">G · E</div>
   <div class="footer-grid">
     <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/fela2">The Stance</a></li><li><a href="/artworks/abstract">Fragments of Thought</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/benjamin">In God We Trust</a></li><li><a href="/artworks/lips">Unspoken</a></li></ul></div>
     <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
   </div>
   <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
