@@ -1,88 +1,204 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require("@google/genai");
 
-module.exports = function(app) {
+module.exports = function (app) {
 
-  app.get('/chat-test', function(req, res) {
-    res.json({ status: 'working', google_key_set: !!process.env.GOOGLE_API_KEY });
-  });
+    app.get("/chat-test", function (req, res) {
 
-  app.post('/chat', async function(req, res) {
-    console.log('[CHAT] request received');
-    try {
-      var messages = req.body.messages;
-      var system   = req.body.system || '';
+        res.json({
+            status: "working",
+            google_key_set: !!process.env.GOOGLE_API_KEY
+        });
 
-      if (!messages || !messages.length) {
-        return res.status(400).json({ error: 'No messages' });
-      }
-      if (!process.env.GOOGLE_API_KEY) {
-        return res.status(500).json({ error: 'GOOGLE_API_KEY not set' });
-      }
+    });
 
-      var genAI  = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-      var config = { model: 'gemini-2.5-flash' };
-      if (system) config.systemInstruction = system;
-      var model  = genAI.getGenerativeModel(config);
 
-      // Gemini requires history to start with a user message — skip leading model messages
-      var startIdx = 0;
-      while (startIdx < messages.length - 1 &&
-             (messages[startIdx].role === 'assistant' || messages[startIdx].role === 'model')) {
-        startIdx++;
-      }
+    app.post("/chat", async function (req, res) {
 
-      var geminiHistory = [];
-      for (var i = startIdx; i < messages.length - 1; i++) {
-        var msg   = messages[i];
-        var role  = msg.role === 'assistant' ? 'model' : 'user';
-        var parts = toParts(msg.content);
-        if (parts.length) geminiHistory.push({ role: role, parts: parts });
-      }
+        console.log("[CHAT] request received");
 
-      var last    = messages[messages.length - 1];
-      var current = toParts(last.content);
-      if (!current.length) return res.status(400).json({ error: 'Empty message' });
+        try {
 
-      console.log('[CHAT] history:', geminiHistory.length, 'entries | calling Gemini');
+            const messages = req.body.messages;
+            const system = req.body.system || "";
 
-      var chat   = model.startChat({ history: geminiHistory, generationConfig: { maxOutputTokens: 1000 } });
-      var result = await chat.sendMessage(current);
+            if (!messages || !messages.length) {
 
-      var text = '';
-      try {
-        text = result.response.text() || '';
-      } catch (e) {
-        console.error('[CHAT] text() error:', e.message);
-        text = '';
-      }
+                return res.status(400).json({
+                    error: "No messages"
+                });
 
-      // If Gemini returned empty (safety block or other issue), give a fallback
-      if (!text || !text.trim()) {
-        console.warn('[CHAT] Gemini returned empty — using fallback');
-        text = 'Thank you. Could you tell me a bit more about what you have in mind for this commission?';
-      }
+            }
 
-      console.log('[CHAT] reply chars:', text.length);
-      res.json({ text: text });
+            if (!process.env.GOOGLE_API_KEY) {
 
-    } catch (err) {
-      console.error('[CHAT] error:', err.message);
-      res.status(500).json({ error: err.message });
-    }
-  });
+                return res.status(500).json({
+                    error: "GOOGLE_API_KEY not set"
+                });
+
+            }
+
+
+            const ai = new GoogleGenAI({
+                apiKey: process.env.GOOGLE_API_KEY
+            });
+
+
+            const contents = [];
+
+
+            for (const msg of messages) {
+
+                const role =
+                    msg.role === "assistant"
+                        ? "model"
+                        : "user";
+
+
+                const parts =
+                    convertParts(msg.content);
+
+
+                if (parts.length) {
+
+                    contents.push({
+                        role: role,
+                        parts: parts
+                    });
+
+                }
+
+            }
+
+
+            const response =
+                await ai.models.generateContent({
+
+                    model: "gemini-3.6-flash",
+
+                    contents: contents,
+
+                    config: {
+
+                        systemInstruction:
+                            system || undefined,
+
+                        maxOutputTokens:
+                            1000
+
+                    }
+
+                });
+
+
+            const text =
+                response.text ||
+                "Thank you. Could you tell me a little more about what you have in mind for this commission?";
+
+
+            console.log(
+                "[CHAT] reply chars:",
+                text.length
+            );
+
+
+            res.json({
+                text: text
+            });
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "[CHAT] error:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                error:
+                    error.message ||
+                    "AI request failed"
+
+            });
+
+        }
+
+    });
+
 };
 
-function toParts(content) {
-  if (!content) return [];
-  if (typeof content === 'string') return [{ text: content }];
-  if (!Array.isArray(content)) return [{ text: String(content) }];
-  var parts = [];
-  for (var i = 0; i < content.length; i++) {
-    var p = content[i];
-    if (p.type === 'text' && p.text) parts.push({ text: p.text });
-    if (p.type === 'image' && p.source && p.source.data) {
-      parts.push({ inlineData: { mimeType: p.source.media_type || 'image/jpeg', data: p.source.data } });
+
+function convertParts(content) {
+
+    if (!content) {
+        return [];
     }
-  }
-  return parts;
+
+
+    if (typeof content === "string") {
+
+        return [{
+            text: content
+        }];
+
+    }
+
+
+    if (!Array.isArray(content)) {
+
+        return [{
+            text: String(content)
+        }];
+
+    }
+
+
+    const parts = [];
+
+
+    for (const item of content) {
+
+        if (
+            item.type === "text" &&
+            item.text
+        ) {
+
+            parts.push({
+                text: item.text
+            });
+
+        }
+
+
+        if (
+            item.type === "image" &&
+            item.source &&
+            item.source.data
+        ) {
+
+            parts.push({
+
+                inlineData: {
+
+                    mimeType:
+                        item.source.media_type ||
+                        "image/jpeg",
+
+                    data:
+                        item.source.data
+
+                }
+
+            });
+
+        }
+
+    }
+
+
+    return parts;
+
 }
