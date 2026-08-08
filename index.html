@@ -228,7 +228,7 @@ nav.scrolled {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://goodereseh.com/images/hero/hero-artwork.jpg');
+  background-image: url('https://goodereseh.com/images/artwork/fela.jpg');
   background-size: cover;
   background-position: center 15%;
   filter: brightness(0.05) contrast(1.4);
@@ -272,7 +272,7 @@ nav.scrolled {
   font-weight: 400;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--g1);
+  color: var(--g3);
   margin-bottom: 28px;
   display: flex;
   align-items: center;
@@ -284,7 +284,7 @@ nav.scrolled {
   display: block;
   width: 20px;
   height: 1px;
-  background: var(--g1);
+  background: var(--g3);
 }
 
 .hero-h1 {
@@ -299,7 +299,7 @@ nav.scrolled {
 
 .hero-h1 .italic {
   font-style: italic;
-  color: var(--g3);
+  color: var(--p1);
   display: block;
 }
 
@@ -407,7 +407,7 @@ nav.scrolled {
   font-weight: 400;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--g0);
+  color: var(--g2);
   display: flex;
   align-items: center;
   gap: 28px;
@@ -416,7 +416,7 @@ nav.scrolled {
 .ticker-diamond {
   width: 3px;
   height: 3px;
-  background: var(--g0);
+  background: var(--g2);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -1165,7 +1165,8 @@ nav.scrolled {
   .hero-content { padding: 0 28px 72px; }
   .hero-location { display: none; }
   .viewer-slide { grid-template-columns: 1fr; }
-  .viewer-left { padding: 100px 28px 60px; }
+  .viewer-left { padding: 100px 28px 160px; }
+  .viewer-controls { left: 28px; bottom: 28px; }
   .viewer-right { display: none; }
   .viewer-num { font-size: 100px; }
   .editorial { padding: 80px 28px; }
@@ -1315,14 +1316,40 @@ nav.scrolled {
     </div>
   </div>
 
+  <div class="viewer-slide" data-index="4">
+    <div class="viewer-left">
+      <div class="viewer-num">05</div>
+      <div class="viewer-title">In God<br>We Trust</div>
+      <div class="viewer-type">Charcoal &amp; Graphite Portrait</div>
+      <div class="viewer-price">Original — £4,000 · Prints from £95</div>
+      <a href="/artworks/benjamin" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="/images/artwork/benjamin.jpeg" alt="In God We Trust">
+    </div>
+  </div>
+
+  <div class="viewer-slide" data-index="5">
+    <div class="viewer-left">
+      <div class="viewer-num">06</div>
+      <div class="viewer-title">Unspoken</div>
+      <div class="viewer-type">Charcoal &amp; White Ink Study</div>
+      <div class="viewer-price">Original — £3,500 · Prints from £85</div>
+      <a href="/artworks/lips" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="/images/artwork/lips.jpg" alt="Unspoken">
+    </div>
+  </div>
+
   <div class="viewer-controls">
     <button class="viewer-btn" id="viewerPrev" aria-label="Previous artwork">←</button>
-    <span class="viewer-count" id="viewerCount">01 / 04</span>
+    <span class="viewer-count" id="viewerCount">01 / 06</span>
     <button class="viewer-btn" id="viewerNext" aria-label="Next artwork">→</button>
   </div>
 
   <div class="viewer-progress">
-    <div class="viewer-progress-fill" id="viewerProgress" style="width:25%"></div>
+    <div class="viewer-progress-fill" id="viewerProgress" style="width:16.67%"></div>
   </div>
 
 </section>
