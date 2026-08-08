@@ -1,504 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Commission a personal charcoal or graphite portrait by Good Ereseh. Personal portraits, family artworks, memorial pieces.">
+<title>Commissions — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+/* Commission types */
+.commission-types {
+  padding: 120px 64px;
+  background: var(--ink);
+}
 
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
 
-<title>
-Commission Artwork | Good Ereseh
-</title>
+.type-card {
+  background: var(--c1);
+  padding: 56px 44px;
+  border: 1px solid rgba(189,179,168,.06);
+  transition: border-color .4s, background .4s;
+  position: relative;
+  overflow: hidden;
+}
 
+.type-card:hover {
+  border-color: rgba(189,179,168,.15);
+  background: var(--c2);
+}
 
-<meta name="description" content="Commission a personalised hyperrealistic charcoal or graphite portrait by Good Ereseh. Original handmade artwork created in London for collectors and special occasions.">
+.type-num {
+  font-family: var(--serif);
+  font-size: 80px;
+  font-weight: 300;
+  color: rgba(189,179,168,.04);
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  line-height: 1;
+  pointer-events: none;
+}
 
+.type-icon {
+  width: 28px;
+  height: 1px;
+  background: var(--g0);
+  margin-bottom: 28px;
+}
 
-<link rel="stylesheet" href="css/style.css">
+.type-name {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
 
+.type-desc {
+  font-size: 13px;
+  color: var(--g2);
+  line-height: 1.85;
+}
 
+/* Process */
+.commission-process {
+  padding: 140px 64px;
+  background: var(--c1);
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 72px;
+  border-top: 1px solid rgba(189,179,168,.07);
+}
+
+.process-step {
+  padding: 52px 48px 52px 0;
+  border-right: 1px solid rgba(189,179,168,.07);
+}
+
+.process-step:last-child { border-right: none; }
+
+.step-num {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 300;
+  color: rgba(189,179,168,.12);
+  line-height: 1;
+  margin-bottom: 28px;
+}
+
+.step-name {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 14px;
+}
+
+.step-desc {
+  font-size: 13px;
+  color: var(--g1);
+  line-height: 1.8;
+}
+
+/* Pricing */
+.commission-pricing {
+  padding: 140px 64px;
+  background: var(--ink);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+
+.pricing-card {
+  background: var(--c1);
+  padding: 44px 36px;
+  border: 1px solid rgba(189,179,168,.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-size {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 20px;
+}
+
+.pricing-price {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pricing-from {
+  font-size: 10px;
+  color: var(--g1);
+  letter-spacing: .08em;
+  margin-bottom: 28px;
+}
+
+.pricing-details {
+  font-size: 12px;
+  color: var(--g2);
+  line-height: 1.8;
+  border-top: 1px solid rgba(189,179,168,.07);
+  padding-top: 20px;
+}
+
+/* Form section */
+.commission-form-section {
+  padding: 140px 64px;
+  background: var(--c1);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 100px;
+  align-items: start;
+}
+
+.form-intro h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-bottom: 24px;
+}
+
+.form-intro h2 em { font-style: italic; color: var(--g3); }
+
+.form-intro p {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+.form-note {
+  font-size: 11px;
+  color: var(--g1);
+  line-height: 1.8;
+  padding-top: 32px;
+  border-top: 1px solid rgba(189,179,168,.07);
+}
+
+/* Form styles */
+.enquiry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: var(--c2);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 14px 18px;
+  outline: none;
+  transition: border-color .3s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: rgba(189,179,168,.3);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--g0);
+}
+
+.form-field select option {
+  background: var(--c2);
+  color: var(--p1);
+}
+
+.form-field textarea { resize: vertical; min-height: 140px; }
+
+.form-submit {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-terms {
+  font-size: 10px;
+  color: var(--g1);
+  line-height: 1.7;
+}
+
+.form-terms a { color: var(--g2); text-decoration: underline; }
+
+/* Success message */
+.form-success {
+  display: none;
+  padding: 28px;
+  background: rgba(100,180,100,.06);
+  border: 1px solid rgba(100,180,100,.15);
+  font-size: 14px;
+  color: var(--p1);
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .commission-types, .commission-process, .commission-pricing, .commission-form-section { padding: 80px 28px; }
+  .types-grid, .pricing-grid { grid-template-columns: 1fr; gap: 3px; }
+  .process-steps { grid-template-columns: 1fr; }
+  .process-step { border-right: none; border-bottom: 1px solid rgba(189,179,168,.07); padding: 40px 0; }
+  .process-step:last-child { border-bottom: none; }
+  .commission-form-section { grid-template-columns: 1fr; gap: 60px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
 </head>
-
-
-
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-
-<header>
-
-<nav>
-
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-
-<ul>
-
-<li>
-<a href="index.html">
-Home
-</a>
-</li>
-
-
-<li>
-<a href="gallery.html">
-Gallery
-</a>
-</li>
-
-
-<li>
-<a href="about.html">
-About
-</a>
-</li>
-
-
-<li>
-<a href="commissions.html">
-Commissions
-</a>
-</li>
-
-
-<li>
-<a href="contact.html">
-Contact
-</a>
-</li>
-
-
-</ul>
-
-
+<nav id="nav">
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions" class="active">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
+<!-- Hero -->
+<div class="page-hero">
+  <p class="page-hero-eyebrow">Personal Artworks</p>
+  <h1 class="page-hero-title">Commission<br>a Portrait.</h1>
+  <p class="page-hero-sub">Transform your most meaningful photographs into a handcrafted charcoal or graphite portrait created exclusively for you.</p>
+</div>
 
-
-
-
-
-
-<main>
-
-
-
-<section class="commission-hero">
-
-
-<h1>
-Commission A Personal Artwork
-</h1>
-
-
-<p>
-Transform your most meaningful photographs into a handcrafted charcoal or graphite portrait created exclusively for you.
-</p>
-
-
-<a href="contact.html">
-Request A Commission
-</a>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="commission-intro">
-
-
-<h2>
-A Portrait With Meaning
-</h2>
-
-
-<p>
-Every commission begins with a personal story. Whether it is a family portrait, a memorial piece, a gift for someone special or a personal collector artwork, each piece is carefully created to preserve emotion and character.
-</p>
-
-
-<p>
-Using traditional charcoal and graphite techniques, each artwork is drawn entirely by hand with attention to detail, texture and expression.
-</p>
-
-
-
-</section>
-
-
-
-
-
-
-
-
+<!-- Commission Types -->
 <section class="commission-types">
-
-
-<h2>
-Commission Options
-</h2>
-
-
-
-<div class="commission-grid">
-
-
-
-<div>
-
-<h3>
-Personal Portraits
-</h3>
-
-
-<p>
-A detailed handmade portrait capturing the personality and emotion of an individual.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Family Artwork
-</h3>
-
-
-<p>
-A meaningful artwork combining loved ones into a timeless piece for your home.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Memorial Pieces
-</h3>
-
-
-<p>
-A respectful portrait created to preserve the memory of someone important.
-</p>
-
-</div>
-
-
-
-</div>
-
-
+  <div class="section-header reveal">
+    <div>
+      <p class="eyebrow">What we create</p>
+      <h2 class="section-title">A portrait<br><em>with meaning.</em></h2>
+    </div>
+  </div>
+  <div class="types-grid">
+    <div class="type-card reveal d1">
+      <div class="type-num" aria-hidden="true">I</div>
+      <div class="type-icon"></div>
+      <div class="type-name">Personal<br>Portrait</div>
+      <p class="type-desc">A detailed handmade portrait capturing the personality and emotion of an individual — drawn from reference photographs you supply. The most personal thing you can own on a wall.</p>
+    </div>
+    <div class="type-card reveal d2">
+      <div class="type-num" aria-hidden="true">II</div>
+      <div class="type-icon"></div>
+      <div class="type-name">Family<br>Artwork</div>
+      <p class="type-desc">A meaningful artwork combining loved ones into a timeless piece for your home. Multiple subjects, one composition — drawn entirely by hand in charcoal or graphite.</p>
+    </div>
+    <div class="type-card reveal d3">
+      <div class="type-num" aria-hidden="true">III</div>
+      <div class="type-icon"></div>
+      <div class="type-name">Memorial<br>Piece</div>
+      <p class="type-desc">A respectful portrait created to preserve the memory of someone important. Drawn with the care and attention the subject deserves — a lasting record of who they were.</p>
+    </div>
+  </div>
 </section>
 
-
-
-
-
-
-
-
+<!-- Process -->
 <section class="commission-process">
-
-
-<h2>
-The Process
-</h2>
-
-
-
-
-<div class="process-grid">
-
-
-
-<div>
-
-<h3>
-01. Consultation
-</h3>
-
-
-<p>
-We discuss your idea, preferred artwork size, reference images and the feeling you want the artwork to communicate.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-02. Creation
-</h3>
-
-
-<p>
-The artwork is carefully developed through layers of charcoal and graphite to build realism, depth and detail.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-03. Completion
-</h3>
-
-
-<p>
-Your finished original artwork is reviewed, signed and prepared for secure delivery.
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
+  <div class="section-header reveal">
+    <div>
+      <p class="eyebrow">How it works</p>
+      <h2 class="section-title">The process.</h2>
+    </div>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal d1">
+      <div class="step-num">01</div>
+      <div class="step-name">Consultation</div>
+      <p class="step-desc">We discuss your idea, preferred artwork size, reference images and the feeling you want the artwork to communicate. No commitment required at this stage.</p>
+    </div>
+    <div class="process-step reveal d2">
+      <div class="step-num">02</div>
+      <div class="step-name">Creation</div>
+      <p class="step-desc">The artwork is carefully developed through layers of charcoal and graphite to build realism, depth and detail. You receive progress updates throughout.</p>
+    </div>
+    <div class="process-step reveal d3">
+      <div class="step-num">03</div>
+      <div class="step-name">Completion</div>
+      <p class="step-desc">Your finished original artwork is reviewed, signed and prepared for secure delivery in a black presentation box with Certificate of Authenticity and wax seal.</p>
+    </div>
+  </div>
 </section>
 
-
-
-
-
-
-
-
-<section class="pricing-section">
-
-
-<h2>
-Commission Pricing
-</h2>
-
-
-
-<div class="pricing-grid">
-
-
-
-<div>
-
-<h3>
-A4 Portrait
-</h3>
-
-
-<p>
-From £250
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-A3 Portrait
-</h3>
-
-
-<p>
-From £500
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-A2 Collector Piece
-</h3>
-
-
-<p>
-From £900
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Large Custom Artwork
-</h3>
-
-
-<p>
-From £1,500
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
+<!-- Pricing -->
+<section class="commission-pricing">
+  <div class="section-header reveal">
+    <div>
+      <p class="eyebrow">Investment</p>
+      <h2 class="section-title">Commission<br><em>pricing.</em></h2>
+    </div>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal d1">
+      <div class="pricing-size">A4 Portrait</div>
+      <div class="pricing-price">£250</div>
+      <div class="pricing-from">from</div>
+      <div class="pricing-details">210 × 297mm. Ideal for personal portraits and intimate subjects. Delivered framed-ready.</div>
+    </div>
+    <div class="pricing-card reveal d2">
+      <div class="pricing-size">A3 Portrait</div>
+      <div class="pricing-price">£500</div>
+      <div class="pricing-from">from</div>
+      <div class="pricing-details">297 × 420mm. The most popular size — substantial enough to be a statement piece.</div>
+    </div>
+    <div class="pricing-card reveal d3">
+      <div class="pricing-size">A2 Collector Piece</div>
+      <div class="pricing-price">£900</div>
+      <div class="pricing-from">from</div>
+      <div class="pricing-details">420 × 594mm. A collector-grade artwork for the serious collector or prominent wall space.</div>
+    </div>
+    <div class="pricing-card reveal d4">
+      <div class="pricing-size">Large Custom Artwork</div>
+      <div class="pricing-price">£1,500</div>
+      <div class="pricing-from">from</div>
+      <div class="pricing-details">Any size above A2. For ambitious commissions — multiple subjects, large formats, architectural scales.</div>
+    </div>
+  </div>
 </section>
 
+<!-- Form -->
+<section class="commission-form-section">
+  <div class="form-intro">
+    <p class="eyebrow reveal">Begin your commission</p>
+    <h2 class="reveal d1">Tell me<br>your<br><em>story.</em></h2>
+    <p class="reveal d2">
+      Tell me about the person, story or idea you want transformed into a unique handmade artwork. I'll respond within two business days to discuss your commission in detail.
+    </p>
+    <div class="form-note reveal d3">
+      All commissions begin with a free consultation. A 50% deposit is required before work commences, with the balance due on completion. Timelines are discussed at consultation — typically 3–6 weeks depending on size and complexity.
+    </div>
+  </div>
 
+  <!-- Netlify form — handled automatically on Netlify hosting -->
+  <div class="reveal d2">
+    <form class="enquiry-form" name="commission-enquiry" method="POST" netlify netlify-honeypot="bot-field" id="commissionForm">
+      <input type="hidden" name="form-name" value="commission-enquiry">
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
 
+      <div class="form-row">
+        <div class="form-field">
+          <label for="name">Your Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Full name">
+        </div>
+        <div class="form-field">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required placeholder="your@email.com">
+        </div>
+      </div>
 
+      <div class="form-row">
+        <div class="form-field">
+          <label for="commission-type">Commission Type *</label>
+          <select id="commission-type" name="commission-type" required>
+            <option value="" disabled selected>Select type</option>
+            <option value="personal-portrait">Personal Portrait</option>
+            <option value="family-artwork">Family Artwork</option>
+            <option value="memorial-piece">Memorial Piece</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="size">Preferred Size</label>
+          <select id="size" name="size">
+            <option value="" disabled selected>Select size</option>
+            <option value="a4">A4 (from £250)</option>
+            <option value="a3">A3 (from £500)</option>
+            <option value="a2">A2 (from £900)</option>
+            <option value="large">Large Custom (from £1,500)</option>
+            <option value="unsure">Not sure yet</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="form-field">
+        <label for="message">Tell Me About Your Commission *</label>
+        <textarea id="message" name="message" required placeholder="Describe the subject, the occasion, any reference images you have, and what you'd like the artwork to capture or communicate."></textarea>
+      </div>
 
-
-
-<section class="commission-contact">
-
-
-<h2>
-Start Your Commission
-</h2>
-
-
-
-<p>
-Tell me about the person, story or idea you want transformed into a unique handmade artwork.
-</p>
-
-
-
-<a href="contact.html">
-Begin Request
-</a>
-
-
-
+      <div class="form-submit">
+        <button type="submit" class="btn-primary">Send Enquiry</button>
+        <p class="form-terms">By submitting you agree to our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+      </div>
+    </form>
+    <div class="form-success" id="formSuccess">
+      <strong style="font-family:var(--serif);font-size:20px;font-weight:300;color:var(--p2)">Thank you for your enquiry.</strong><br><br>
+      I'll be in touch within two business days to discuss your commission. Please check your email — including your spam folder just in case.
+    </div>
+  </div>
 </section>
 
-
-
-
-
-
-</main>
-
-
-
-
-
-
-<footer>
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-<h2>
-<a href="index.html">
-GOOD ERESEH
-</a>
-</h2>
-
-<p>
-Hyperrealistic charcoal and graphite artist creating original works focused on identity, emotion and human stories.
-</p>
-
-</div>
-
-
-
-<div class="footer-links">
-
-<a href="index.html">
-Home
-</a>
-
-<a href="gallery.html">
-Gallery
-</a>
-
-<a href="about.html">
-About
-</a>
-
-<a href="commissions.html">
-Commissions
-</a>
-
-<a href="contact.html">
-Contact
-</a>
-
-</div>
-
-
-
-<div class="footer-contact">
-
-<p>
-London, United Kingdom
-</p>
-
-<p>
-<a href="mailto:art@goodereseh.com">
-art@goodereseh.com
-</a>
-</p>
-
-</div>
-
-
-</div>
-
-
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-</div>
-
-
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/fela2">The Stance</a></li><li><a href="/artworks/abstract">Fragments of Thought</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
 </footer>
 
+<script>
+const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+const dot=document.getElementById('cursorDot');const ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){let mx=0,my=0,rx=0,ry=0,tt=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-
+// Form submission with Netlify
+const form = document.getElementById('commissionForm');
+const success = document.getElementById('formSuccess');
+if (form) {
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('[type="submit"]');
+    const orig = btn.textContent;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const formData = new FormData(form);
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(formData).toString() });
+      form.style.display = 'none';
+      success.style.display = 'block';
+    } catch (err) {
+      btn.textContent = orig;
+      btn.disabled = false;
+      alert('Something went wrong. Please email us directly at art@goodereseh.com');
+    }
+  });
+}
+</script>
 </body>
-
 </html>

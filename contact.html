@@ -1,431 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Contact Good Ereseh — charcoal and graphite artist based in London. Enquiries about commissions, prints, and original artworks.">
+<title>Contact — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+.contact-body {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0;
+  min-height: 70vh;
+}
 
-<title>
-Contact | Good Ereseh
-</title>
+/* Left column — contact details */
+.contact-details {
+  background: var(--c1);
+  padding: 100px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  border-right: 1px solid rgba(189,179,168,.07);
+}
 
-<meta name="description" content="Contact Good Ereseh for original charcoal artwork purchases, limited edition prints and personalised portrait commissions.">
+.contact-block h3 {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
 
-<link rel="stylesheet" href="css/style.css">
+.contact-block a {
+  font-size: 18px;
+  color: var(--p1);
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: .02em;
+  transition: color .3s;
+}
 
+.contact-block a:hover { color: var(--g3); }
+
+.contact-block p {
+  font-size: 13px;
+  color: var(--g2);
+  line-height: 1.8;
+}
+
+.contact-block .tag-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.contact-block .tag-item {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--g1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-block .tag-item::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--g0);
+}
+
+/* Right column — form */
+.contact-form-col {
+  background: var(--ink);
+  padding: 100px 80px;
+}
+
+.contact-form-col h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-bottom: 10px;
+}
+
+.contact-form-col h2 em { font-style: italic; color: var(--g3); }
+
+.contact-form-col .sub {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.8;
+  margin-bottom: 48px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+
+.form-field { display: flex; flex-direction: column; gap: 8px; }
+
+.form-field label {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: var(--c1);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 14px 18px;
+  outline: none;
+  transition: border-color .3s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus { border-color: rgba(189,179,168,.3); }
+
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--g0); }
+
+.form-field select option { background: var(--c1); color: var(--p1); }
+.form-field textarea { resize: vertical; min-height: 120px; }
+
+.form-submit {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-terms { font-size: 10px; color: var(--g1); line-height: 1.7; }
+.form-terms a { color: var(--g2); text-decoration: underline; }
+
+.form-success {
+  display: none;
+  padding: 28px;
+  background: rgba(100,180,100,.06);
+  border: 1px solid rgba(100,180,100,.15);
+  font-size: 14px;
+  color: var(--p1);
+  line-height: 1.7;
+  margin-top: 16px;
+}
+
+@media (max-width: 960px) {
+  .contact-body { grid-template-columns: 1fr; }
+  .contact-details { padding: 60px 28px; border-right: none; border-bottom: 1px solid rgba(189,179,168,.07); }
+  .contact-form-col { padding: 60px 28px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
 </head>
-
-
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="gallery.html">Gallery</a></li>
-
-<li><a href="about.html">About</a></li>
-
-<li><a href="commissions.html">Commissions</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
+<nav id="nav">
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact" class="active">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
-
-
-
-
-
-<main>
-
-
-<section class="contact-page">
-
-
-<div class="contact-container">
-
-
-<h1>
-Artwork Enquiry
-</h1>
-
-
-<p>
-Interested in purchasing an artwork or requesting a commission? Send a message and I will personally respond.
-</p>
-
-
-
-
-<form id="contactForm" action="https://formspree.io/f/xdaqqeqv" method="POST">
-
-
-<input type="hidden" name="_next" value="https://wudixo.github.io/goodereseh-website/contact-success.html">
-
-
-
-
-
-<label>
-Name
-</label>
-
-
-<input 
-type="text" 
-name="name" 
-placeholder="Your name"
-autocomplete="name"
-required>
-
-
-
-
-
-
-<label>
-Artwork
-</label>
-
-
-<select id="artwork" name="artwork">
-
-
-<option value="">
-Select artwork
-</option>
-
-
-<option value="Fela Kuti Original Hand-Drawn Portrait">
-Fela Kuti Original Portrait
-</option>
-
-
-<option value="The Stance Original Charcoal Portrait">
-The Stance
-</option>
-
-
-<option value="Reflections Original Hyperrealistic Eye Drawing">
-Reflections
-</option>
-
-
-<option value="Fragments of Thought Abstract Charcoal Figure Study">
-Fragments of Thought
-</option>
-
-
-<option value="Commission Request">
-Commission Request
-</option>
-
-
-</select>
-
-
-
-
-
-
-<label>
-Email
-</label>
-
-
-<input 
-type="email" 
-name="email" 
-placeholder="Your email"
-autocomplete="email"
-required>
-
-
-
-
-
-
-<label>
-Phone Number (Optional)
-</label>
-
-
-<input 
-type="tel" 
-name="phone" 
-placeholder="Your phone number"
-autocomplete="tel">
-
-
-
-
-
-
-<label>
-Enquiry Type
-</label>
-
-
-<select name="enquiry_type">
-
-
-<option>
-Purchase Existing Artwork
-</option>
-
-
-<option>
-Commission New Artwork
-</option>
-
-
-</select>
-
-
-
-
-
-
-<label>
-Preferred Artwork Size
-</label>
-
-
-<select name="size">
-
-
-<option>
-A4
-</option>
-
-
-<option>
-A3
-</option>
-
-
-<option>
-A2
-</option>
-
-
-<option>
-A1
-</option>
-
-
-<option>
-Custom Size
-</option>
-
-
-</select>
-
-
-
-
-
-
-<label>
-Budget Range
-</label>
-
-
-<select name="budget">
-
-
-<option>
-Under £250
-</option>
-
-
-<option>
-£250 - £500
-</option>
-
-
-<option>
-£500 - £1000
-</option>
-
-
-<option>
-£1000+
-</option>
-
-
-</select>
-
-
-
-
-
-
-<label>
-Message
-</label>
-
-
-<textarea 
-name="message"
-placeholder="Tell me about your request"
-required>
-</textarea>
-
-
-
-
-
-
-<button type="submit">
-Send Enquiry
-</button>
-
-
-
-</form>
-
+<!-- Hero -->
+<div class="page-hero">
+  <p class="page-hero-eyebrow">Get In Touch</p>
+  <h1 class="page-hero-title">Contact.</h1>
+  <p class="page-hero-sub">Questions about commissions, existing works, or anything else. I'll respond within two business days.</p>
+</div>
+
+<!-- Main -->
+<div class="contact-body">
+
+  <!-- Details -->
+  <div class="contact-details">
+
+    <div class="contact-block reveal">
+      <h3>Email</h3>
+      <a href="mailto:art@goodereseh.com">art@goodereseh.com</a>
+    </div>
+
+    <div class="contact-block reveal d1">
+      <h3>Location</h3>
+      <p>London, United Kingdom</p>
+      <div class="tag-row" style="margin-top:16px">
+        <span class="tag-item">Worldwide commissions accepted</span>
+        <span class="tag-item">Shipping to UK &amp; internationally</span>
+      </div>
+    </div>
+
+    <div class="contact-block reveal d2">
+      <h3>Commission Enquiries</h3>
+      <p>For commission requests, please use the <a href="/commissions" style="color:var(--g3);font-size:inherit;font-family:inherit">Commissions page</a> which includes sizing, pricing, and a full enquiry form. Alternatively, email directly with a brief description of what you have in mind.</p>
+    </div>
+
+    <div class="contact-block reveal d3">
+      <h3>Response Time</h3>
+      <div class="tag-row" style="margin-top:8px">
+        <span class="tag-item">Within 2 business days</span>
+        <span class="tag-item">Mon – Fri, 9am – 6pm GMT</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Form -->
+  <div class="contact-form-col reveal d1">
+    <h2>Send a<br><em>message.</em></h2>
+    <p class="sub">Use this form for general enquiries. For commission requests, the <a href="/commissions" style="color:var(--g3)">Commissions page</a> gives you more options to describe your project.</p>
+
+    <form class="contact-form" name="contact" method="POST" netlify netlify-honeypot="bot-field" id="contactForm">
+      <input type="hidden" name="form-name" value="contact">
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="name">Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="your@email.com">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="subject">Subject</label>
+        <select id="subject" name="subject">
+          <option value="" disabled selected>Select subject</option>
+          <option value="commission">Commission enquiry</option>
+          <option value="purchase">Purchasing a print or original</option>
+          <option value="general">General question</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" required placeholder="Your message..."></textarea>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn-primary">Send Message</button>
+        <p class="form-terms">By submitting you agree to our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+      </div>
+    </form>
+    <div class="form-success" id="formSuccess">
+      <strong style="font-family:var(--serif);font-size:20px;font-weight:300;color:var(--p2)">Message received.</strong><br><br>
+      Thank you for getting in touch. I'll respond within two business days.
+    </div>
+  </div>
 
 </div>
 
-
-</section>
-
-
-</main>
-
-
-
-
-
-
-<footer>
-
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-
-<h2>
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</h2>
-
-
-<p>
-Hyperrealistic charcoal and graphite artist creating original works focused on identity, emotion and human stories.
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="footer-links">
-
-
-<a href="index.html">
-Home
-</a>
-
-
-<a href="gallery.html">
-Gallery
-</a>
-
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="commissions.html">
-Commissions
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
-</div>
-
-
-
-
-
-<div class="footer-contact">
-
-
-<p>
-London, United Kingdom
-</p>
-
-
-<p>
-
-<a href="mailto:art@goodereseh.com">
-art@goodereseh.com
-</a>
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="footer-bottom">
-
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-
-</div>
-
-
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/fela2">The Stance</a></li><li><a href="/artworks/abstract">Fragments of Thought</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
 </footer>
 
+<script>
+const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+const dot=document.getElementById('cursorDot');const ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){let mx=0,my=0,rx=0,ry=0,tt=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-
-
-<script src="js/app.js"></script>
-
-
+// Form
+const form=document.getElementById('contactForm');const success=document.getElementById('formSuccess');
+if(form){form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('[type="submit"]');const orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;try{await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()});form.style.display='none';success.style.display='block';}catch(err){btn.textContent=orig;btn.disabled=false;alert('Something went wrong. Please email us directly at art@goodereseh.com');}});}
+</script>
 </body>
-
 </html>

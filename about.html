@@ -1,314 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="About Good Ereseh — hyperrealistic charcoal and graphite artist based in London.">
+<title>About — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+/* About-specific */
+.about-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 70vh;
+}
 
-<title>
-About Good Ereseh | Hyperrealistic Charcoal Artist
-</title>
+.about-intro-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--c2);
+}
 
-<meta name="description" content="Learn about Good Ereseh, a London-based hyperrealistic charcoal and graphite artist creating original artworks focused on identity, emotion and human stories.">
+.about-intro-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(.82) contrast(1.08) grayscale(10%);
+}
 
-<link rel="stylesheet" href="css/style.css">
+.about-intro-body {
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 72px;
+}
 
+.about-intro-body .eyebrow { margin-bottom: 24px; }
+
+.about-intro-body h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin-bottom: 32px;
+}
+
+.about-intro-body h2 em { font-style: italic; color: var(--g3); }
+
+.about-intro-body p {
+  font-size: 15px;
+  color: var(--g2);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+/* Full-width statement */
+.about-statement {
+  padding: 140px 64px;
+  background: var(--c1);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-statement-quote {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4.5vw, 58px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--p2);
+  max-width: 860px;
+  line-height: 1.3;
+  letter-spacing: .005em;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.about-statement-quote em {
+  font-style: normal;
+  color: var(--g2);
+}
+
+.about-statement-attr {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--g1);
+  position: relative;
+  z-index: 1;
+}
+
+.about-bg-char {
+  position: absolute;
+  bottom: -60px;
+  right: -20px;
+  font-family: var(--serif);
+  font-size: 320px;
+  font-weight: 300;
+  color: rgba(189,179,168,.025);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Practice section */
+.about-practice {
+  padding: 140px 64px;
+  background: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: start;
+}
+
+.about-practice h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin-bottom: 32px;
+}
+
+.about-practice h2 em { font-style: italic; color: var(--g3); }
+
+.about-practice p {
+  font-size: 15px;
+  color: var(--g2);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+.about-practice-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--c2);
+}
+
+.about-practice-img img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  filter: brightness(.82) contrast(1.08) grayscale(8%);
+  transition: transform 1s var(--ease);
+}
+
+.about-practice-img:hover img { transform: scale(1.03); }
+
+.about-practice-img::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  right: -16px;
+  width: 55%;
+  height: 55%;
+  border: 1px solid rgba(189,179,168,.08);
+  pointer-events: none;
+}
+
+/* Materials */
+.about-materials {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(189,179,168,.07);
+  background: var(--c1);
+}
+
+.about-material {
+  padding: 52px 40px;
+  border-right: 1px solid rgba(189,179,168,.07);
+  transition: background .4s;
+}
+
+.about-material:last-child { border-right: none; }
+.about-material:hover { background: var(--c2); }
+
+.material-num {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: .15em;
+  color: var(--g0);
+  margin-bottom: 24px;
+}
+
+.material-name {
+  font-family: var(--serif);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 300;
+  color: var(--p1);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.material-desc {
+  font-size: 12px;
+  color: var(--g1);
+  line-height: 1.75;
+}
+
+/* CTA */
+.about-cta {
+  padding: 160px 64px;
+  background: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 6vw, 80px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.0;
+  letter-spacing: -.02em;
+}
+
+.about-cta h2 em { font-style: italic; color: var(--g3); display: block; }
+
+.about-cta-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-cta-body p {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.9;
+}
+
+.about-cta-actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+@media (max-width: 960px) {
+  .about-intro { grid-template-columns: 1fr; }
+  .about-intro-img { min-height: 60vw; }
+  .about-intro-body { padding: 60px 28px; }
+  .about-statement { padding: 80px 28px; }
+  .about-bg-char { display: none; }
+  .about-practice { grid-template-columns: 1fr; padding: 80px 28px; gap: 48px; }
+  .about-practice-img::after { display: none; }
+  .about-materials { grid-template-columns: 1fr 1fr; }
+  .about-material:nth-child(2n) { border-right: none; }
+  .about-cta { grid-template-columns: 1fr; padding: 100px 28px; gap: 48px; }
+}
+</style>
 </head>
-
-
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="gallery.html">Gallery</a></li>
-
-<li><a href="about.html">About</a></li>
-
-<li><a href="commissions.html">Commissions</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
+<nav id="nav">
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about" class="active">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
-
-
-
-
-
-<main>
-
-
-<section class="about-page">
-
-
-<div class="about-hero">
-
-<h1>
-The Artist
-</h1>
-
-
-<p>
-Good Ereseh creates hyperrealistic charcoal and graphite artworks that explore identity, emotion and the stories held within human expression.
-</p>
-
-
+<!-- Hero -->
+<div class="page-hero">
+  <p class="page-hero-eyebrow">Charcoal &amp; Graphite Artist</p>
+  <h1 class="page-hero-title">The<br><em>Artist.</em></h1>
+  <p class="page-hero-sub">Based in London. Working in charcoal and graphite on heavy cotton paper. Every piece drawn entirely by hand.</p>
 </div>
 
-<section class="artist-image">
+<!-- Intro -->
+<div class="about-intro">
+  <div class="about-intro-img reveal">
+    <img src="https://goodereseh.com/images/artwork/fela.jpg" alt="Fela Kuti — Original Graphite Portrait">
+  </div>
+  <div class="about-intro-body">
+    <p class="eyebrow reveal">The Practice</p>
+    <h2 class="reveal d1">Drawing from<br><em>the human story.</em></h2>
+    <p class="reveal d2">
+      Good Ereseh is a hyperrealistic charcoal and graphite artist based in London. The work focuses on the human face — the details that make a person recognisable, the emotion that lives beneath the surface.
+    </p>
+    <p class="reveal d2">
+      Each artwork begins with sustained observation. The drawing process is slow by design: layers of charcoal or graphite built up over days or weeks, erased and rebuilt, until the marks on the paper begin to carry what the eye sees.
+    </p>
+    <p class="reveal d2">
+      The medium is traditional. There are no digital tools, no shortcuts, no filters. What you see in the work is what the hand made — mark by mark, on heavy cotton paper, in real time.
+    </p>
+  </div>
+</div>
 
-<img 
-src="images/about/artist.jpg"
-alt="Good Ereseh working on a charcoal artwork"
->
-
+<!-- Statement -->
+<section class="about-statement">
+  <div class="about-bg-char" aria-hidden="true">G</div>
+  <blockquote class="about-statement-quote reveal">
+    "The cotton paper holds the charcoal like <em>memory holds a face</em> — imperfectly, beautifully, with weight."
+  </blockquote>
+  <p class="about-statement-attr reveal d1">Good Ereseh · Artist Statement</p>
 </section>
 
-
-
-
-<section class="about-section">
-
-
-<h2>
-My Approach
-</h2>
-
-
-<p>
-Every artwork begins with observation. Through charcoal and graphite, I study light, texture and expression to create portraits that capture more than physical appearance.
-</p>
-
-
-<p>
-My work focuses on the connection between artist and subject. Each mark is carefully placed to preserve character, emotion and individuality.
-</p>
-
-
-<p>
-The goal is not only realism, but creating artwork that allows viewers to feel a connection with the person represented.
-</p>
-
-
+<!-- Practice -->
+<section class="about-practice">
+  <div>
+    <p class="eyebrow reveal">The Medium</p>
+    <h2 class="reveal d1">Charcoal.<br>Graphite.<br><em>Cotton paper.</em></h2>
+    <p class="reveal d2">
+      Charcoal is a difficult medium. It smudges, it lifts, it doesn't stay where you put it. That's precisely what makes it right for this work. The instability of the material forces a different kind of attention — you can't be passive. You have to be present.
+    </p>
+    <p class="reveal d2">
+      Graphite is the opposite: precise, resistant, unyielding. When used together, the two materials create a tonal range that neither achieves alone. The darkest darks come from compressed charcoal; the finest detail from hard graphite pencils; everything in between from careful layering and selective erasure.
+    </p>
+    <p class="reveal d2">
+      The surface is always heavy cotton paper — 300gsm or above. Cotton rag has a tooth that holds charcoal in a way wood-pulp paper never does. It also ages well, remaining stable for decades without yellowing. These are works made to last.
+    </p>
+  </div>
+  <div class="about-practice-img reveal d2">
+    <img src="https://goodereseh.com/images/artwork/eye.jpg" alt="Reflections — Hyperrealistic Eye Study">
+  </div>
 </section>
 
+<!-- Materials -->
+<div class="about-materials">
+  <div class="about-material reveal">
+    <div class="material-num">I.</div>
+    <div class="material-name">Cotton<br>Paper</div>
+    <p class="material-desc">Heavyweight archival cotton rag. The tooth and texture become part of the work — not a surface but a collaborator.</p>
+  </div>
+  <div class="about-material reveal d1">
+    <div class="material-num">II.</div>
+    <div class="material-name">Charcoal<br>Stick</div>
+    <p class="material-desc">Natural compressed charcoal built in layers. Darkness achieved through accumulated pressure over hours.</p>
+  </div>
+  <div class="about-material reveal d2">
+    <div class="material-num">III.</div>
+    <div class="material-name">Graphite<br>Pencil</div>
+    <p class="material-desc">Grades from 2H to 9B. Precision instruments for the detail that defines hyperrealistic work.</p>
+  </div>
+  <div class="about-material reveal d3">
+    <div class="material-num">IV.</div>
+    <div class="material-name">The<br>Hand</div>
+    <p class="material-desc">No digital intervention at any stage. Every mark is a real-time decision made by a human hand.</p>
+  </div>
+</div>
 
-
-
-
-
-<section class="about-section">
-
-
-<h2>
-Medium and Process
-</h2>
-
-
-<p>
-I work primarily with charcoal and graphite pencil on archival paper, building each artwork through layers of tone, texture and detail.
-</p>
-
-
-<p>
-Large-scale drawings can take many hours to complete, with careful attention given to skin texture, facial structure, contrast and atmosphere.
-</p>
-
-
+<!-- CTA -->
+<section class="about-cta">
+  <h2 class="reveal">
+    A piece made<br>
+    <em>only for you.</em>
+  </h2>
+  <div class="about-cta-body reveal d2">
+    <p>
+      Commission a hyperrealistic charcoal or graphite portrait — your subject, your size, drawn entirely by hand over weeks. Every commission begins with a conversation about who or what you want preserved.
+    </p>
+    <div class="about-cta-actions">
+      <a href="/commissions" class="btn-primary">Begin a Commission</a>
+      <a href="/gallery" class="btn-ghost"><span class="arr">→</span> View the collection</a>
+    </div>
+  </div>
 </section>
 
-
-
-
-
-
-
-<section class="artist-values">
-
-
-<div>
-
-<h3>
-Identity
-</h3>
-
-<p>
-Exploring the stories, backgrounds and experiences that shape people.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Emotion
-</h3>
-
-<p>
-Capturing expressions and moments that communicate feeling beyond words.
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Craftsmanship
-</h3>
-
-<p>
-Creating handmade artworks through patience, precision and traditional techniques.
-</p>
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-<section class="about-section">
-
-
-<h2>
-Based in London
-</h2>
-
-
-<p>
-Good Ereseh is a London-based artist creating original artworks and limited edition fine art prints for collectors who appreciate traditional handmade techniques.
-</p>
-
-
-<a href="gallery.html" class="view-button">
-View Collection
-</a>
-
-
-</section>
-
-
-
-</section>
-
-
-</main>
-
-
-
-
-
-
-
-<footer>
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-<h2>
-<a href="index.html">
-GOOD ERESEH
-</a>
-</h2>
-
-<p>
-Hyperrealistic charcoal and graphite artist creating original works focused on identity, emotion and human stories.
-</p>
-
-</div>
-
-
-
-<div class="footer-links">
-
-<a href="index.html">
-Home
-</a>
-
-<a href="gallery.html">
-Gallery
-</a>
-
-<a href="about.html">
-About
-</a>
-
-<a href="commissions.html">
-Commissions
-</a>
-
-<a href="contact.html">
-Contact
-</a>
-
-</div>
-
-
-
-<div class="footer-contact">
-
-<p>
-London, United Kingdom
-</p>
-
-<p>
-<a href="mailto:art@goodereseh.com">
-art@goodereseh.com
-</a>
-</p>
-
-</div>
-
-
-</div>
-
-
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-</div>
-
-
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/fela2">The Stance</a></li><li><a href="/artworks/abstract">Fragments of Thought</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
 </footer>
 
-
-
+<script>
+const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+const dot=document.getElementById('cursorDot');const ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){let mx=0,my=0,rx=0,ry=0,tt=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
-
 </html>
