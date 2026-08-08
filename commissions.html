@@ -3,569 +3,623 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Commission a portrait with Good Ereseh. Chat with our AI assistant to build your brief.">
 <title>Commissions &mdash; Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
-.chat-page{min-height:100vh;background:var(--ink);display:flex;flex-direction:column;}
-.chat-page::before{content:"";position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(79,70,229,.07) 0%,rgba(6,182,212,.04) 50%,transparent 70%);pointer-events:none;z-index:0;animation:ambientPulse 5s ease-in-out infinite;}
-@keyframes ambientPulse{0%,100%{opacity:.5;}50%{opacity:1;}}
-.chat-wrap{flex:1;display:flex;flex-direction:column;max-width:780px;width:100%;margin:0 auto;padding:100px 24px 0;position:relative;z-index:1;}
-.chat-header{text-align:center;padding:32px 0 44px;}
-.chat-avatar-large{width:64px;height:64px;border-radius:50%;background:var(--c2);border:1px solid rgba(189,179,168,.1);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:22px;font-weight:300;color:var(--g3);margin:0 auto 18px;position:relative;}
-.chat-avatar-large::after{content:"";position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,#4f46e5,#0ea5e9,#06b6d4,#7c3aed,#4f46e5);animation:spinGlow 4s linear infinite;z-index:-1;filter:blur(5px);opacity:.65;}
-@keyframes spinGlow{to{transform:rotate(360deg);}}
-.chat-header-title{font-family:var(--serif);font-size:24px;font-weight:300;color:var(--p2);margin-bottom:6px;}
-.chat-header-sub{font-size:11px;color:var(--g1);letter-spacing:.12em;}
-.chat-messages{flex:1;display:flex;flex-direction:column;gap:22px;padding-bottom:240px;min-height:200px;}
-.msg{display:flex;gap:12px;align-items:flex-end;animation:msgIn .45s var(--ease) forwards;opacity:0;}
-.msg.static-msg{opacity:1;animation:none;}
-@keyframes msgIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+html,body{height:100%;overflow:hidden;}
+.c-page{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--ink);}
+
+/* NAV */
+#nav{position:relative;flex-shrink:0;}
+
+/* HEADER */
+.c-head{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 20px;
+  border-bottom:1px solid rgba(189,179,168,.07);background:var(--ink);}
+.c-av{width:34px;height:34px;border-radius:50%;background:var(--c2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:12px;color:var(--g3);
+  position:relative;flex-shrink:0;}
+.c-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;
+  background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#06b6d4,#7c3aed,#6366f1);
+  animation:spin 5s linear infinite;z-index:-1;filter:blur(3px);opacity:.65;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.c-head-info{flex:1;}
+.c-head-name{font-family:var(--serif);font-size:15px;font-weight:300;color:var(--p2);line-height:1;}
+.c-head-sub{font-size:9px;color:var(--g1);letter-spacing:.1em;margin-top:2px;}
+.c-head-dot{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--g1);}
+.c-head-dot span{width:6px;height:6px;border-radius:50%;background:#10b981;display:block;animation:glow 2s ease infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
+
+/* MESSAGES */
+.c-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;}
+.c-msgs::-webkit-scrollbar{width:3px;}
+.c-msgs::-webkit-scrollbar-thumb{background:var(--g0);border-radius:2px;}
+
+.msg{display:flex;gap:10px;align-items:flex-start;animation:msgIn .35s ease forwards;opacity:0;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .msg.user{flex-direction:row-reverse;}
-.msg-avatar{width:34px;height:34px;border-radius:50%;background:var(--c2);border:1px solid rgba(189,179,168,.1);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:12px;color:var(--g3);flex-shrink:0;position:relative;}
-.msg-avatar::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#4f46e5,#0ea5e9,#4f46e5);animation:spinGlow 3s linear infinite;z-index:-1;filter:blur(3px);opacity:.5;}
-.msg.ai .msg-bubble{background:var(--c1);border:1px solid rgba(189,179,168,.08);border-bottom-left-radius:2px;max-width:82%;}
-.msg.user .msg-bubble{background:rgba(79,70,229,.12);border:1px solid rgba(79,70,229,.2);border-bottom-right-radius:2px;max-width:82%;margin-left:auto;}
-.msg-bubble{padding:14px 18px;font-size:14px;color:var(--p1);line-height:1.75;border-radius:10px;}
-.msg-bubble p+p{margin-top:8px;}
-.typing-dots{display:flex;gap:5px;padding:6px 2px;align-items:center;}
-.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--g1);animation:bounce 1.2s ease-in-out infinite;}
-.typing-dots span:nth-child(2){animation-delay:.2s;}
-.typing-dots span:nth-child(3){animation-delay:.4s;}
-@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
-.chat-input-area{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(15,13,11,.98) 65%,transparent);padding:20px 24px 28px;z-index:100;}
-.chat-input-inner{max-width:780px;margin:0 auto;}
-.chat-text-row{display:flex;gap:8px;align-items:center;background:var(--c1);border:1px solid rgba(189,179,168,.12);padding:5px 5px 5px 18px;border-radius:10px;transition:border-color .3s;}
-.chat-text-row:focus-within{border-color:rgba(79,70,229,.5);box-shadow:0 0 0 3px rgba(79,70,229,.08);}
-.chat-text-input{flex:1;background:none;border:none;outline:none;color:var(--p1);font-family:var(--sans);font-size:14px;font-weight:300;padding:10px 0;caret-color:#0ea5e9;}
-.chat-text-input::placeholder{color:var(--g0);}
-.chat-send-btn{padding:11px 22px;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.1em;cursor:none;transition:opacity .3s,transform .2s;border-radius:8px;}
-.chat-send-btn:hover{opacity:.88;transform:translateY(-1px);}
-.chat-send-btn:disabled{opacity:.3;transform:none;}
-.chat-options{display:flex;flex-direction:column;gap:8px;}
-.chat-opt{padding:14px 20px;background:var(--c1);border:1px solid rgba(189,179,168,.1);color:var(--g2);font-family:var(--sans);font-size:13px;text-align:left;cursor:none;transition:all .25s;border-radius:10px;}
-.chat-opt:hover{border-color:rgba(79,70,229,.5);color:var(--p1);background:rgba(79,70,229,.06);transform:translateX(4px);}
-.chat-moods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-.mood-chip{padding:9px 18px;background:var(--c1);border:1px solid rgba(189,179,168,.1);color:var(--g2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:none;transition:all .25s;font-family:var(--sans);border-radius:20px;}
-.mood-chip:hover{border-color:rgba(14,165,233,.4);color:var(--p1);}
-.mood-chip.on{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08);}
-.chat-mood-confirm{padding:12px 28px;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:none;opacity:.35;transition:all .3s;border-radius:8px;}
-.chat-mood-confirm.ready{opacity:1;}
-.chat-mood-confirm.ready:hover{transform:translateY(-1px);}
-.chat-textarea{background:var(--c1);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:14px;font-weight:300;padding:14px 16px;outline:none;resize:none;width:100%;line-height:1.75;caret-color:#0ea5e9;transition:border-color .3s;border-radius:10px;}
-.chat-textarea:focus{border-color:rgba(79,70,229,.4);}
-.chat-textarea::placeholder{color:var(--g0);}
-.gen-overlay{position:fixed;inset:0;background:rgba(15,13,11,.97);z-index:9000;align-items:center;justify-content:center;flex-direction:column;gap:36px;display:none;}
-.gen-overlay.active{display:flex;}
-.gen-canvas-wrap{position:relative;width:260px;height:325px;overflow:hidden;background:var(--c2);border-radius:4px;}
-.gen-canvas-wrap::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.05) 1px,transparent 1px);background-size:18px 18px;z-index:1;}
-.gen-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#0ea5e9,#7c3aed,#0ea5e9,transparent);z-index:3;animation:genScan 1.6s ease-in-out infinite;box-shadow:0 0 16px rgba(14,165,233,.9),0 0 32px rgba(124,58,237,.5);}
-@keyframes genScan{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
-.gen-corner{position:absolute;width:16px;height:16px;z-index:4;}
-.gen-corner.tl{top:8px;left:8px;border-top:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
-.gen-corner.tr{top:8px;right:8px;border-top:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
-.gen-corner.bl{bottom:8px;left:8px;border-bottom:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
-.gen-corner.br{bottom:8px;right:8px;border-bottom:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
-.gen-noise{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s ease;}
-.gen-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:1;opacity:0;transition:opacity 2s ease;filter:brightness(.9) contrast(1.12) grayscale(12%);}
-.gen-status-wrap{text-align:center;}
-.gen-title{font-family:var(--serif);font-size:14px;font-weight:300;color:var(--g3);letter-spacing:.12em;margin-bottom:14px;}
-.gen-status-text{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--g1);transition:opacity .5s;}
-.gen-dots{display:flex;gap:7px;justify-content:center;margin-top:14px;}
-.gen-dots span{width:4px;height:4px;border-radius:50%;background:#0ea5e9;animation:bounce 1.2s ease-in-out infinite;}
-.gen-dots span:nth-child(2){animation-delay:.2s;}
-.gen-dots span:nth-child(3){animation-delay:.4s;}
-.gen-bar{width:260px;height:1px;background:rgba(255,255,255,.06);overflow:hidden;border-radius:1px;}
-.gen-bar-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#0ea5e9,#06b6d4);width:0%;transition:width 1s ease;}
-.concept-in-chat{width:100%;max-width:300px;overflow:hidden;border-radius:8px;}
-.concept-in-chat img{width:100%;display:block;filter:brightness(.9) contrast(1.1) grayscale(12%);}
-.concept-in-chat-note{padding:10px 14px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;}
-.brief-form-msg{background:var(--c1);border:1px solid rgba(189,179,168,.08);padding:20px;display:flex;flex-direction:column;gap:10px;max-width:85%;border-radius:10px;}
-.brief-form-msg input{background:var(--c2);border:1px solid rgba(189,179,168,.08);color:var(--p1);font-family:var(--sans);font-size:13px;font-weight:300;padding:12px 16px;outline:none;transition:all .3s;width:100%;border-radius:8px;}
-.brief-form-msg input:focus{border-color:rgba(79,70,229,.4);box-shadow:0 0 0 3px rgba(79,70,229,.07);}
-.brief-form-msg input::placeholder{color:var(--g0);}
-.btn-send-brief{padding:13px;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:none;transition:all .3s;border-radius:8px;}
-.btn-send-brief:hover{opacity:.87;transform:translateY(-1px);}
-.btn-send-brief:disabled{opacity:.35;transform:none;}
-.send-done{padding:16px 20px;background:rgba(100,180,100,.07);border:1px solid rgba(100,180,100,.18);font-size:13px;color:var(--p1);line-height:1.75;display:none;border-radius:8px;}
-.send-err{font-size:11px;color:#d48888;display:none;padding:8px 0;}
-@media(max-width:760px){.chat-wrap{padding:90px 16px 0;}.chat-input-area{padding:16px 16px 24px;}.gen-canvas-wrap{width:220px;height:275px;}.gen-bar{width:220px;}.msg.ai .msg-bubble,.msg.user .msg-bubble{max-width:90%;}}
+
+.m-av{width:28px;height:28px;border-radius:50%;background:var(--c2);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:10px;color:var(--g3);margin-top:2px;position:relative;}
+.m-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;
+  background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#6366f1);
+  animation:spin 3s linear infinite;z-index:-1;filter:blur(2px);opacity:.4;}
+
+.m-body{display:flex;flex-direction:column;gap:8px;max-width:74%;}
+.bubble{padding:11px 15px;font-size:13.5px;line-height:1.7;border-radius:14px;color:var(--p1);}
+.msg.ai .bubble{background:var(--c1);border:1px solid rgba(189,179,168,.07);border-top-left-radius:3px;}
+.msg.user .bubble{background:rgba(99,102,241,.16);border:1px solid rgba(99,102,241,.2);border-top-right-radius:3px;margin-left:auto;}
+.bubble p{margin:0;}.bubble p+p{margin-top:7px;}
+
+/* Clickable options inside AI message */
+.opt-btn{display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 13px;margin-top:5px;
+  background:var(--c2);border:1px solid rgba(189,179,168,.1);
+  color:var(--g2);font-family:var(--sans);font-size:13px;
+  text-align:left;cursor:none;border-radius:8px;
+  transition:border-color .2s,color .2s,background .2s;}
+.opt-btn:hover{border-color:#6366f1;color:var(--p1);background:rgba(99,102,241,.06);}
+.opt-letter{width:22px;height:22px;border-radius:50%;background:rgba(189,179,168,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;color:var(--g3);flex-shrink:0;letter-spacing:0;}
+
+/* Typing indicator */
+.typing{display:flex;gap:4px;padding:5px 2px;align-items:center;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--g1);
+  animation:tdot 1.2s ease-in-out infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
+
+/* Image in chat */
+.chat-img{max-width:200px;border-radius:10px;overflow:hidden;margin-top:4px;}
+.chat-img img{width:100%;display:block;}
+.gen-img-wrap{max-width:240px;border-radius:10px;overflow:hidden;border:1px solid rgba(189,179,168,.1);margin-top:4px;}
+.gen-img-wrap img{width:100%;display:block;filter:brightness(.92) contrast(1.1) grayscale(10%);}
+.gen-img-note{padding:8px 12px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;}
+
+/* Image preview above input */
+.img-preview{display:none;padding:8px 16px;background:var(--c1);
+  border-top:1px solid rgba(189,179,168,.07);}
+.img-preview.show{display:flex;align-items:center;gap:10px;}
+.img-preview img{width:48px;height:48px;object-fit:cover;border-radius:6px;}
+.img-preview-name{font-size:11px;color:var(--g2);flex:1;}
+.img-preview-rm{background:none;border:none;color:var(--g1);cursor:none;font-size:16px;padding:4px;}
+
+/* INPUT BAR */
+.c-input{flex-shrink:0;padding:10px 14px 16px;background:var(--ink);
+  border-top:1px solid rgba(189,179,168,.07);}
+.c-input-box{display:flex;align-items:flex-end;gap:8px;
+  background:var(--c1);border:1px solid rgba(189,179,168,.1);
+  border-radius:14px;padding:8px 8px 8px 12px;
+  transition:border-color .25s;}
+.c-input-box:focus-within{border-color:rgba(99,102,241,.4);}
+.c-icon-btn{width:34px;height:34px;border-radius:50%;background:none;border:none;
+  color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;
+  transition:color .2s,background .2s;flex-shrink:0;}
+.c-icon-btn:hover{color:var(--p1);background:rgba(189,179,168,.06);}
+.c-icon-btn.active{color:#6366f1;}
+.c-textarea{flex:1;background:none;border:none;outline:none;
+  color:var(--p1);font-family:var(--sans);font-size:14px;font-weight:300;
+  resize:none;line-height:1.5;min-height:22px;max-height:140px;
+  overflow-y:auto;padding:6px 0;caret-color:#6366f1;}
+.c-textarea::placeholder{color:var(--g0);}
+.c-send{width:34px;height:34px;border-radius:50%;
+  background:rgba(189,179,168,.1);border:none;
+  color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .2s;}
+.c-send.ready{background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;}
+.c-send.ready:hover{opacity:.88;transform:scale(1.05);}
+
+/* Voice recording pulse */
+.c-icon-btn.recording{color:#ef4444;animation:recPulse 1s ease-in-out infinite;}
+@keyframes recPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* GENERATION OVERLAY */
+.gen-ov{position:fixed;inset:0;background:rgba(15,13,11,.97);z-index:9999;
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
+.gen-ov.on{display:flex;}
+.gen-fr{position:relative;width:200px;height:250px;background:var(--c2);border-radius:4px;overflow:hidden;}
+.gen-fr::before{content:"";position:absolute;inset:0;z-index:1;
+  background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);
+  background-size:14px 14px;}
+.gen-scan{position:absolute;left:0;right:0;height:2px;z-index:3;
+  background:linear-gradient(90deg,transparent,#6366f1,#0ea5e9,#6366f1,transparent);
+  animation:gscan 1.5s ease-in-out infinite;box-shadow:0 0 14px rgba(99,102,241,.9);}
+@keyframes gscan{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
+.gc{position:absolute;width:12px;height:12px;z-index:4;}
+.gc.tl{top:6px;left:6px;border-top:1px solid #6366f1;border-left:1px solid #6366f1;}
+.gc.tr{top:6px;right:6px;border-top:1px solid #6366f1;border-right:1px solid #6366f1;}
+.gc.bl{bottom:6px;left:6px;border-bottom:1px solid #6366f1;border-left:1px solid #6366f1;}
+.gc.br{bottom:6px;right:6px;border-bottom:1px solid #6366f1;border-right:1px solid #6366f1;}
+.gen-noise{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s;}
+.gen-pic{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s;}
+.gen-bar-wrap{width:200px;height:1px;background:rgba(255,255,255,.06);}
+.gen-bar-fill{height:100%;background:linear-gradient(90deg,#6366f1,#0ea5e9);width:0%;transition:width 1s ease;}
+.gen-label{font-family:var(--serif);font-size:13px;color:var(--g3);letter-spacing:.1em;text-align:center;margin-bottom:8px;}
+.gen-status{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);text-align:center;transition:opacity .4s;}
+.gen-ldots{display:flex;gap:5px;justify-content:center;margin-top:8px;}
+.gen-ldots span{width:4px;height:4px;border-radius:50%;background:#6366f1;animation:tdot 1.2s ease-in-out infinite;}
+.gen-ldots span:nth-child(2){animation-delay:.2s;}.gen-ldots span:nth-child(3){animation-delay:.4s;}
+
+@media(max-width:600px){.c-msgs{padding:14px;}.c-input{padding:8px 10px 14px;}.m-body{max-width:85%;}}
 </style>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<div class="gen-overlay" id="genOverlay">
-  <div class="gen-canvas-wrap">
-    <div class="gen-corner tl"></div><div class="gen-corner tr"></div>
-    <div class="gen-corner bl"></div><div class="gen-corner br"></div>
+<!-- Generation overlay -->
+<div class="gen-ov" id="genOv">
+  <div class="gen-fr">
+    <div class="gc tl"></div><div class="gc tr"></div>
+    <div class="gc bl"></div><div class="gc br"></div>
     <div class="gen-scan"></div>
-    <div class="gen-noise" id="genNoise"></div>
-    <img class="gen-img" id="genImg" src="" alt="AI Portrait Concept">
+    <div class="gen-noise" id="gNoise"></div>
+    <img class="gen-pic" id="gPic" src="" alt="">
   </div>
-  <div class="gen-bar"><div class="gen-bar-fill" id="genBarFill"></div></div>
-  <div class="gen-status-wrap">
-    <div class="gen-title">Good Ereseh &middot; Commission Assistant</div>
-    <div class="gen-status-text" id="genStatusText">Analysing your description</div>
-    <div class="gen-dots"><span></span><span></span><span></span></div>
+  <div class="gen-bar-wrap"><div class="gen-bar-fill" id="gFill"></div></div>
+  <div>
+    <div class="gen-label">Good Ereseh &middot; Commission Assistant</div>
+    <div class="gen-status" id="gStatus">Analysing your description</div>
+    <div class="gen-ldots"><span></span><span></span><span></span></div>
   </div>
 </div>
 
-<nav id="nav">
-  <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
-  <ul class="nav-links">
-    <li><a href="/gallery">Gallery</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/commissions" class="active">Commissions</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/commissions" class="nav-commission">Commission</a></li>
-  </ul>
-</nav>
+<div class="c-page">
+  <nav id="nav">
+    <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
+    <ul class="nav-links">
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/commissions" class="active">Commissions</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/commissions" class="nav-commission">Commission</a></li>
+    </ul>
+  </nav>
 
-<div class="chat-page">
-  <div class="chat-wrap">
-    <div class="chat-header">
-      <div class="chat-avatar-large">G</div>
-      <div class="chat-header-title">Commission Assistant</div>
-      <div class="chat-header-sub">Good Ereseh &middot; Charcoal &amp; Graphite Artist &middot; London</div>
+  <div class="c-head">
+    <div class="c-av">G</div>
+    <div class="c-head-info">
+      <div class="c-head-name">Commission Assistant</div>
+      <div class="c-head-sub">Good Ereseh &middot; Charcoal &amp; Graphite &middot; London</div>
     </div>
+    <div class="c-head-dot"><span></span>Online</div>
+  </div>
 
-    <!-- Static first message — always visible, no JS needed -->
-    <div class="chat-messages" id="chatMessages">
-      <div class="msg ai static-msg">
-        <div class="msg-avatar">G</div>
-        <div class="msg-bubble">
-          <p>Hello. I am the commission assistant for Good Ereseh.</p>
-          <p>I will help you design your portrait brief in five questions, then generate an AI concept so you can see the direction before you commit.</p>
-        </div>
-      </div>
+  <div class="c-msgs" id="cMsgs"></div>
+
+  <!-- Image preview strip -->
+  <div class="img-preview" id="imgPreview">
+    <img id="previewImg" src="" alt="">
+    <span class="img-preview-name" id="previewName"></span>
+    <button class="img-preview-rm" onclick="clearImage()" title="Remove">&#x2715;</button>
+  </div>
+
+  <!-- Input bar -->
+  <div class="c-input">
+    <div class="c-input-box">
+      <!-- Image upload -->
+      <button class="c-icon-btn" onclick="document.getElementById('fileIn').click()" title="Attach image">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </button>
+      <input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+
+      <!-- Text input -->
+      <textarea class="c-textarea" id="cIn"
+        placeholder="Describe your portrait, or type A / B / C to select an option&hellip;"
+        rows="1"></textarea>
+
+      <!-- Voice -->
+      <button class="c-icon-btn" id="micBtn" onclick="toggleVoice()" title="Voice input">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+
+      <!-- Send (up arrow) -->
+      <button class="c-send" id="cSend" onclick="handleSend()" disabled title="Send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+        </svg>
+      </button>
     </div>
   </div>
 </div>
-
-<!-- Static Begin button — always visible, no JS needed -->
-<div class="chat-input-area" id="chatInputArea">
-  <div class="chat-input-inner">
-    <button class="chat-send-btn" id="beginBtn" style="width:100%;padding:15px;font-size:13px;" onclick="step1()">
-      Begin &rarr;
-    </button>
-  </div>
-</div>
-
-<footer class="footer-mono" style="position:relative;z-index:1;">
-  <div class="footer-glyph" aria-hidden="true">G &middot; E</div>
-  <div class="footer-social">
-    <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
-    </a>
-    <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-    </a>
-  </div>
-  <div class="footer-grid">
-    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/benjamin">In God We Trust</a></li><li><a href="/artworks/lips">Unspoken</a></li></ul></div>
-    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/gallery">Browse Gallery</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
-  </div>
-  <div class="footer-base"><span>&copy; 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
-</footer>
 
 <script>
-var API = 'https://goodereseh-website-production.up.railway.app';
-var chat = document.getElementById('chatMessages');
-var answers = { subject: '', occasion: '', moods: [], size: '', details: '' };
+var API_RAIL = 'https://goodereseh-website-production.up.railway.app';
 
-var S2_OPTS = [
-  'A gift for someone special',
-  'A memorial &mdash; preserving a loved one\'s memory',
-  'A family artwork for the home',
-  'A personal collector piece',
-  'Something else'
-];
+/* ---- STATE ---- */
+var history = [];
+var uploadedB64 = null, uploadedType = null, uploadedName = '';
+var recognition = null, isRecording = false;
+var lastGenUrl = null;
+var briefCollected = false;
 
-var S4_SIZES = [
-  { l: 'A4 Portrait',        s: '210\u00d7297mm \u00b7 From \u00a3250' },
-  { l: 'A3 Portrait',        s: '297\u00d7420mm \u00b7 From \u00a3500' },
-  { l: 'A2 Collector Piece', s: '420\u00d7594mm \u00b7 From \u00a3900' },
-  { l: 'Large Custom',       s: 'Above A2 \u00b7 From \u00a31,500' }
-];
+/* ---- SYSTEM PROMPT ---- */
+var SYSTEM = "You are the commission assistant for Good Ereseh, a hyperrealistic charcoal and graphite portrait artist based in London. You help customers commission a portrait through natural, friendly conversation.\n\nKEY RULES:\n1. When presenting options, ALWAYS format them EXACTLY like this (so they become clickable buttons):\nA) Option text here\nB) Option text here\nC) Option text here\n\n2. Users can type a letter (A/B/C/D) to select, or click the button, or type freely\n3. If a user says they made a mistake or wants to change something, re-present the relevant options\n4. Keep responses concise - 1-2 sentences then show options if needed\n5. Never say 'continue' - just naturally flow to the next question\n6. If user uploads an image, acknowledge it warmly and use what you can see to inform the brief\n\nCOMMISSION FLOW:\n1. Greet warmly (1-2 sentences). Ask what type of commission using options:\nA) Personal Portrait - capturing an individual from reference photos\nB) Family Artwork - multiple loved ones in one composition\nC) Memorial Piece - honouring someone's memory with care\n\n2. Ask who the portrait is of and any details (name, age, relationship to customer)\n\n3. Ask about mood/feeling using options (pick 5-6):\nA) Strength and dignity\nB) Warmth and tenderness\nC) Joy and playfulness\nD) Nostalgia and reflection\nE) Elegance and grace\nF) Mystery and depth\n\n4. Ask about size and investment:\nA) A4 Portrait - from £250 (210x297mm, ideal for intimate subjects)\nB) A3 Portrait - from £500 (297x420mm, most popular size)\nC) A2 Collector Piece - from £900 (420x594mm, prominent statement)\nD) Large Custom - from £1,500 (any size above A2)\n\n5. Ask for any final details or reference image description. If they uploaded an image, describe what you see and confirm it will be sent directly to Good Ereseh.\n\n6. When you have enough information, say you are ready to generate a concept. Then on a NEW LINE write exactly: GENERATE_CONCEPT\nThen on the next line write: PROMPT: followed by a detailed image generation prompt for a hyperrealistic charcoal portrait based on everything discussed.\n\n7. After the image is generated, ask if it captures what they had in mind. If not, ask what to change and adjust. Keep refining until they are happy.\n\n8. When customer is satisfied with the concept, say you will now collect their details to send the brief. Then write exactly: COLLECT_DETAILS\n\nIMPORTANT: The customer's reference photo (if uploaded) will be sent directly to Good Ereseh without any alteration. Mention this.\n\nProcess info (share when relevant):\n- 50% deposit required before work begins\n- Regular progress updates throughout\n- Final artwork delivered in a black presentation box with Certificate of Authenticity and wax seal\n- Good Ereseh responds within 2 business days";
 
-var MOODS = [
-  'Strength','Tenderness','Joy','Nostalgia','Power','Serenity',
-  'Elegance','Warmth','Gravity','Mystery','Legacy','Playfulness'
-];
+/* ---- HELPERS ---- */
+var cMsgs = document.getElementById('cMsgs');
+var cIn   = document.getElementById('cIn');
+var cSend = document.getElementById('cSend');
 
-function scrollDown() {
-  setTimeout(function() {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  }, 80);
-}
+function wait(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function sb(){ setTimeout(function(){ cMsgs.scrollTop = cMsgs.scrollHeight; },60); }
 
-function wait(ms) {
-  return new Promise(function(r) { setTimeout(r, ms); });
-}
-
-function addMsg(role, html) {
-  var div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.innerHTML = role === 'ai'
-    ? '<div class="msg-avatar">G</div><div class="msg-bubble">' + html + '</div>'
-    : '<div class="msg-bubble">' + html + '</div>';
-  chat.appendChild(div);
-  scrollDown();
-  return div;
-}
-
-async function aiSay(html, delay) {
-  if (delay === undefined) delay = 850;
-  var t = addMsg('ai', '<div class="typing-dots"><span></span><span></span><span></span></div>');
-  await wait(delay);
-  t.remove();
-  addMsg('ai', html);
-  await wait(80);
-  scrollDown();
-}
-
-function setInput(html) {
-  var a = document.getElementById('chatInputArea');
-  a.innerHTML = '<div class="chat-input-inner">' + html + '</div>';
-  attachCursorListeners(a);
-}
-
-function attachCursorListeners(root) {
-  root.querySelectorAll('a,button,input,textarea').forEach(function(el) {
-    el.addEventListener('mouseenter', function() { document.body.classList.add('cursor-hover'); });
-    el.addEventListener('mouseleave', function() { document.body.classList.remove('cursor-hover'); });
+function ac(el){
+  el.querySelectorAll('button,input,textarea').forEach(function(e){
+    e.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
+    e.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
   });
 }
 
-/* ===== STEP 1: Subject ===== */
-async function step1() {
-  setInput('<div style="height:48px"></div>'); /* clear begin button */
-  await aiSay('<p>Who is this portrait of?</p>', 600);
-  setInput(
-    '<div class="chat-text-row">' +
-      '<input class="chat-text-input" id="s1in" placeholder="e.g. My grandmother Rose, aged 80\u2026" maxlength="200" autocomplete="off">' +
-      '<button class="chat-send-btn" id="s1btn" onclick="submitStep1()" disabled>Send</button>' +
-    '</div>'
-  );
-  var inp = document.getElementById('s1in');
-  var btn = document.getElementById('s1btn');
-  inp.addEventListener('input', function() { btn.disabled = inp.value.trim().length < 2; });
-  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !btn.disabled) submitStep1(); });
-  setTimeout(function() { inp.focus(); }, 150);
-}
+/* ---- RENDER AI TEXT (parse options into buttons) ---- */
+function renderAI(text){
+  // Split into lines
+  var lines = text.split('\n');
+  var out = [];
+  var inOptions = false;
 
-async function submitStep1() {
-  var val = document.getElementById('s1in').value.trim();
-  if (val.length < 2) return;
-  answers.subject = val;
-  setInput('<div style="height:48px"></div>');
-  addMsg('user', '<p>' + val + '</p>');
-  await step2();
-}
-
-/* ===== STEP 2: Occasion ===== */
-async function step2() {
-  var first = answers.subject.split(' ')[0];
-  await aiSay('<p>' + first + ' &mdash; a meaningful subject.</p><p>What is this commission for?</p>', 850);
-  var html = '<div class="chat-options">';
-  S2_OPTS.forEach(function(o, i) {
-    html += '<button class="chat-opt" data-idx="' + i + '">' + o + '</button>';
+  lines.forEach(function(line){
+    var optMatch = line.match(/^([A-F])\)\s+(.+)$/);
+    if(optMatch){
+      inOptions = true;
+      out.push('<button class="opt-btn" onclick="pickOpt(\'' + optMatch[1] + '\',this)">' +
+        '<span class="opt-letter">' + optMatch[1] + '</span>' +
+        optMatch[2] +
+        '</button>');
+    } else {
+      if(line.trim() === 'GENERATE_CONCEPT' || line.trim().startsWith('PROMPT:') || line.trim() === 'COLLECT_DETAILS') return;
+      if(line.trim()){
+        out.push('<p>' + line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</p>');
+      } else if(out.length && out[out.length-1] !== '<br>'){
+        out.push('<br>');
+      }
+    }
   });
-  html += '</div>';
-  setInput(html);
-  document.querySelectorAll('#chatInputArea .chat-opt').forEach(function(btn) {
-    btn.addEventListener('click', function() { submitStep2(parseInt(btn.dataset.idx)); });
-  });
+  return out.join('');
 }
 
-async function submitStep2(i) {
-  answers.occasion = S2_OPTS[i].replace(/&mdash;/g, '-');
-  setInput('<div style="height:48px"></div>');
-  addMsg('user', '<p>' + S2_OPTS[i] + '</p>');
-  await step3();
+/* ---- ADD MESSAGES ---- */
+function addAI(html){
+  var d = document.createElement('div');
+  d.className = 'msg ai';
+  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble">' + html + '</div></div>';
+  cMsgs.appendChild(d);
+  sb(); ac(d); return d;
 }
 
-/* ===== STEP 3: Mood ===== */
-async function step3() {
-  await aiSay('<p>Understood. What should this artwork communicate?</p><p>Choose everything that resonates &mdash; you can pick more than one.</p>', 850);
-  answers.moods = [];
-  var chips = MOODS.map(function(m, i) {
-    return '<button class="mood-chip" data-idx="' + i + '">' + m + '</button>';
-  }).join('');
-  setInput(
-    '<div class="chat-moods">' + chips + '</div>' +
-    '<button class="chat-mood-confirm" id="moodConfirm" onclick="submitStep3()" disabled>Continue &rarr;</button>'
-  );
-  document.querySelectorAll('#chatInputArea .mood-chip').forEach(function(btn) {
-    btn.addEventListener('click', function() { toggleMood(btn, parseInt(btn.dataset.idx)); });
-  });
+function addUser(html, imgUrl){
+  var imgHtml = imgUrl ? '<div class="chat-img"><img src="' + imgUrl + '" alt="Reference"></div>' : '';
+  var d = document.createElement('div');
+  d.className = 'msg user';
+  d.innerHTML = '<div class="m-body">' + imgHtml + '<div class="bubble"><p>' + html + '</p></div></div>';
+  cMsgs.appendChild(d);
+  sb(); return d;
 }
 
-function toggleMood(btn, i) {
-  btn.classList.toggle('on');
-  var val = MOODS[i];
-  if (btn.classList.contains('on')) {
-    if (answers.moods.indexOf(val) === -1) answers.moods.push(val);
-  } else {
-    answers.moods = answers.moods.filter(function(m) { return m !== val; });
+function showTyping(){
+  var d = document.createElement('div');
+  d.className = 'msg ai';
+  d.id = 'typing';
+  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>';
+  cMsgs.appendChild(d); sb(); return d;
+}
+
+/* ---- OPTION CLICK ---- */
+function pickOpt(letter, btn){
+  // Grey out all sibling option buttons
+  var body = btn.closest('.m-body');
+  if(body) body.querySelectorAll('.opt-btn').forEach(function(b){ b.disabled=true; b.style.opacity='.45'; });
+  // Get full option text
+  var text = letter + ') ' + btn.textContent.trim();
+  addUser(letter);
+  sendToAI(letter, null, null);
+}
+
+/* ---- INPUT HANDLING ---- */
+cIn.addEventListener('input', function(){
+  cIn.style.height = 'auto';
+  cIn.style.height = Math.min(cIn.scrollHeight, 140) + 'px';
+  var hasText = cIn.value.trim().length > 0;
+  cSend.disabled = !hasText;
+  cSend.classList.toggle('ready', hasText);
+});
+
+cIn.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && !e.shiftKey && !cSend.disabled){
+    e.preventDefault(); handleSend();
   }
-  var c = document.getElementById('moodConfirm');
-  if (c) {
-    c.disabled = answers.moods.length === 0;
-    c.classList.toggle('ready', answers.moods.length > 0);
+});
+
+function handleSend(){
+  var text = cIn.value.trim();
+  if(!text && !uploadedB64) return;
+  var b64 = uploadedB64, type = uploadedType;
+  var previewSrc = uploadedB64 ? 'data:' + uploadedType + ';base64,' + uploadedB64 : null;
+  clearImage();
+  cIn.value = ''; cIn.style.height = 'auto';
+  cSend.disabled = true; cSend.classList.remove('ready');
+  addUser(text || '(image attached)', previewSrc);
+  sendToAI(text || 'I have uploaded a reference image.', b64, type);
+}
+
+/* ---- IMAGE UPLOAD ---- */
+function handleFile(file){
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var dataUrl = e.target.result;
+    uploadedB64   = dataUrl.split(',')[1];
+    uploadedType  = file.type;
+    uploadedName  = file.name;
+    var prev = document.getElementById('imgPreview');
+    document.getElementById('previewImg').src = dataUrl;
+    document.getElementById('previewName').textContent = file.name;
+    prev.classList.add('show');
+    // Enable send
+    cSend.disabled = false; cSend.classList.add('ready');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage(){
+  uploadedB64 = null; uploadedType = null; uploadedName = '';
+  document.getElementById('imgPreview').classList.remove('show');
+  document.getElementById('fileIn').value = '';
+  if(!cIn.value.trim()){ cSend.disabled=true; cSend.classList.remove('ready'); }
+}
+
+/* ---- VOICE ---- */
+function toggleVoice(){
+  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRec){ addAI('<p>Voice input is not supported in this browser. Please try Chrome.</p>'); return; }
+  var micBtn = document.getElementById('micBtn');
+  if(isRecording){
+    if(recognition) recognition.stop();
+    isRecording = false; micBtn.classList.remove('recording'); return;
   }
+  recognition = new SpeechRec();
+  recognition.lang = 'en-GB'; recognition.continuous = false; recognition.interimResults = true;
+  recognition.onstart = function(){ isRecording=true; micBtn.classList.add('recording'); };
+  recognition.onresult = function(e){
+    var t = Array.from(e.results).map(function(r){ return r[0].transcript; }).join('');
+    cIn.value = t;
+    cIn.style.height='auto'; cIn.style.height=Math.min(cIn.scrollHeight,140)+'px';
+    cSend.disabled=false; cSend.classList.add('ready');
+  };
+  recognition.onend = function(){ isRecording=false; micBtn.classList.remove('recording'); };
+  recognition.onerror = function(){ isRecording=false; micBtn.classList.remove('recording'); };
+  recognition.start();
 }
 
-async function submitStep3() {
-  if (!answers.moods.length) return;
-  setInput('<div style="height:48px"></div>');
-  addMsg('user', '<p>' + answers.moods.join(', ') + '</p>');
-  await step4();
-}
-
-/* ===== STEP 4: Size ===== */
-async function step4() {
-  var mood = answers.moods.slice(0, 2).join(' and ').toLowerCase();
-  await aiSay('<p>' + (mood.charAt(0).toUpperCase() + mood.slice(1)) + ' &mdash; noted. What size are you thinking?</p>', 800);
-  var html = '<div class="chat-options">';
-  S4_SIZES.forEach(function(s, i) {
-    html += '<button class="chat-opt" data-idx="' + i + '">' +
-      '<span style="color:var(--p1);font-size:14px;">' + s.l + '</span>' +
-      '<span style="display:block;font-size:11px;color:var(--g0);margin-top:3px;">' + s.s + '</span>' +
-    '</button>';
-  });
-  html += '</div>';
-  setInput(html);
-  document.querySelectorAll('#chatInputArea .chat-opt').forEach(function(btn) {
-    btn.addEventListener('click', function() { submitStep4(parseInt(btn.dataset.idx)); });
-  });
-}
-
-async function submitStep4(i) {
-  answers.size = S4_SIZES[i].l + ' (' + S4_SIZES[i].s + ')';
-  setInput('<div style="height:48px"></div>');
-  addMsg('user', '<p>' + S4_SIZES[i].l + '</p>');
-  await step5();
-}
-
-/* ===== STEP 5: Details ===== */
-async function step5() {
-  var first = answers.subject.split(' ')[0];
-  await aiSay(
-    '<p>One last question.</p>' +
-    '<p>Tell me about ' + first + ' &mdash; their appearance, personality, how they carry themselves. The more detail you share, the more accurate the AI concept will be.</p>',
-    950
-  );
-  setInput(
-    '<div style="display:flex;flex-direction:column;gap:10px;">' +
-      '<textarea class="chat-textarea" id="s5in" rows="4" ' +
-        'placeholder="e.g. She has kind eyes, high cheekbones, silver hair. Warm but dignified. I have a photo in natural light, slight smile\u2026" ' +
-        'maxlength="800"></textarea>' +
-      '<button class="chat-send-btn" style="align-self:flex-end;padding:12px 28px;" onclick="submitStep5()">Generate my concept &rarr;</button>' +
-    '</div>'
-  );
-}
-
-async function submitStep5() {
-  var val = document.getElementById('s5in').value.trim();
-  answers.details = val;
-  setInput('<div style="height:48px"></div>');
-  if (val) addMsg('user', '<p>' + val + '</p>');
-  await aiSay('<p>Thank you. I have everything I need.</p><p>Generating your portrait concept now\u2026</p>', 750);
-  await wait(400);
-  runGeneration();
-}
-
-/* ===== GENERATION ===== */
-async function runGeneration() {
-  var overlay  = document.getElementById('genOverlay');
-  var statusEl = document.getElementById('genStatusText');
-  var barFill  = document.getElementById('genBarFill');
-  var genImg   = document.getElementById('genImg');
-  var genNoise = document.getElementById('genNoise');
-
-  overlay.classList.add('active');
-
-  var phases = [
-    { text: 'Analysing your description',   pct: 15 },
-    { text: 'Composing portrait structure',  pct: 38 },
-    { text: 'Rendering charcoal textures',   pct: 62 },
-    { text: 'Adding depth and detail',       pct: 84 },
-    { text: 'Finalising concept',            pct: 97 }
-  ];
-
-  var subject = answers.subject;
-  var mood    = answers.moods.slice(0, 4).join(', ') || 'dignified';
-  var detail  = answers.details ? answers.details.substring(0, 100) : '';
-  var prompt  = 'hyperrealistic charcoal pencil portrait, ' + subject + ', ' +
-    mood + ', ' + detail +
-    ', black and white fine art, cotton paper texture, dramatic lighting, detailed eyes, professional artist';
-
-  var seed = Math.floor(Math.random() * 99999);
-  var imageUrl = 'https://image.pollinations.ai/prompt/' +
-    encodeURIComponent(prompt) + '?width=520&height=650&nologo=true&seed=' + seed;
-
-  genImg.src = imageUrl;
-
-  for (var p = 0; p < phases.length; p++) {
-    statusEl.style.opacity = '0';
-    await wait(200);
-    statusEl.textContent = phases[p].text;
-    statusEl.style.opacity = '1';
-    barFill.style.width = phases[p].pct + '%';
-    await wait(1100);
+/* ---- CLAUDE API ---- */
+async function sendToAI(userText, imgB64, imgType){
+  // Build message content
+  var content = [];
+  if(imgB64 && imgType){
+    content.push({ type:'image', source:{ type:'base64', media_type:imgType, data:imgB64 }});
   }
+  if(userText) content.push({ type:'text', text:userText });
+  if(content.length === 0) return;
 
-  await new Promise(function(resolve) {
-    if (genImg.complete && genImg.naturalWidth > 0) { resolve(); return; }
-    genImg.onload  = resolve;
-    genImg.onerror = resolve;
-    setTimeout(resolve, 30000);
-  });
+  history.push({ role:'user', content: content.length===1 && content[0].type==='text' ? userText : content });
 
-  statusEl.textContent = 'Concept ready';
-  barFill.style.width = '100%';
-  genNoise.style.opacity = '0';
-  genImg.style.opacity = '1';
-  await wait(2200);
-  overlay.classList.remove('active');
-  await showResult(imageUrl);
-}
-
-/* ===== RESULT ===== */
-async function showResult(imageUrl) {
-  await aiSay('<p>Here is your portrait concept, based on everything you have described.</p>', 650);
-
-  addMsg('ai',
-    '<div class="concept-in-chat">' +
-      '<img src="' + imageUrl + '" alt="AI Portrait Concept" ' +
-        'onerror="this.parentElement.innerHTML=\'<div style=\\\"padding:20px;font-size:12px;color:var(--g1);\\\">Concept unavailable &mdash; your brief has all the detail we need.</div>\'">' +
-      '<div class="concept-in-chat-note">AI concept based on your description. The actual drawing will be far richer &mdash; built by hand over days.</div>' +
-    '</div>'
-  );
-
-  await wait(1000);
-  await aiSay(
-    '<p>Enter your details below and I will send your brief to Good Ereseh.</p>' +
-    '<p>You will hear back within two business days with pricing and next steps.</p>',
-    900
-  );
-
-  addMsg('ai',
-    '<div class="brief-form-msg" id="briefForm">' +
-      '<input type="text"  id="briefName"  placeholder="Your full name"  autocomplete="name">' +
-      '<input type="email" id="briefEmail" placeholder="Email address"   autocomplete="email">' +
-      '<button class="btn-send-brief" id="sendBriefBtn" onclick="submitBrief()">Send commission brief &rarr;</button>' +
-      '<div class="send-err" id="sendErr"></div>' +
-    '</div>' +
-    '<div class="send-done" id="sendDone" style="display:none;">' +
-      '<strong style="font-family:var(--serif);font-size:18px;font-weight:300;color:var(--p2)">Brief received.</strong><br><br>' +
-      'Good Ereseh will review your brief and respond within two business days.' +
-    '</div>'
-  );
-
-  setInput('<div style="height:48px"></div>');
-  scrollDown();
-}
-
-/* ===== SUBMIT BRIEF ===== */
-async function submitBrief() {
-  var name  = document.getElementById('briefName').value.trim();
-  var email = document.getElementById('briefEmail').value.trim();
-  var errEl = document.getElementById('sendErr');
-  var btn   = document.getElementById('sendBriefBtn');
-
-  if (!name || !email) {
-    errEl.textContent = 'Please enter your name and email address.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  var lines = [
-    'COMMISSION BRIEF',
-    '---',
-    'Subject:  ' + answers.subject,
-    'Occasion: ' + answers.occasion,
-    'Mood:     ' + answers.moods.join(', '),
-    'Size:     ' + answers.size,
-    '',
-    'Description:',
-    answers.details || 'Not provided'
-  ];
-
-  btn.textContent = 'Sending\u2026';
-  btn.disabled = true;
-  errEl.style.display = 'none';
+  var t = showTyping();
+  cIn.disabled = true; cSend.disabled = true;
 
   try {
-    var res = await fetch(API + '/commission', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        name:              name,
-        email:             email,
-        'commission-type': answers.occasion || 'AI Assistant',
-        size:              answers.size || '',
-        message:           lines.join('\n')
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system: SYSTEM,
+        messages: history
       })
     });
     var data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Something went wrong.');
-    document.getElementById('briefForm').style.display = 'none';
-    document.getElementById('sendDone').style.display  = 'block';
-    scrollDown();
-  } catch(err) {
-    errEl.textContent   = err.message || 'Something went wrong. Please email art@goodereseh.com directly.';
-    errEl.style.display = 'block';
-    btn.textContent     = 'Send commission brief \u2192';
-    btn.disabled        = false;
+    var aiText = data.content && data.content[0] ? data.content[0].text : 'Something went wrong. Please try again.';
+    history.push({ role:'assistant', content: aiText });
+    t.remove();
+
+    // Check for special triggers
+    if(aiText.includes('COLLECT_DETAILS')){
+      var cleanText = aiText.replace('COLLECT_DETAILS','').trim();
+      if(cleanText) addAI(renderAI(cleanText));
+      showBriefForm();
+    } else if(aiText.includes('GENERATE_CONCEPT')){
+      var promptMatch = aiText.match(/PROMPT:\s*(.+)/s);
+      var cleanText = aiText.split('GENERATE_CONCEPT')[0].trim();
+      if(cleanText) addAI(renderAI(cleanText));
+      if(promptMatch) await generateImage(promptMatch[1].trim());
+    } else {
+      addAI(renderAI(aiText));
+    }
+  } catch(err){
+    t.remove();
+    addAI('<p>Sorry, something went wrong. Please try again or email art@goodereseh.com.</p>');
+  }
+
+  cIn.disabled = false;
+  setTimeout(function(){ cIn.focus(); },100);
+}
+
+/* ---- IMAGE GENERATION ---- */
+async function generateImage(prompt){
+  var overlay = document.getElementById('genOv');
+  var status  = document.getElementById('gStatus');
+  var fill    = document.getElementById('gFill');
+  var pic     = document.getElementById('gPic');
+  var noise   = document.getElementById('gNoise');
+
+  pic.style.opacity='0'; noise.style.opacity='1'; fill.style.width='0%';
+  overlay.classList.add('on');
+
+  var phases=[
+    {t:'Analysing your description',p:18},
+    {t:'Composing portrait structure',p:42},
+    {t:'Rendering charcoal textures',p:68},
+    {t:'Finalising concept',p:94}
+  ];
+
+  var fullPrompt = 'hyperrealistic charcoal graphite portrait drawing, black and white fine art, ' +
+    'heavy cotton paper texture, dramatic studio lighting, detailed eyes and skin, ' + prompt;
+  var seed = Math.floor(Math.random()*99999);
+  var imageUrl = 'https://image.pollinations.ai/prompt/' +
+    encodeURIComponent(fullPrompt) + '?width=520&height=650&nologo=true&seed=' + seed;
+
+  pic.src = imageUrl;
+  lastGenUrl = imageUrl;
+
+  for(var i=0;i<phases.length;i++){
+    status.style.opacity='0'; await wait(200);
+    status.textContent=phases[i].t; status.style.opacity='1';
+    fill.style.width=phases[i].p+'%'; await wait(1100);
+  }
+
+  await new Promise(function(resolve){
+    if(pic.complete&&pic.naturalWidth>0){resolve();return;}
+    pic.onload=resolve; pic.onerror=resolve; setTimeout(resolve,30000);
+  });
+
+  status.textContent='Concept ready'; fill.style.width='100%';
+  noise.style.opacity='0'; pic.style.opacity='1';
+  await wait(2000);
+  overlay.classList.remove('on');
+
+  // Show image in chat
+  var imgMsg = document.createElement('div');
+  imgMsg.className = 'msg ai';
+  imgMsg.style.animation = 'msgIn .4s ease forwards';
+  imgMsg.style.opacity = '0';
+  imgMsg.innerHTML = '<div class="m-av">G</div><div class="m-body">' +
+    '<div class="gen-img-wrap">' +
+      '<img src="' + imageUrl + '" alt="Portrait Concept">' +
+      '<div class="gen-img-note">AI concept based on your description. The actual charcoal drawing will be far richer \u2014 built entirely by hand.</div>' +
+    '</div></div>';
+  cMsgs.appendChild(imgMsg);
+  sb();
+
+  // Ask AI to follow up
+  history.push({ role:'user', content:'[System: The portrait concept image has been generated and shown to the customer. Please ask them what they think of it and whether it captures what they had in mind. If not, ask what they would like to change.]' });
+  var t = showTyping();
+  try{
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM,messages:history})
+    });
+    var data = await res.json();
+    var txt = data.content[0].text;
+    history.push({role:'assistant',content:txt});
+    t.remove(); addAI(renderAI(txt));
+  } catch(e){ t.remove(); addAI('<p>What do you think of this concept? Does it capture what you had in mind?</p>'); }
+}
+
+/* ---- BRIEF FORM ---- */
+function showBriefForm(){
+  briefCollected = true;
+  var d = document.createElement('div');
+  d.className = 'msg ai';
+  d.innerHTML = '<div class="m-av">G</div><div class="m-body"><div class="bubble" style="padding:16px;">' +
+    '<p style="margin-bottom:12px;font-size:13px;">Please enter your details to send your commission brief and receive your deposit invoice.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:8px;" id="briefFormInner">' +
+      '<input type="text"  id="bfName"  placeholder="Full name"      style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
+      '<input type="email" id="bfEmail" placeholder="Email address"  style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
+      '<input type="tel"   id="bfPhone" placeholder="Phone number"   style="background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;padding:10px 13px;outline:none;border-radius:7px;width:100%;">' +
+      '<button onclick="submitBrief()" style="padding:12px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:none;border-radius:7px;transition:opacity .25s;" id="submitBriefBtn">Send Brief &amp; Receive Deposit Invoice &#8250;</button>' +
+      '<div id="briefErr" style="font-size:11px;color:#f87171;display:none;"></div>' +
+    '</div>' +
+    '<div id="briefDone" style="display:none;padding:14px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:13px;color:var(--p1);line-height:1.75;">' +
+      '<strong style="font-family:var(--serif);font-size:16px;font-weight:300;color:var(--p2);">Brief received.</strong><br><br>' +
+      'Good Ereseh will be in touch within two business days with your deposit invoice and start date.' +
+    '</div>' +
+  '</div></div>';
+  cMsgs.appendChild(d);
+  sb(); ac(d);
+}
+
+async function submitBrief(){
+  var name  = document.getElementById('bfName').value.trim();
+  var email = document.getElementById('bfEmail').value.trim();
+  var phone = document.getElementById('bfPhone').value.trim();
+  var errEl = document.getElementById('briefErr');
+  var btn   = document.getElementById('submitBriefBtn');
+
+  if(!name||!email){ errEl.textContent='Please enter name and email.'; errEl.style.display='block'; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent='Invalid email.'; errEl.style.display='block'; return; }
+
+  // Build brief from conversation
+  var convSummary = history.filter(function(m){return m.role==='assistant';}).slice(-6)
+    .map(function(m){ return typeof m.content==='string'?m.content:''; }).join('\n');
+
+  var message = ['COMMISSION BRIEF VIA AI ASSISTANT','================================',
+    'Name:  '+name,'Email: '+email,'Phone: '+(phone||'Not provided'),'',
+    'CONVERSATION SUMMARY:',convSummary,'',
+    (uploadedName ? 'NOTE: Customer uploaded a reference photo: '+uploadedName+'. Please request this file from them directly at art@goodereseh.com.' : ''),
+    (lastGenUrl ? 'AI Concept generated: '+lastGenUrl : '')].join('\n');
+
+  btn.textContent='Sending\u2026'; btn.disabled=true; errEl.style.display='none';
+
+  try{
+    var res = await fetch(API_RAIL+'/commission',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:name,email:email,phone:phone,
+        'commission-type':'AI Assistant Commission',size:'',message:message})
+    });
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error||'Something went wrong.');
+    document.getElementById('briefFormInner').style.display='none';
+    document.getElementById('briefDone').style.display='block';
+    sb();
+  } catch(err){
+    errEl.textContent=err.message||'Error. Please email art@goodereseh.com';
+    errEl.style.display='block';
+    btn.textContent='Send Brief & Receive Deposit Invoice \u203a'; btn.disabled=false;
   }
 }
 
-/* ===== NAV / CURSOR ===== */
-var nav = document.getElementById('nav');
-window.addEventListener('scroll', function() {
-  nav.classList.toggle('scrolled', window.scrollY > 60);
-}, { passive: true });
-
-var dot  = document.getElementById('cursorDot');
-var ring = document.getElementById('cursorRing');
-if (window.matchMedia('(pointer: fine)').matches) {
-  var mx=0, my=0, rx=0, ry=0, tt=0;
-  document.addEventListener('mousemove', function(e) {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-    clearTimeout(tt);
-    tt = setTimeout(function() {
-      var t = document.createElement('div');
-      t.className = 'cursor-trail';
-      t.style.left = mx + 'px'; t.style.top = my + 'px';
-      document.body.appendChild(t);
-      t.addEventListener('animationend', function() { t.remove(); });
-    }, 16);
+/* ---- NAV / CURSOR ---- */
+var nav=document.getElementById('nav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
+var dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){
+  var mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';
+    clearTimeout(tt);tt=setTimeout(function(){
+      var t=document.createElement('div');t.className='cursor-trail';
+      t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);
+      t.addEventListener('animationend',function(){t.remove();});},16);
   });
-  (function loop() {
-    rx += (mx - rx) * .12; ry += (my - ry) * .12;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a,button').forEach(function(el) {
-    el.addEventListener('mouseenter', function() { document.body.classList.add('cursor-hover'); });
-    el.addEventListener('mouseleave', function() { document.body.classList.remove('cursor-hover'); });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button').forEach(function(el){
+    el.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
+    el.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
   });
 }
+
+/* ---- START ---- */
+window.addEventListener('DOMContentLoaded', function(){
+  // Kick off the AI conversation
+  history.push({ role:'user', content:'Hello, I would like to commission a portrait.' });
+  sendToAI('Hello, I would like to commission a portrait.', null, null);
+  // Remove the first user message from display (it's the init trigger)
+  setTimeout(function(){ var first=cMsgs.querySelector('.msg.user'); if(first) first.remove(); },200);
+});
 </script>
 </body>
 </html>
