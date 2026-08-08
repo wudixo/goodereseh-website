@@ -1,376 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Review your order — Good Ereseh">
+<title>Review Order — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+/* Split layout */
+.purchase-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
 
-<title>Purchase Artwork | Good Ereseh</title>
+/* Left: artwork image */
+.purchase-image {
+  position: relative;
+  background: var(--c2);
+  overflow: hidden;
+}
 
-<meta name="description" content="Purchase original charcoal and graphite artwork and limited edition fine art prints by Good Ereseh.">
+.purchase-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(.78) contrast(1.08) grayscale(8%);
+  display: block;
+}
 
-<link rel="stylesheet" href="../css/style.css">
+.purchase-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15,13,11,.15) 0%,
+    transparent 60%,
+    rgba(15,13,11,.7) 100%
+  );
+}
 
+.image-back {
+  position: absolute;
+  top: 120px;
+  left: 40px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(189,179,168,.6);
+  transition: color .3s;
+}
+
+.image-back:hover { color: var(--p2); }
+.image-back .arr { font-size: 14px; letter-spacing: 0; }
+
+.image-artwork-label {
+  position: absolute;
+  bottom: 48px;
+  left: 40px;
+  z-index: 2;
+}
+
+.image-artwork-label .tag {
+  margin-bottom: 10px;
+}
+
+.image-artwork-name {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  color: var(--p2);
+  letter-spacing: -.01em;
+  line-height: 1.05;
+}
+
+/* Right: order panel */
+.purchase-panel {
+  background: var(--c1);
+  padding: 120px 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid rgba(189,179,168,.07);
+}
+
+.panel-eyebrow {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.panel-eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--g0);
+}
+
+/* Order summary */
+.order-summary {
+  background: var(--c2);
+  border: 1px solid rgba(189,179,168,.08);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(189,179,168,.06);
+}
+
+.order-row:last-child { border-bottom: none; padding-bottom: 0; }
+.order-row:first-child { padding-top: 0; }
+
+.order-row-label {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.order-row-value {
+  font-size: 13px;
+  color: var(--p1);
+  text-align: right;
+  max-width: 60%;
+}
+
+.order-total-label {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g2);
+}
+
+.order-total-value {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--p2);
+  letter-spacing: -.01em;
+}
+
+/* Optional fields */
+.optional-fields {
+  margin-bottom: 28px;
+}
+
+.optional-label {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 12px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group label {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.field-group input {
+  background: var(--c2);
+  border: 1px solid rgba(189,179,168,.08);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color .3s;
+  width: 100%;
+}
+
+.field-group input:focus { border-color: rgba(189,179,168,.28); }
+.field-group input::placeholder { color: var(--g0); }
+
+/* Pay button */
+.pay-btn {
+  width: 100%;
+  padding: 18px 28px;
+  background: var(--p2);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: background .3s, letter-spacing .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.pay-btn:hover { background: var(--g3); letter-spacing: .28em; }
+.pay-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.pay-btn .lock {
+  font-size: 13px;
+  opacity: .6;
+  letter-spacing: 0;
+}
+
+/* Security note */
+.security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 9px;
+  color: var(--g0);
+  letter-spacing: .12em;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.security-note .dot {
+  width: 3px;
+  height: 3px;
+  background: var(--g0);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Error */
+.error-msg {
+  display: none;
+  padding: 14px 18px;
+  background: rgba(200,80,80,.08);
+  border: 1px solid rgba(200,80,80,.2);
+  font-size: 11px;
+  color: #d48888;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+/* Not found state */
+.not-found {
+  display: none;
+  text-align: center;
+  padding: 60px 0;
+}
+
+.not-found h2 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 16px;
+}
+
+.not-found p { font-size: 13px; color: var(--g2); margin-bottom: 28px; }
+
+@media (max-width: 960px) {
+  .purchase-layout { grid-template-columns: 1fr; }
+  .purchase-image { height: 50vw; min-height: 280px; }
+  .image-back { top: 80px; left: 28px; }
+  .image-artwork-label { left: 28px; bottom: 28px; }
+  .purchase-panel { padding: 52px 28px 60px; }
+  .field-row { grid-template-columns: 1fr; }
+}
+</style>
 </head>
-
-
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-<div class="logo">
-
-<a href="../index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-<ul>
-
-<li><a href="../index.html">Home</a></li>
-
-<li><a href="../gallery.html">Gallery</a></li>
-
-<li><a href="../about.html">About</a></li>
-
-<li><a href="../commissions.html">Commissions</a></li>
-
-<li><a href="../contact.html">Contact</a></li>
-
-</ul>
-
+<nav id="nav">
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
+<div class="purchase-layout">
 
+  <!-- Left: image -->
+  <div class="purchase-image">
+    <img id="artworkImg" src="" alt="">
+    <a href="#" id="backLink" class="image-back"><span class="arr">←</span> Back to artwork</a>
+    <div class="image-artwork-label">
+      <span class="tag" id="artworkType"></span>
+      <div class="image-artwork-name" id="artworkName"></div>
+    </div>
+  </div>
 
+  <!-- Right: order panel -->
+  <div class="purchase-panel">
+    <p class="panel-eyebrow">Review Your Order</p>
 
+    <!-- Order summary -->
+    <div class="order-summary">
+      <div class="order-row">
+        <span class="order-row-label">Artwork</span>
+        <span class="order-row-value" id="summaryArtwork"></span>
+      </div>
+      <div class="order-row">
+        <span class="order-row-label">Edition</span>
+        <span class="order-row-value" id="summaryType"></span>
+      </div>
+      <div class="order-row">
+        <span class="order-row-label">Delivery</span>
+        <span class="order-row-value" id="summaryDelivery">Calculated at checkout</span>
+      </div>
+      <div class="order-row" style="padding-top:20px;margin-top:8px;border-top:1px solid rgba(189,179,168,.1);border-bottom:none;">
+        <span class="order-total-label">Total</span>
+        <span class="order-total-value" id="summaryPrice"></span>
+      </div>
+    </div>
 
+    <!-- Optional: name + email for Stripe pre-fill -->
+    <div class="optional-fields">
+      <p class="optional-label">Your details <span style="color:var(--g0)">(optional — speeds up checkout)</span></p>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="customerName">Name</label>
+          <input type="text" id="customerName" placeholder="Full name" autocomplete="name">
+        </div>
+        <div class="field-group">
+          <label for="customerEmail">Email</label>
+          <input type="email" id="customerEmail" placeholder="your@email.com" autocomplete="email">
+        </div>
+      </div>
+    </div>
 
-<main>
+    <!-- Pay -->
+    <button class="pay-btn" id="payBtn" onclick="proceedToPayment()">
+      <span class="lock">🔒</span> Proceed to Secure Payment
+    </button>
 
+    <div class="security-note">
+      <span>Secured by Stripe</span>
+      <span class="dot"></span>
+      <span>SSL Encrypted</span>
+      <span class="dot"></span>
+      <span>All major cards accepted</span>
+    </div>
 
-<section class="purchase-page">
+    <div class="error-msg" id="errorMsg"></div>
 
-
-<div class="purchase-header">
-
-<h1>
-Complete Your Artwork Purchase
-</h1>
-
-<p>
-Secure your original artwork or limited edition print from Good Ereseh.
-</p>
-
-</div>
-
-
-
-
-
-<div class="purchase-container">
-
-
-
-
-
-<div class="purchase-summary">
-
-
-<h2>
-Order Summary
-</h2>
-
-
-<div class="summary-card">
-
-
-<h3 id="artwork-title">
-Loading artwork...
-</h3>
-
-
-<p id="artwork-type">
-</p>
-
-
-<p id="artwork-size">
-</p>
-
-
-
-<div class="price-container">
-
-<span>
-Total
-</span>
-
-
-<strong id="artwork-price">
-</strong>
-
-</div>
-
-
-</div>
-
-
-
-
-<div class="collector-note">
-
-
-<h3>
-Collector Information
-</h3>
-
-
-<p>
-All original artworks are handmade, signed by the artist and supplied with a Certificate of Authenticity.
-</p>
-
-
-<p>
-Fine art prints are produced on premium archival paper and prepared carefully for delivery.
-</p>
-
+    <!-- Not found -->
+    <div class="not-found" id="notFound">
+      <h2>Artwork not found.</h2>
+      <p>The product you selected is no longer available or the link is invalid.</p>
+      <a href="/gallery" class="btn-primary">Return to Gallery</a>
+    </div>
+  </div>
 
 </div>
 
-
-
-</div>
-
-
-
-
-
-
-
-<div class="customer-details">
-
-
-<h2>
-Delivery Information
-</h2>
-
-
-
-<form id="purchase-form">
-
-
-
-<label>
-Full Name
-</label>
-
-
-<input
-type="text"
-name="name"
-placeholder="Your full name"
-required>
-
-
-
-
-<label>
-Email Address
-</label>
-
-
-<input
-type="email"
-name="email"
-placeholder="Your email address"
-required>
-
-
-
-
-
-<label>
-Phone Number
-</label>
-
-
-<input
-type="tel"
-name="phone"
-placeholder="Your phone number">
-
-
-
-
-
-<label>
-Delivery Address
-</label>
-
-
-<textarea
-name="address"
-placeholder="Your full delivery address"
-required></textarea>
-
-
-
-
-
-<button
-type="button"
-id="checkout-button"
-class="purchase-button">
-
-Proceed To Secure Payment
-
-</button>
-
-
-
-</form>
-
-
-
-<p class="secure-payment">
-
-Secure payment processed by Stripe.
-
-</p>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</section>
-
-
-</main>
-
-
-
-
-
-
-<footer>
-
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-
-<h2>
-
-<a href="../index.html">
-GOOD ERESEH
-</a>
-
-</h2>
-
-
-<p>
-Hyperrealistic Charcoal and Graphite Pencil Artist
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="footer-links">
-
-
-<a href="../index.html">
-Home
-</a>
-
-
-<a href="../gallery.html">
-Gallery
-</a>
-
-
-<a href="../about.html">
-About
-</a>
-
-
-<a href="../commissions.html">
-Commissions
-</a>
-
-
-<a href="../contact.html">
-Contact
-</a>
-
-
-</div>
-
-
-
-
-
-<div class="footer-contact">
-
-
-<p>
-London, United Kingdom
-</p>
-
-
-<p>
-Email: art@goodereseh.com
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="footer-bottom">
-
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-
-</div>
-
-
-
-</footer>
-
-
-
-
-
-<script src="../js/purchase.js"></script>
-
-
+<script>
+const API = 'https://goodereseh-website-production.up.railway.app';
+
+/* ── Product catalogue (display only — prices validated server-side) ── */
+const CATALOG = {
+  // Reflections
+  reflections_original:  { artwork:'Reflections', type:'Original Artwork',   price:'£3,000', image:'/images/artwork/eye.jpg',      page:'/artworks/eye' },
+  reflections_print_A4:  { artwork:'Reflections', type:'Fine Art Print · A4', price:'£85',    image:'/images/artwork/eye.jpg',      page:'/artworks/eye' },
+  reflections_print_A3:  { artwork:'Reflections', type:'Fine Art Print · A3', price:'£150',   image:'/images/artwork/eye.jpg',      page:'/artworks/eye' },
+  reflections_print_A2:  { artwork:'Reflections', type:'Fine Art Print · A2', price:'£275',   image:'/images/artwork/eye.jpg',      page:'/artworks/eye' },
+  reflections_print_A1:  { artwork:'Reflections', type:'Fine Art Print · A1', price:'£500',   image:'/images/artwork/eye.jpg',      page:'/artworks/eye' },
+  // Fela Kuti
+  fela_original:         { artwork:'Fela Kuti',   type:'Original Artwork',   price:'£4,500', image:'/images/artwork/fela.jpg',     page:'/artworks/fela' },
+  fela_print_A4:         { artwork:'Fela Kuti',   type:'Fine Art Print · A4', price:'£95',    image:'/images/artwork/fela.jpg',     page:'/artworks/fela' },
+  fela_print_A3:         { artwork:'Fela Kuti',   type:'Fine Art Print · A3', price:'£175',   image:'/images/artwork/fela.jpg',     page:'/artworks/fela' },
+  fela_print_A2:         { artwork:'Fela Kuti',   type:'Fine Art Print · A2', price:'£325',   image:'/images/artwork/fela.jpg',     page:'/artworks/fela' },
+  fela_print_A1:         { artwork:'Fela Kuti',   type:'Fine Art Print · A1', price:'£550',   image:'/images/artwork/fela.jpg',     page:'/artworks/fela' },
+  // The Stance
+  the_stance_print_A4:   { artwork:'The Stance',  type:'Fine Art Print · A4', price:'£95',    image:'/images/artwork/fela2.jpg',    page:'/artworks/fela2' },
+  the_stance_print_A3:   { artwork:'The Stance',  type:'Fine Art Print · A3', price:'£175',   image:'/images/artwork/fela2.jpg',    page:'/artworks/fela2' },
+  the_stance_print_A2:   { artwork:'The Stance',  type:'Fine Art Print · A2', price:'£325',   image:'/images/artwork/fela2.jpg',    page:'/artworks/fela2' },
+  the_stance_print_A1:   { artwork:'The Stance',  type:'Fine Art Print · A1', price:'£550',   image:'/images/artwork/fela2.jpg',    page:'/artworks/fela2' },
+  // Fragments of Thought
+  fragments_original:    { artwork:'Fragments of Thought', type:'Original Artwork',   price:'£400',  image:'/images/artwork/abstract.jpg', page:'/artworks/abstract' },
+  fragments_print_A4:    { artwork:'Fragments of Thought', type:'Fine Art Print · A4', price:'£50',   image:'/images/artwork/abstract.jpg', page:'/artworks/abstract' },
+  fragments_print_A3:    { artwork:'Fragments of Thought', type:'Fine Art Print · A3', price:'£95',   image:'/images/artwork/abstract.jpg', page:'/artworks/abstract' },
+  fragments_print_A2:    { artwork:'Fragments of Thought', type:'Fine Art Print · A2', price:'£175',  image:'/images/artwork/abstract.jpg', page:'/artworks/abstract' },
+  fragments_print_A1:    { artwork:'Fragments of Thought', type:'Fine Art Print · A1', price:'£300',  image:'/images/artwork/abstract.jpg', page:'/artworks/abstract' },
+  // In God We Trust
+  in_god_we_trust_original:  { artwork:'In God We Trust', type:'Original Artwork',   price:'£4,000', image:'/images/artwork/benjamin.jpeg', page:'/artworks/benjamin' },
+  in_god_we_trust_print_A4:  { artwork:'In God We Trust', type:'Fine Art Print · A4', price:'£95',    image:'/images/artwork/benjamin.jpeg', page:'/artworks/benjamin' },
+  in_god_we_trust_print_A3:  { artwork:'In God We Trust', type:'Fine Art Print · A3', price:'£175',   image:'/images/artwork/benjamin.jpeg', page:'/artworks/benjamin' },
+  in_god_we_trust_print_A2:  { artwork:'In God We Trust', type:'Fine Art Print · A2', price:'£325',   image:'/images/artwork/benjamin.jpeg', page:'/artworks/benjamin' },
+  in_god_we_trust_print_A1:  { artwork:'In God We Trust', type:'Fine Art Print · A1', price:'£550',   image:'/images/artwork/benjamin.jpeg', page:'/artworks/benjamin' },
+  // Unspoken
+  unspoken_original:     { artwork:'Unspoken', type:'Original Artwork',   price:'£3,500', image:'/images/artwork/lips.jpg', page:'/artworks/lips' },
+  unspoken_print_A4:     { artwork:'Unspoken', type:'Fine Art Print · A4', price:'£85',    image:'/images/artwork/lips.jpg', page:'/artworks/lips' },
+  unspoken_print_A3:     { artwork:'Unspoken', type:'Fine Art Print · A3', price:'£150',   image:'/images/artwork/lips.jpg', page:'/artworks/lips' },
+  unspoken_print_A2:     { artwork:'Unspoken', type:'Fine Art Print · A2', price:'£275',   image:'/images/artwork/lips.jpg', page:'/artworks/lips' },
+  unspoken_print_A1:     { artwork:'Unspoken', type:'Fine Art Print · A1', price:'£500',   image:'/images/artwork/lips.jpg', page:'/artworks/lips' },
+};
+
+/* ── Load product from URL ── */
+const params    = new URLSearchParams(window.location.search);
+const productId = params.get('product');
+const product   = productId ? CATALOG[productId] : null;
+
+if (product) {
+  document.title = `${product.artwork} — Good Ereseh`;
+  document.getElementById('artworkImg').src          = product.image;
+  document.getElementById('artworkImg').alt          = product.artwork;
+  document.getElementById('artworkType').textContent = product.type;
+  document.getElementById('artworkName').textContent = product.artwork;
+  document.getElementById('backLink').href           = product.page;
+  document.getElementById('summaryArtwork').textContent = product.artwork;
+  document.getElementById('summaryType').textContent    = product.type;
+  document.getElementById('summaryPrice').textContent   = product.price;
+} else {
+  // Product not found — hide the normal UI, show not-found state
+  document.querySelector('.purchase-image').style.display = 'none';
+  document.querySelector('.panel-eyebrow').style.display  = 'none';
+  document.querySelector('.order-summary').style.display  = 'none';
+  document.querySelector('.optional-fields').style.display = 'none';
+  document.querySelector('.pay-btn').style.display        = 'none';
+  document.querySelector('.security-note').style.display  = 'none';
+  document.getElementById('notFound').style.display       = 'block';
+}
+
+/* ── Proceed to Stripe ── */
+async function proceedToPayment() {
+  if (!product) return;
+
+  const btn  = document.getElementById('payBtn');
+  const errEl = document.getElementById('errorMsg');
+  const name  = document.getElementById('customerName').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
+
+  btn.textContent = 'Redirecting...';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+
+  try {
+    const body = { productId };
+    if (name)  body.name  = name;
+    if (email) body.email = email;
+
+    const res  = await fetch(`${API}/create-checkout-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || 'Unable to create payment session.');
+    window.location.href = data.url;
+
+  } catch (err) {
+    errEl.textContent   = err.message;
+    errEl.style.display = 'block';
+    btn.innerHTML       = '<span class="lock">🔒</span> Proceed to Secure Payment';
+    btn.disabled        = false;
+  }
+}
+
+/* ── Nav / Cursor / Reveals ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    clearTimeout(tt);
+    tt=setTimeout(()=>{
+      const t=document.createElement('div');
+      t.className='cursor-trail';
+      t.style.left=mx+'px'; t.style.top=my+'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend',()=>t.remove());
+    },16);
+  });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+}
+</script>
 </body>
-
 </html>
