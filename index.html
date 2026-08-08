@@ -1,411 +1,1599 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Good Ereseh — Hyperrealistic charcoal and graphite artworks. London.">
+<title>Good Ereseh</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
-<title>
-Good Ereseh | Hyperrealistic Charcoal and Graphite Artist
-</title>
+<style>
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --ink:    #0f0d0b;
+  --c1:     #181512;
+  --c2:     #221e19;
+  --c3:     #2c271f;
+  --g0:     #3d3830;
+  --g1:     #5c5449;
+  --g2:     #8c8278;
+  --g3:     #bdb3a8;
+  --p1:     #e4dbd0;
+  --p2:     #f0e8d8;
+  --gold:   #b09060;
 
+  --serif:  'Cormorant Garamond', Georgia, serif;
+  --sans:   'Inter', system-ui, sans-serif;
+  --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-<meta name="description" content="Good Ereseh creates hyperrealistic charcoal and graphite artworks exploring identity, emotion and human stories.">
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
+body {
+  background: var(--ink);
+  color: var(--p1);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: none; /* custom cursor takes over */
+}
 
-<link rel="stylesheet" href="css/style.css">
+@media (pointer: coarse) {
+  body { cursor: auto; }
+}
 
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; cursor: none; }
+button { cursor: none; }
 
+/* ── PAPER GRAIN ─────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px;
+}
+
+/* ── CUSTOM CURSOR ───────────────────────────────────────── */
+.cursor-dot {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g3);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: screen;
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(189,179,168,0.4);
+  pointer-events: none;
+  z-index: 9997;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.3s;
+  mix-blend-mode: screen;
+}
+
+body.cursor-hover .cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--p2);
+}
+
+body.cursor-hover .cursor-ring {
+  width: 44px;
+  height: 44px;
+  border-color: rgba(240,232,216,0.3);
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--g2);
+  pointer-events: none;
+  z-index: 9996;
+  transform: translate(-50%, -50%);
+  animation: trailFade 0.6s var(--ease) forwards;
+}
+
+@keyframes trailFade {
+  0%   { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.2); }
+}
+
+/* ── NAV ─────────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 64px;
+  transition: padding 0.4s var(--ease), background 0.5s;
+}
+
+nav.scrolled {
+  padding: 22px 64px;
+  background: rgba(15,13,11,0.9);
+  backdrop-filter: blur(28px);
+  border-bottom: 1px solid rgba(189,179,168,0.06);
+}
+
+.nav-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.mark-g {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: var(--p2);
+}
+
+.mark-sub {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-top: 3px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 52px;
+}
+
+.nav-links a {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--g2);
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--g3);
+  transition: width 0.35s var(--ease);
+}
+
+.nav-links a:hover { color: var(--p1); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-commission {
+  display: inline-block;
+  padding: 11px 26px;
+  border: 1px solid rgba(189,179,168,0.2);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g3) !important;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+
+.nav-commission:hover {
+  border-color: var(--g3) !important;
+  background: var(--g3) !important;
+  color: var(--ink) !important;
+}
+
+.nav-commission::after { display: none !important; }
+
+/* ── HERO — DARKROOM REVEAL ──────────────────────────────── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://goodereseh.com/images/artwork/fela.jpg');
+  background-size: cover;
+  background-position: center 15%;
+  filter: brightness(0.05) contrast(1.4);
+  animation: darkroomReveal 3.5s 0.8s var(--ease) forwards;
+  transform: scale(1.04);
+  animation-fill-mode: forwards;
+}
+
+@keyframes darkroomReveal {
+  0%   { filter: brightness(0.05) contrast(1.4); transform: scale(1.04); }
+  60%  { filter: brightness(0.75) contrast(1.08); }
+  100% { filter: brightness(0.88) contrast(1.05) grayscale(8%); transform: scale(1.0); }
+}
+
+/* Vignette overlay */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(15,13,11,0.7) 100%),
+    linear-gradient(to bottom, rgba(15,13,11,0.5) 0%, transparent 30%, transparent 60%, rgba(15,13,11,0.98) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 64px 88px;
+  max-width: 820px;
+  opacity: 0;
+  animation: heroIn 1.2s 2.8s var(--ease) forwards;
+}
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-pre {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-pre::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--g1);
+}
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(60px, 8.5vw, 120px);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--p2);
+  letter-spacing: -0.02em;
+  margin-bottom: 44px;
+}
+
+.hero-h1 .italic {
+  font-style: italic;
+  color: var(--g3);
+  display: block;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+/* Animated underline CTA */
+.btn-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--p2);
+  position: relative;
+  padding-bottom: 6px;
+}
+
+.btn-line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--p2);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease);
+}
+
+.btn-line:hover::after {
+  transform-origin: left;
+  transform: scaleX(1.0);
+}
+
+.btn-line .arr {
+  font-size: 16px;
+  transition: transform 0.35s var(--ease);
+  letter-spacing: 0;
+}
+
+.btn-line:hover .arr { transform: translateX(5px); }
+
+.btn-silent {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--g1);
+  transition: color 0.3s;
+}
+
+.btn-silent:hover { color: var(--g3); }
+
+/* Hero location badge */
+.hero-location {
+  position: absolute;
+  bottom: 88px;
+  right: 64px;
+  z-index: 2;
+  opacity: 0;
+  animation: heroIn 1s 3.4s var(--ease) forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.hero-location span {
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+.hero-location-line {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, var(--g1), transparent);
+}
+
+/* ── TICKER ──────────────────────────────────────────────── */
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid rgba(189,179,168,0.06);
+  border-bottom: 1px solid rgba(189,179,168,0.06);
+  padding: 13px 0;
+  background: var(--c1);
+}
+
+.ticker-track {
+  display: flex;
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+}
+
+.ticker-item {
+  padding: 0 28px;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--g0);
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.ticker-diamond {
+  width: 3px;
+  height: 3px;
+  background: var(--g0);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── FULL-SCREEN ARTWORK VIEWER ──────────────────────────── */
+.viewer {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.viewer-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease);
+  pointer-events: none;
+}
+
+.viewer-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.viewer-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 64px;
+  background: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+
+.viewer-num {
+  font-family: var(--serif);
+  font-size: clamp(120px, 18vw, 220px);
+  font-weight: 300;
+  color: rgba(189,179,168,0.04);
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  transform: translateY(-50%);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viewer-title {
+  font-family: var(--serif);
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.viewer-type {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.viewer-price {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--g3);
+  position: relative;
+  z-index: 2;
+  margin-bottom: 36px;
+}
+
+.viewer-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g2);
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s;
+}
+
+.viewer-action:hover { color: var(--p1); }
+
+.viewer-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.viewer-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.05) brightness(0.85);
+}
+
+/* Viewer controls */
+.viewer-controls {
+  position: absolute;
+  bottom: 40px;
+  left: 64px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.viewer-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(189,179,168,0.15);
+  background: transparent;
+  color: var(--g2);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  -webkit-appearance: none;
+}
+
+.viewer-btn:hover {
+  border-color: var(--g3);
+  color: var(--p2);
+  background: rgba(189,179,168,0.06);
+}
+
+.viewer-count {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--g1);
+}
+
+/* Viewer progress line */
+.viewer-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(189,179,168,0.06);
+  z-index: 10;
+}
+
+.viewer-progress-fill {
+  height: 100%;
+  background: var(--g1);
+  transition: width 0.5s var(--ease);
+}
+
+/* ── EDITORIAL STATEMENT ─────────────────────────────────── */
+.editorial {
+  padding: 160px 64px;
+  background: var(--c1);
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-quote {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--p2);
+  line-height: 1.25;
+  letter-spacing: 0.005em;
+  max-width: 900px;
+  margin-bottom: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+.editorial-quote em {
+  font-style: normal;
+  color: var(--g2);
+}
+
+.editorial-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+.editorial-body p {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.95;
+}
+
+.editorial-sig {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 32px;
+}
+
+.sig {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--g3);
+}
+
+.sig-role {
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--g1);
+}
+
+/* Background text decoration */
+.editorial-bg-text {
+  position: absolute;
+  bottom: -40px;
+  right: -20px;
+  font-family: var(--serif);
+  font-size: 260px;
+  font-weight: 300;
+  color: rgba(189,179,168,0.025);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── ABOUT ───────────────────────────────────────────────── */
+.about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 80vh;
+}
+
+.about-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--c2);
+}
+
+.about-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.8) grayscale(15%) contrast(1.08);
+  transition: transform 1s var(--ease);
+}
+
+.about-img:hover img { transform: scale(1.04); }
+
+.about-body {
+  background: var(--c1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 72px;
+}
+
+.eyebrow {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--g0);
+}
+
+.about-h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+}
+
+.about-h2 em { font-style: italic; color: var(--g3); }
+
+.about-p {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.9;
+  margin-bottom: 14px;
+}
+
+.about-link {
+  margin-top: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g2);
+  transition: color 0.3s, gap 0.3s;
+}
+
+.about-link .arr { font-size: 15px; transition: transform 0.35s var(--ease); letter-spacing: 0; }
+.about-link:hover { color: var(--p1); gap: 18px; }
+.about-link:hover .arr { transform: translateX(4px); }
+
+/* ── MATERIALS STRIP ─────────────────────────────────────── */
+.materials {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(189,179,168,0.07);
+}
+
+.material {
+  padding: 52px 44px;
+  border-right: 1px solid rgba(189,179,168,0.07);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s;
+}
+
+.material:last-child { border-right: none; }
+.material:hover { background: var(--c1); }
+
+.material-n {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--g0);
+  margin-bottom: 24px;
+}
+
+.material-name {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 300;
+  color: var(--p1);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.material-desc {
+  font-size: 11px;
+  color: var(--g1);
+  line-height: 1.75;
+}
+
+/* ── PACKAGING ───────────────────────────────────────────── */
+.packaging {
+  padding: 160px 64px;
+  background: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 120px;
+  align-items: center;
+}
+
+/* CSS box — refined from V2 */
+.box-scene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 440px;
+  position: relative;
+}
+
+.box {
+  width: 200px;
+  height: 240px;
+  border: 1px solid rgba(189,179,168,0.15);
+  position: relative;
+  background: linear-gradient(160deg, var(--c2) 0%, var(--ink) 100%);
+}
+
+.box-lid-el {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 72px;
+  border: 1px solid rgba(189,179,168,0.1);
+  background: linear-gradient(135deg, var(--c3), var(--c1));
+}
+
+/* Ribbon horizontal */
+.ribbon-h {
+  position: absolute;
+  top: 36px;
+  left: -18px;
+  right: -18px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(176,144,96,0.5), rgba(176,144,96,0.5), transparent);
+}
+
+/* Ribbon vertical */
+.ribbon-v {
+  position: absolute;
+  top: -18px;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(176,144,96,0.5), rgba(176,144,96,0.5), transparent);
+}
+
+/* Bow */
+.bow {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 18px;
+  height: 14px;
+  background: var(--ink);
+  border: 1px solid rgba(176,144,96,0.4);
+  border-radius: 50%;
+}
+
+/* Inside */
+.box-inside {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(189,179,168,0.05);
+}
+
+.box-glyph {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(189,179,168,0.18);
+  letter-spacing: 0.1em;
+}
+
+/* Wax seal */
+.wax-seal {
+  position: absolute;
+  bottom: -22px;
+  right: -22px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c8a060, #7a5830);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  font-family: var(--serif);
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.06em;
+}
+
+/* Certificate (rotated card) */
+.cert-card {
+  position: absolute;
+  bottom: 36px;
+  left: 32px;
+  width: 80px;
+  height: 100px;
+  background: rgba(240,232,216,0.03);
+  border: 1px solid rgba(189,179,168,0.08);
+  transform: rotate(-8deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.cert-lines span {
+  display: block;
+  height: 1px;
+  background: rgba(189,179,168,0.12);
+  margin-bottom: 4px;
+}
+
+.cert-lines span:nth-child(1) { width: 44px; }
+.cert-lines span:nth-child(2) { width: 36px; }
+.cert-lines span:nth-child(3) { width: 40px; }
+
+.cert-label {
+  font-size: 5.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-top: 6px;
+}
+
+.packaging-content .eyebrow { margin-bottom: 18px; }
+
+.packaging-h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.packaging-h2 em { font-style: italic; color: var(--g3); }
+
+.packaging-p {
+  font-size: 14px;
+  color: var(--g2);
+  line-height: 1.9;
+  margin-bottom: 44px;
+}
+
+.pkg-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgba(189,179,168,0.07);
+}
+
+.pkg-list li {
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(189,179,168,0.07);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--g2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pkg-list li::before { content: '·'; color: var(--g0); }
+
+/* ── COMMISSION CTA — SILENT ─────────────────────────────── */
+.commission {
+  height: 100vh;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+  padding: 64px;
+}
+
+/* Faint radial light */
+.commission::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(140,130,120,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.commission-pre {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--g0);
+  margin-bottom: 48px;
+}
+
+.commission-h2 {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  margin-bottom: 48px;
+}
+
+.commission-h2 em {
+  display: block;
+  font-style: italic;
+  color: var(--g3);
+}
+
+.commission-rule {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--g0), transparent);
+  margin: 0 auto 48px;
+}
+
+.commission-sub {
+  font-size: 13px;
+  color: var(--g2);
+  max-width: 360px;
+  line-height: 1.9;
+  margin-bottom: 52px;
+}
+
+/* Big button — the one time we use a real button */
+.commission-btn {
+  display: inline-block;
+  padding: 16px 52px;
+  background: var(--p2);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: background 0.3s, letter-spacing 0.3s;
+}
+
+.commission-btn:hover {
+  background: var(--g3);
+  letter-spacing: 0.34em;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.footer-mono {
+  background: var(--ink);
+  border-top: 1px solid rgba(189,179,168,0.06);
+  padding: 80px 64px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 48px;
+}
+
+.footer-glyph {
+  font-family: var(--serif);
+  font-size: 80px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(189,179,168,0.12);
+  line-height: 1;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  width: 100%;
+  max-width: 700px;
+  text-align: left;
+}
+
+.footer-col h5 {
+  font-size: 7px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--g0);
+  margin-bottom: 20px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li + li { margin-top: 10px; }
+
+.footer-col a {
+  font-size: 12px;
+  color: var(--g1);
+  letter-spacing: 0.04em;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--p1); }
+
+.footer-base {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 36px;
+  border-top: 1px solid rgba(189,179,168,0.05);
+  font-size: 9px;
+  color: var(--g0);
+  letter-spacing: 0.1em;
+}
+
+.footer-legal { display: flex; gap: 28px; }
+.footer-legal a { color: var(--g0); transition: color 0.3s; }
+.footer-legal a:hover { color: var(--g2); }
+
+/* ── SCROLL REVEAL ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.22s; }
+.d3 { transition-delay: 0.36s; }
+.d4 { transition-delay: 0.5s; }
+
+/* ── MOBILE ──────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  nav { padding: 24px 28px; }
+  nav.scrolled { padding: 18px 28px; }
+  .nav-links { display: none; }
+  .hero-content { padding: 0 28px 72px; }
+  .hero-location { display: none; }
+  .viewer-slide { grid-template-columns: 1fr; }
+  .viewer-left { padding: 100px 28px 60px; }
+  .viewer-right { display: none; }
+  .viewer-num { font-size: 100px; }
+  .editorial { padding: 80px 28px; }
+  .editorial-body { grid-template-columns: 1fr; gap: 40px; }
+  .editorial-bg-text { display: none; }
+  .about { grid-template-columns: 1fr; }
+  .about-img { min-height: 50vw; }
+  .about-body { padding: 60px 28px; }
+  .materials { grid-template-columns: 1fr 1fr; }
+  .material { border-right: 1px solid rgba(189,179,168,0.07); }
+  .material:nth-child(2n) { border-right: none; }
+  .packaging { grid-template-columns: 1fr; padding: 80px 28px; gap: 60px; }
+  .pkg-list { grid-template-columns: 1fr; }
+  .commission { padding: 80px 28px; }
+  .footer-mono { padding: 60px 28px 40px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-base { flex-direction: column; gap: 16px; text-align: center; }
+  .footer-legal { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg { animation: none !important; filter: brightness(0.88) contrast(1.05) grayscale(8%); transform: none !important; }
+  .hero-content { animation: none !important; opacity: 1; }
+  .hero-location { animation: none !important; opacity: 1; }
+  *, .ticker-track { animation: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .viewer-slide { transition: none; }
+}
+</style>
 </head>
-
-
 <body>
 
+<!-- CURSOR ──────────────────────────────────────────────── -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-
-<ul>
-
-<li>
-<a href="gallery.html">
-Gallery
-</a>
-</li>
-
-
-<li>
-<a href="about.html">
-About
-</a>
-</li>
-
-
-<li>
-<a href="commissions.html">
-Commissions
-</a>
-</li>
-
-
-<li>
-<a href="contact.html">
-Contact
-</a>
-</li>
-
-
-</ul>
-
-
+<!-- NAV ─────────────────────────────────────────────────── -->
+<nav id="nav">
+  <a href="/" class="nav-mark">
+    <span class="mark-g">G · E</span>
+    <span class="mark-sub">Good Ereseh</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-
-</header>
-
-
-
-
-
-<main>
-
-
-
-
+<!-- HERO — DARKROOM ─────────────────────────────────────── -->
 <section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-pre">London · Charcoal &amp; Graphite</p>
+    <h1 class="hero-h1">
+      What remains<br>
+      when the<br>
+      <span class="italic">hand lifts.</span>
+    </h1>
+    <div class="hero-actions">
+      <a href="/gallery" class="btn-line">View Collection <span class="arr">→</span></a>
+      <a href="/commissions" class="btn-silent">Commission a portrait</a>
+    </div>
+  </div>
+  <div class="hero-location">
+    <span>London, UK</span>
+    <div class="hero-location-line"></div>
+  </div>
+</section>
 
-
-<img 
-src="images/hero/hero-artwork.jpg"
-alt="Good Ereseh charcoal artwork"
->
-
-
-
-<div class="hero-overlay">
-
-
-<h1>
-GOOD ERESEH
-</h1>
-
-
-
-<p>
-Hyperrealistic charcoal artwork capturing stories, identity and emotion.
-</p>
-
-
-
-<div class="hero-buttons">
-
-
-<a href="gallery.html">
-View Collection
-</a>
-
-
-<a href="commissions.html">
-Commission Artwork
-</a>
-
-
+<!-- TICKER ──────────────────────────────────────────────── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Original Artworks <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Fine Art Prints <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Portrait Commissions <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Heavy Cotton Paper <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Charcoal &amp; Graphite <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">London, United Kingdom <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Certificate of Authenticity <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Wax Sealed <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Original Artworks <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Fine Art Prints <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Portrait Commissions <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Heavy Cotton Paper <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Charcoal &amp; Graphite <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">London, United Kingdom <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Certificate of Authenticity <span class="ticker-diamond"></span></span>
+    <span class="ticker-item">Wax Sealed <span class="ticker-diamond"></span></span>
+  </div>
 </div>
 
+<!-- ARTWORK VIEWER ──────────────────────────────────────── -->
+<section class="viewer" id="viewer">
 
+  <div class="viewer-slide active" data-index="0">
+    <div class="viewer-left">
+      <div class="viewer-num">01</div>
+      <div class="viewer-title">Reflections</div>
+      <div class="viewer-type">Hyperrealistic Eye Study</div>
+      <div class="viewer-price">Original — £3,000 · Prints from £85</div>
+      <a href="/artworks/eye" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="https://goodereseh.com/images/artwork/eye.jpg" alt="Reflections">
+    </div>
+  </div>
 
-</div>
+  <div class="viewer-slide" data-index="1">
+    <div class="viewer-left">
+      <div class="viewer-num">02</div>
+      <div class="viewer-title">Fela Kuti</div>
+      <div class="viewer-type">Original Graphite Portrait</div>
+      <div class="viewer-price">Original — £4,500 · Prints from £95</div>
+      <a href="/artworks/fela" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="https://goodereseh.com/images/artwork/fela.jpg" alt="Fela Kuti">
+    </div>
+  </div>
 
+  <div class="viewer-slide" data-index="2">
+    <div class="viewer-left">
+      <div class="viewer-num">03</div>
+      <div class="viewer-title">The Stance</div>
+      <div class="viewer-type">Charcoal Portrait Study</div>
+      <div class="viewer-price">Prints from £95</div>
+      <a href="/artworks/fela2" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="https://goodereseh.com/images/artwork/fela2.jpg" alt="The Stance">
+    </div>
+  </div>
+
+  <div class="viewer-slide" data-index="3">
+    <div class="viewer-left">
+      <div class="viewer-num">04</div>
+      <div class="viewer-title">Fragments of<br>Thought</div>
+      <div class="viewer-type">Abstract Charcoal Artwork</div>
+      <div class="viewer-price">Original — £400 · Prints from £50</div>
+      <a href="/artworks/abstract" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="https://goodereseh.com/images/artwork/abstract.jpg" alt="Fragments of Thought">
+    </div>
+  </div>
+
+  <div class="viewer-controls">
+    <button class="viewer-btn" id="viewerPrev" aria-label="Previous artwork">←</button>
+    <span class="viewer-count" id="viewerCount">01 / 04</span>
+    <button class="viewer-btn" id="viewerNext" aria-label="Next artwork">→</button>
+  </div>
+
+  <div class="viewer-progress">
+    <div class="viewer-progress-fill" id="viewerProgress" style="width:25%"></div>
+  </div>
 
 </section>
 
-
-
-
-
-
-
-<section class="featured">
-
-
-<div class="section-title">
-
-
-<h2>
-Selected Works
-</h2>
-
-
-<p>
-A collection of original charcoal and graphite artworks.
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="featured-grid">
-
-
-
-
-
-<a href="artworks/eye.html">
-
-<img 
-src="images/artwork/eye.jpg"
-alt="Reflections Eye Drawing"
->
-
-
-<h3>
-Reflections
-</h3>
-
-<p>
-Hyperrealistic Eye Study
-</p>
-
-
-</a>
-
-
-
-
-
-
-<a href="artworks/fela.html">
-
-
-<img 
-src="images/artwork/fela.jpg"
-alt="Fela Kuti Portrait"
->
-
-
-<h3>
-Fela Kuti
-</h3>
-
-
-<p>
-Original Graphite Portrait
-</p>
-
-
-</a>
-
-
-
-
-
-
-
-<a href="artworks/fela2.html">
-
-
-<img 
-src="images/artwork/fela2.jpg"
-alt="The Stance Portrait"
->
-
-
-<h3>
-The Stance
-</h3>
-
-
-<p>
-Charcoal Portrait Study
-</p>
-
-
-</a>
-
-
-
-</div>
-
-
+<!-- EDITORIAL STATEMENT ─────────────────────────────────── -->
+<section class="editorial">
+  <div class="editorial-bg-text" aria-hidden="true">G</div>
+  <blockquote class="editorial-quote reveal">
+    "The cotton paper holds the charcoal like <em>memory holds a face</em> — imperfectly, beautifully, with weight."
+  </blockquote>
+  <div class="editorial-body">
+    <div class="reveal d1">
+      <p>
+        Good Ereseh works entirely by hand, drawing with charcoal and graphite pencils on heavy cotton paper. No digital tools, no shortcuts. Each piece can take weeks — a sustained act of looking and translating what the eye sees into marks the hand must make.
+      </p>
+      <p style="margin-top:16px">
+        The work explores what makes a face recognisable: the weight behind an eye, the tension held in a jaw, the way emotion organises itself across skin. These are not portraits. They are studies in being human.
+      </p>
+    </div>
+    <div class="reveal d2">
+      <div class="editorial-sig">
+        <span class="sig">Good Ereseh</span>
+        <span class="sig-role">Charcoal &amp; Graphite Artist · London</span>
+      </div>
+      <a href="/about" class="about-link" style="margin-top:28px">
+        <span class="arr">→</span> Discover the artist
+      </a>
+    </div>
+  </div>
 </section>
 
-
-
-
-
-
-
-
-<section class="artist-intro">
-
-
-<h2>
-The Artist
-</h2>
-
-
-
-<p>
-
-Through charcoal and graphite, Good Ereseh explores human emotion, identity and storytelling. Each artwork is created by hand, focusing on detail, expression and the connection between artist and subject.
-
-</p>
-
-
-<a href="about.html">
-Discover More
-</a>
-
-
+<!-- ABOUT ───────────────────────────────────────────────── -->
+<section class="about">
+  <div class="about-img reveal">
+    <img src="https://goodereseh.com/images/artwork/abstract.jpg" alt="Fragments of Thought — Original Abstract Charcoal Artwork">
+  </div>
+  <div class="about-body">
+    <p class="eyebrow reveal">The Artist</p>
+    <h2 class="about-h2 reveal d1">
+      Drawing from<br>
+      <em>the human story.</em>
+    </h2>
+    <p class="about-p reveal d2">
+      Based in London. Working across original commissions, limited edition prints, and bespoke portrait work. Every piece is created on archival cotton paper, built in layers over days or weeks.
+    </p>
+    <p class="about-p reveal d2">
+      The process is slow by design — the slowness is the work.
+    </p>
+    <a href="/about" class="about-link reveal d3"><span class="arr">→</span> Read more</a>
+  </div>
 </section>
 
+<!-- MATERIALS ───────────────────────────────────────────── -->
+<div class="materials">
+  <div class="material reveal">
+    <div class="material-n">I.</div>
+    <div class="material-name">Cotton<br>Paper</div>
+    <p class="material-desc">Heavyweight archival cotton rag. The tooth and texture become part of the work.</p>
+  </div>
+  <div class="material reveal d1">
+    <div class="material-n">II.</div>
+    <div class="material-name">Charcoal<br>Stick</div>
+    <p class="material-desc">Natural compressed charcoal built in layers. Darkness achieved through accumulated pressure.</p>
+  </div>
+  <div class="material reveal d2">
+    <div class="material-n">III.</div>
+    <div class="material-name">Graphite<br>Pencil</div>
+    <p class="material-desc">Grades from 2H to 9B for the precision that defines hyperrealistic work.</p>
+  </div>
+  <div class="material reveal d3">
+    <div class="material-n">IV.</div>
+    <div class="material-name">The<br>Hand</div>
+    <p class="material-desc">No digital intervention. Every mark is a real-time decision by a human hand.</p>
+  </div>
+</div>
 
-
-
-
-
-
-<section class="commission-banner">
-
-
-<h2>
-Own A Unique Original Artwork
-</h2>
-
-
-
-<p>
-Commission a personalised charcoal portrait created exclusively for you.
-</p>
-
-
-
-<a href="commissions.html">
-Start A Commission
-</a>
-
-
+<!-- PACKAGING ───────────────────────────────────────────── -->
+<section class="packaging">
+  <div class="box-scene reveal">
+    <div class="box">
+      <div class="box-lid-el"></div>
+      <div class="ribbon-h"></div>
+      <div class="ribbon-v"></div>
+      <div class="bow"></div>
+      <div class="box-inside">
+        <div class="box-glyph">G · E</div>
+      </div>
+      <div class="wax-seal">G·E</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-lines">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="cert-label">Certificate</div>
+    </div>
+  </div>
+  <div class="packaging-content">
+    <p class="eyebrow reveal">The Presentation</p>
+    <h2 class="packaging-h2 reveal d1">
+      Unboxing<br>
+      should feel<br>
+      <em>unforgettable.</em>
+    </h2>
+    <p class="packaging-p reveal d2">
+      Every original and fine art print arrives as an object worthy of its contents — a ceremony for a considered purchase.
+    </p>
+    <ul class="pkg-list reveal d3">
+      <li>Black presentation box</li>
+      <li>Certificate of Authenticity</li>
+      <li>Black satin ribbon</li>
+      <li>Artist's signature</li>
+      <li>Cream tissue paper</li>
+      <li>Wax seal</li>
+      <li>Heavy cotton paper</li>
+      <li>Handwritten artist's note</li>
+    </ul>
+  </div>
 </section>
 
+<!-- COMMISSION CTA — SILENCE ────────────────────────────── -->
+<section class="commission">
+  <p class="commission-pre reveal">Commission a portrait</p>
+  <h2 class="commission-h2 reveal d1">
+    A piece made<br>
+    <em>only for you.</em>
+  </h2>
+  <div class="commission-rule reveal d2"></div>
+  <p class="commission-sub reveal d2">
+    Hyperrealistic charcoal or graphite. Your subject. Your size. Drawn entirely by hand. From £400.
+  </p>
+  <a href="/commissions" class="commission-btn reveal d3">Begin a Commission</a>
+</section>
 
-
-
-
-</main>
-
-
-
-
-
-
-
-
-<footer>
-
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-
-<h2>
-GOOD ERESEH
-</h2>
-
-
-<p>
-Hyperrealistic Charcoal and Graphite Pencil Artist
-</p>
-
-
-</div>
-
-
-
-
-<div class="footer-links">
-
-
-<a href="gallery.html">
-Gallery
-</a>
-
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="commissions.html">
-Commissions
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
-</div>
-
-
-
-<div class="footer-contact">
-
-
-<p>
-London, United Kingdom
-</p>
-
-
-<p>
-Email: art@goodereseh.com
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-<div class="footer-bottom">
-
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-
-</div>
-
-
-
+<!-- FOOTER ──────────────────────────────────────────────── -->
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/commissions">Commissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Collect</h5>
+      <ul>
+        <li><a href="/artworks/eye">Reflections</a></li>
+        <li><a href="/artworks/fela">Fela Kuti</a></li>
+        <li><a href="/artworks/fela2">The Stance</a></li>
+        <li><a href="/gallery">All Works</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li>
+        <li><a href="/privacy-policy.html">Privacy</a></li>
+        <li><a href="/terms-and-conditions.html">Terms</a></li>
+        <li><a href="/shipping-policy.html">Shipping</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 Good Ereseh. All Rights Reserved.</span>
+    <div class="footer-legal">
+      <a href="/returns-policy.html">Returns Policy</a>
+      <a href="/privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
 </footer>
 
+<!-- SCRIPTS ─────────────────────────────────────────────── -->
+<script>
+/* ── Nav ──────────────────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
 
+/* ── Custom cursor + graphite trail ──────────────────────────── */
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
 
+if (dot && ring && window.matchMedia('(pointer: fine)').matches) {
+  let mx = 0, my = 0;
+  let rx = 0, ry = 0;
+  let trailTimer = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+
+    // Graphite trail — drop a fading mark every 40px of movement
+    clearTimeout(trailTimer);
+    trailTimer = setTimeout(() => {
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = mx + 'px';
+      t.style.top  = my + 'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend', () => t.remove());
+    }, 16);
+  });
+
+  // Smooth ring follow
+  (function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  // Hover state
+  const hovers = document.querySelectorAll('a, button, [role="button"]');
+  hovers.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+}
+
+/* ── Artwork viewer ───────────────────────────────────────────── */
+const slides   = document.querySelectorAll('.viewer-slide');
+const btnPrev  = document.getElementById('viewerPrev');
+const btnNext  = document.getElementById('viewerNext');
+const countEl  = document.getElementById('viewerCount');
+const progEl   = document.getElementById('viewerProgress');
+let current    = 0;
+const total    = slides.length;
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  current = (n + total) % total;
+  slides[current].classList.add('active');
+  countEl.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  progEl.style.width = ((current + 1) / total * 100) + '%';
+}
+
+btnNext.addEventListener('click', () => goTo(current + 1));
+btnPrev.addEventListener('click', () => goTo(current - 1));
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') goTo(current + 1);
+  if (e.key === 'ArrowLeft')  goTo(current - 1);
+});
+
+// Auto-advance every 6s
+let autoTimer = setInterval(() => goTo(current + 1), 6000);
+
+// Pause on hover
+const viewer = document.getElementById('viewer');
+viewer.addEventListener('mouseenter', () => clearInterval(autoTimer));
+viewer.addEventListener('mouseleave', () => {
+  autoTimer = setInterval(() => goTo(current + 1), 6000);
+});
+
+/* ── Scroll reveal ────────────────────────────────────────────── */
+const revEls = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+revEls.forEach(el => revObs.observe(el));
+</script>
 
 </body>
-
 </html>
