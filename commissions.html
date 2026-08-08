@@ -3,390 +3,512 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Commission a personal charcoal or graphite portrait by Good Ereseh. Personal portraits, family artworks, memorial pieces.">
 <title>Commissions — Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
-/* Commission types */
-.assistant-cta {
+
+/* ===== PAGE — dark V3 background ===== */
+.chat-page {
+  min-height: 100vh;
   background: var(--ink);
-  border-bottom: 1px solid rgba(189,179,168,.07);
-  padding: 32px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 88px 16px 40px;
 }
 
-.assistant-cta-inner {
+/* ===== THIN AI BORDER around chat box ===== */
+.chat-box-outer {
+  width: 100%;
+  max-width: 740px;
+  height: calc(100vh - 148px);
+  min-height: 500px;
+  border-radius: 14px;
+  padding: 1.5px;
+  background: linear-gradient(90deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
+  background-size: 300% 100%;
+  animation: borderFlow 4s linear infinite;
+}
+@keyframes borderFlow {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
+}
+
+/* ===== CHAT BOX — off-white interior ===== */
+.chat-box {
+  width: 100%;
+  height: 100%;
+  border-radius: 12.5px;
+  background: #f5f0e8;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.cbox-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-}
-
-.assistant-cta-label {
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--g1);
-  margin-bottom: 6px;
-}
-
-.assistant-cta-desc {
-  font-size: 13px;
-  color: var(--g2);
-  line-height: 1.6;
-}
-
-/* Animated AI button */
-.assistant-cta-btn {
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(0,0,0,.07);
+  background: #ece7dd;
   flex-shrink: 0;
+}
+.cbox-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--g3);
   position: relative;
-  padding: 14px 32px;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: #fff;
-  white-space: nowrap;
-  border: none;
-  cursor: none;
-  z-index: 0;
-  display: inline-block;
-  background: transparent;
+  flex-shrink: 0;
 }
-
-/* Animated gradient background */
-.assistant-cta-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
-  background-size: 300% 100%;
-  animation: aiFlow 3s ease infinite;
-  z-index: -1;
-}
-
-/* Glow effect */
-.assistant-cta-btn::after {
-  content: '';
+.cbox-avatar::after {
+  content: "";
   position: absolute;
   inset: -2px;
-  background: linear-gradient(90deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
-  background-size: 300% 100%;
-  animation: aiFlow 3s ease infinite;
-  z-index: -2;
-  filter: blur(8px);
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
+  animation: spinGlow 4s linear infinite;
+  z-index: -1;
+  filter: blur(3px);
+  opacity: .7;
+}
+@keyframes spinGlow { to { transform: rotate(360deg); } }
+.cbox-info { flex: 1; }
+.cbox-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 300;
+  color: #1a1812;
+  line-height: 1;
+}
+.cbox-sub {
+  font-size: 9px;
+  color: #6b7280;
+  letter-spacing: .1em;
+  margin-top: 3px;
+}
+.cbox-online {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: #6b7280;
+  letter-spacing: .08em;
+}
+.cbox-online span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  display: block;
+}
+
+/* ===== MESSAGES — off-white scrollable area ===== */
+.cbox-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+  background: #f5f0e8;
+}
+.cbox-messages::-webkit-scrollbar { width: 4px; }
+.cbox-messages::-webkit-scrollbar-track { background: transparent; }
+.cbox-messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 2px; }
+
+/* Message rows */
+.msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
+  max-width: 100%;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.msg.user { flex-direction: row-reverse; }
+
+/* Small avatar */
+.msg-av {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 10px;
+  color: var(--g3);
+  flex-shrink: 0;
+  position: relative;
+}
+.msg-av::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #4f46e5, #0ea5e9, #4f46e5);
+  animation: spinGlow 3s linear infinite;
+  z-index: -1;
+  filter: blur(3px);
   opacity: .5;
 }
 
-@keyframes aiFlow {
-  0%   { background-position: 0% 0%; }
-  50%  { background-position: 100% 0%; }
-  100% { background-position: 0% 0%; }
-}
-
-.assistant-cta-btn:hover::after { opacity: .8; filter: blur(12px); }
-
-@media (max-width: 960px) {
-  .assistant-cta { padding: 28px; }
-  .assistant-cta-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .assistant-cta-btn { align-self: flex-start; }
-}
-
-
-/* Commission types */
-.commission-types {
-  padding: 120px 64px;
-  background: var(--ink);
-}
-
-.types-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin-top: 64px;
-}
-
-.type-card {
-  background: var(--c1);
-  padding: 56px 44px;
-  border: 1px solid rgba(189,179,168,.06);
-  transition: border-color .4s, background .4s;
-  position: relative;
-  overflow: hidden;
-}
-
-.type-card:hover {
-  border-color: rgba(189,179,168,.15);
-  background: var(--c2);
-}
-
-.type-num {
-  font-family: var(--serif);
-  font-size: 80px;
-  font-weight: 300;
-  color: rgba(189,179,168,.04);
-  position: absolute;
-  top: 20px;
-  right: 28px;
-  line-height: 1;
-  pointer-events: none;
-}
-
-.type-icon {
-  width: 28px;
-  height: 1px;
-  background: var(--g0);
-  margin-bottom: 28px;
-}
-
-.type-name {
-  font-family: var(--serif);
-  font-size: 30px;
-  font-weight: 300;
-  color: var(--p2);
-  margin-bottom: 16px;
-  line-height: 1.15;
-}
-
-.type-desc {
+/* Bubbles */
+.bubble {
+  padding: 11px 15px;
   font-size: 13px;
-  color: var(--g2);
-  line-height: 1.85;
+  line-height: 1.7;
+  border-radius: 12px;
+  max-width: 78%;
+}
+.msg.ai .bubble {
+  background: #ffffff;
+  color: #1a1812;
+  border-bottom-left-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+.msg.user .bubble {
+  background: rgba(79,70,229,.14);
+  border: 1px solid rgba(79,70,229,.22);
+  color: #1a1812;
+  border-bottom-right-radius: 3px;
+  margin-left: auto;
+}
+.bubble p + p { margin-top: 6px; }
+
+/* Typing dots */
+.typing { display: flex; gap: 4px; align-items: center; padding: 6px 2px; }
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #9ca3af;
+  animation: tdot 1.2s ease-in-out infinite;
+}
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes tdot {
+  0%,60%,100% { transform: translateY(0); opacity: .4; }
+  30%          { transform: translateY(-5px); opacity: 1; }
 }
 
-/* Process */
-.commission-process {
-  padding: 140px 64px;
-  background: var(--c1);
-}
-
-.process-steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  margin-top: 72px;
-  border-top: 1px solid rgba(189,179,168,.07);
-}
-
-.process-step {
-  padding: 52px 48px 52px 0;
-  border-right: 1px solid rgba(189,179,168,.07);
-}
-
-.process-step:last-child { border-right: none; }
-
-.step-num {
-  font-family: var(--serif);
-  font-size: 52px;
-  font-weight: 300;
-  color: rgba(189,179,168,.12);
-  line-height: 1;
-  margin-bottom: 28px;
-}
-
-.step-name {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 300;
-  color: var(--p2);
-  margin-bottom: 14px;
-}
-
-.step-desc {
-  font-size: 13px;
-  color: var(--g1);
-  line-height: 1.8;
-}
-
-/* Pricing */
-.commission-pricing {
-  padding: 140px 64px;
-  background: var(--ink);
-}
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  margin-top: 64px;
-}
-
-.pricing-card {
-  background: var(--c1);
-  padding: 44px 36px;
-  border: 1px solid rgba(189,179,168,.06);
-  position: relative;
-  overflow: hidden;
-}
-
-.pricing-size {
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--g1);
-  margin-bottom: 20px;
-}
-
-.pricing-price {
-  font-family: var(--serif);
-  font-size: 42px;
-  font-weight: 300;
-  color: var(--p2);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.pricing-from {
-  font-size: 10px;
-  color: var(--g1);
-  letter-spacing: .08em;
-  margin-bottom: 28px;
-}
-
-.pricing-details {
-  font-size: 12px;
-  color: var(--g2);
-  line-height: 1.8;
-  border-top: 1px solid rgba(189,179,168,.07);
-  padding-top: 20px;
-}
-
-/* Form section */
-.commission-form-section {
-  padding: 140px 64px;
-  background: var(--c1);
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 100px;
-  align-items: start;
-}
-
-.form-intro h2 {
-  font-family: var(--serif);
-  font-size: clamp(36px, 4vw, 56px);
-  font-weight: 300;
-  color: var(--p2);
-  line-height: 1.1;
-  letter-spacing: -.01em;
-  margin-bottom: 24px;
-}
-
-.form-intro h2 em { font-style: italic; color: var(--g3); }
-
-.form-intro p {
-  font-size: 14px;
-  color: var(--g2);
-  line-height: 1.9;
-  margin-bottom: 40px;
-}
-
-.form-note {
-  font-size: 11px;
-  color: var(--g1);
-  line-height: 1.8;
-  padding-top: 32px;
-  border-top: 1px solid rgba(189,179,168,.07);
-}
-
-/* Form styles */
-.enquiry-form {
+/* ===== OPTIONS vertical list ===== */
+.opts-row {
+  padding-left: 38px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 6px;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
 }
+.opt-btn {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.1);
+  color: #374151;
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 11px 16px;
+  text-align: left;
+  cursor: none;
+  border-radius: 8px;
+  transition: border-color .2s, color .2s, background .2s;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.opt-btn:hover { border-color: #0ea5e9; color: #1a1812; background: #f0f9ff; }
+.opt-btn .opt-sub-line { display: block; font-size: 10px; color: #9ca3af; margin-top: 2px; }
 
+/* ===== MOOD CHIPS ===== */
+.moods-row {
+  padding-left: 38px;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
+}
+.chips-wrap { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.chip {
+  padding: 7px 14px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.1);
+  color: #374151;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: none;
+  border-radius: 20px;
+  transition: all .2s;
+  font-family: var(--sans);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.chip:hover { border-color: rgba(14,165,233,.5); color: #0ea5e9; }
+.chip.on    { border-color: #0ea5e9; color: #0ea5e9; background: rgba(14,165,233,.07); }
+.mood-cont {
+  padding: 9px 20px;
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+  color: #fff;
+  border: none;
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: none;
+  border-radius: 7px;
+  opacity: .3;
+  transition: opacity .25s;
+}
+.mood-cont.go { opacity: 1; }
+
+/* ===== FORM CARD ===== */
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px;
+  padding-left: 38px;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
 }
-
-.form-field {
+.form-card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: 84%;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
-
-.form-field label {
-  font-size: 8px;
-  font-weight: 400;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--g1);
-}
-
-.form-field input,
-.form-field select,
-.form-field textarea {
-  background: var(--c2);
-  border: 1px solid rgba(189,179,168,.08);
-  color: var(--p1);
+.form-card input {
+  background: #f5f0e8;
+  border: 1px solid rgba(0,0,0,.1);
+  color: #1a1812;
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 300;
-  padding: 14px 18px;
+  padding: 11px 14px;
   outline: none;
-  transition: border-color .3s;
-  appearance: none;
-  -webkit-appearance: none;
+  border-radius: 7px;
+  transition: border-color .25s;
+}
+.form-card input:focus { border-color: #0ea5e9; }
+.form-card input::placeholder { color: #9ca3af; }
+.form-submit-btn {
+  padding: 12px;
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+  color: #fff;
+  border: none;
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: none;
+  border-radius: 7px;
+  transition: opacity .25s;
+}
+.form-submit-btn:hover { opacity: .88; }
+.form-submit-btn:disabled { opacity: .35; }
+.form-err { font-size: 11px; color: #dc2626; display: none; }
+.done-card {
+  background: #ffffff;
+  border: 1px solid rgba(16,185,129,.2);
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 13px;
+  color: #1a1812;
+  line-height: 1.7;
+  max-width: 84%;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.done-card strong { font-family: var(--serif); font-size: 16px; font-weight: 300; color: #1a1812; }
+.link-btn {
+  display: block;
+  padding: 10px 14px;
+  background: #f5f0e8;
+  border: 1px solid rgba(0,0,0,.1);
+  color: #374151;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border-radius: 7px;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color .2s, color .2s;
+  font-family: var(--sans);
+}
+.link-btn:hover { border-color: #0ea5e9; color: #1a1812; }
+.link-btn.primary { background: linear-gradient(135deg,#4f46e5,#0ea5e9); color: #fff; border-color: transparent; }
+.link-btn.primary:hover { opacity: .88; color: #fff; }
+
+/* ===== CONCEPT IMAGE ===== */
+.concept-row {
+  padding-left: 38px;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
+}
+.concept-card {
+  max-width: 220px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.concept-card img { width: 100%; display: block; }
+.concept-card-note {
+  padding: 8px 12px;
+  background: #ece7dd;
+  font-size: 10px;
+  color: #6b7280;
+  line-height: 1.6;
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  border-color: rgba(189,179,168,.3);
+/* ===== INPUT BAR — white, pinned bottom ===== */
+.cbox-inputbar {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0,0,0,.07);
+  background: #ffffff;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
 }
-
-.form-field input::placeholder,
-.form-field textarea::placeholder {
-  color: var(--g0);
+.cbox-textinput {
+  flex: 1;
+  background: #f5f0e8;
+  border: 1px solid rgba(0,0,0,.1);
+  color: #1a1812;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 11px 14px;
+  outline: none;
+  border-radius: 8px;
+  resize: none;
+  transition: border-color .25s;
+  caret-color: #4f46e5;
+  line-height: 1.5;
+  min-height: 42px;
+  max-height: 120px;
+  overflow-y: auto;
 }
-
-.form-field select option {
-  background: var(--c2);
-  color: var(--p1);
-}
-
-.form-field textarea { resize: vertical; min-height: 140px; }
-
-.form-submit {
-  margin-top: 8px;
+.cbox-textinput:focus { border-color: #0ea5e9; }
+.cbox-textinput::placeholder { color: #9ca3af; }
+.cbox-textinput:disabled { opacity: .45; cursor: not-allowed; }
+.cbox-sendbtn {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: none;
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity .25s;
+}
+.cbox-sendbtn:hover { opacity: .88; }
+.cbox-sendbtn:disabled { opacity: .3; }
+
+/* ===== BEGIN BUTTON ===== */
+.begin-wrap {
+  padding-left: 38px;
+  animation: msgIn .35s ease forwards;
+  opacity: 0;
+}
+.begin-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9, #06b6d4);
+  background-size: 200% 200%;
+  animation: beginPulse 3s ease infinite;
+  color: #fff;
+  border: none;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: none;
+  border-radius: 8px;
+  transition: transform .2s, opacity .2s;
+}
+.begin-btn:hover { transform: translateY(-1px); opacity: .9; }
+@keyframes beginPulse {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
 }
 
-.form-terms {
-  font-size: 10px;
-  color: var(--g1);
-  line-height: 1.7;
-}
-
-.form-terms a { color: var(--g2); text-decoration: underline; }
-
-/* Success message */
-.form-success {
+/* ===== GENERATION OVERLAY ===== */
+.gen-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,13,11,.96);
+  z-index: 9000;
   display: none;
-  padding: 28px;
-  background: rgba(100,180,100,.06);
-  border: 1px solid rgba(100,180,100,.15);
-  font-size: 14px;
-  color: var(--p1);
-  line-height: 1.7;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 28px;
 }
+.gen-overlay.on { display: flex; }
+.gen-frame {
+  position: relative;
+  width: 220px; height: 275px;
+  background: var(--c2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.gen-frame::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(14,165,233,.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(14,165,233,.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+  z-index: 1;
+}
+.gen-scan {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #0ea5e9, #7c3aed, #0ea5e9, transparent);
+  z-index: 3;
+  animation: gscan 1.6s ease-in-out infinite;
+  box-shadow: 0 0 14px rgba(14,165,233,.9);
+}
+@keyframes gscan { 0%{top:0;opacity:0;} 5%{opacity:1;} 95%{opacity:1;} 100%{top:100%;opacity:0;} }
+.gen-c { position: absolute; width: 12px; height: 12px; z-index: 4; }
+.gen-c.tl{top:6px;left:6px;border-top:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
+.gen-c.tr{top:6px;right:6px;border-top:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
+.gen-c.bl{bottom:6px;left:6px;border-bottom:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
+.gen-c.br{bottom:6px;right:6px;border-bottom:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
+.gen-noise { position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s; }
+.gen-pic   { position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s; }
+.gen-info  { text-align: center; }
+.gen-label { font-family: var(--serif); font-size: 12px; color: var(--g3); letter-spacing: .1em; margin-bottom: 10px; }
+.gen-status { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--g1); transition: opacity .4s; }
+.gen-dots  { display:flex;gap:6px;justify-content:center;margin-top:10px; }
+.gen-dots span { width:4px;height:4px;border-radius:50%;background:#0ea5e9;animation:tdot 1.2s ease-in-out infinite; }
+.gen-dots span:nth-child(2){animation-delay:.2s;}
+.gen-dots span:nth-child(3){animation-delay:.4s;}
+.gen-bar-wrap { width: 220px; height: 1px; background: rgba(255,255,255,.06); }
+.gen-bar-fill { height:100%;background:linear-gradient(90deg,#4f46e5,#0ea5e9,#06b6d4);width:0%;transition:width 1s ease; }
 
-@media (max-width: 960px) {
-  .commission-types, .commission-process, .commission-pricing, .commission-form-section { padding: 80px 28px; }
-  .types-grid, .pricing-grid { grid-template-columns: 1fr; gap: 3px; }
-  .process-steps { grid-template-columns: 1fr; }
-  .process-step { border-right: none; border-bottom: 1px solid rgba(189,179,168,.07); padding: 40px 0; }
-  .process-step:last-child { border-bottom: none; }
-  .commission-form-section { grid-template-columns: 1fr; gap: 60px; }
-  .form-row { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+  .chat-page { padding: 78px 8px 20px; }
+  .chat-box-outer { height: calc(100vh - 118px); border-radius: 10px; }
+  .chat-box { border-radius: 8.5px; }
+  .bubble { max-width: 88%; }
 }
 </style>
 </head>
@@ -394,8 +516,25 @@
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
+<!-- Generation overlay -->
+<div class="gen-overlay" id="genOverlay">
+  <div class="gen-frame">
+    <div class="gen-c tl"></div><div class="gen-c tr"></div>
+    <div class="gen-c bl"></div><div class="gen-c br"></div>
+    <div class="gen-scan"></div>
+    <div class="gen-noise" id="genNoise"></div>
+    <img class="gen-pic" id="genPic" src="" alt="">
+  </div>
+  <div class="gen-bar-wrap"><div class="gen-bar-fill" id="genBar"></div></div>
+  <div class="gen-info">
+    <div class="gen-label">Good Ereseh &middot; Commission Assistant</div>
+    <div class="gen-status" id="genStatus">Analysing your description</div>
+    <div class="gen-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
 <nav id="nav">
-  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
   <ul class="nav-links">
     <li><a href="/gallery">Gallery</a></li>
     <li><a href="/about">About</a></li>
@@ -405,245 +544,439 @@
   </ul>
 </nav>
 
-<!-- Hero -->
-<div class="page-hero">
-  <p class="page-hero-eyebrow">Personal Artworks</p>
-  <h1 class="page-hero-title">Commission<br>a Portrait.</h1>
-  <p class="page-hero-sub">Transform your most meaningful photographs into a handcrafted charcoal or graphite portrait created exclusively for you.</p>
+<div class="chat-page">
+  <div class="chat-box-outer">
+    <div class="chat-box">
+
+      <!-- Header -->
+      <div class="cbox-header">
+        <div class="cbox-avatar">G</div>
+        <div class="cbox-info">
+          <div class="cbox-title">Commission Assistant</div>
+          <div class="cbox-sub">Good Ereseh &middot; Charcoal &amp; Graphite Artist</div>
+        </div>
+        <div class="cbox-online"><span></span>Online</div>
+      </div>
+
+      <!-- Messages -->
+      <div class="cbox-messages" id="cboxMessages"></div>
+
+      <!-- Input bar -->
+      <div class="cbox-inputbar">
+        <textarea class="cbox-textinput" id="cboxInput"
+          placeholder="Type a message…" rows="1" disabled></textarea>
+        <button class="cbox-sendbtn" id="cboxSend" onclick="handleSend()" disabled aria-label="Send">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
 </div>
-
-<!-- Assistant CTA -->
-<div class="assistant-cta">
-  <div class="assistant-cta-inner">
-    <div class="assistant-cta-text">
-      <p class="assistant-cta-label">Not sure where to start?</p>
-      <p class="assistant-cta-desc">Answer five questions, see an AI concept of your portrait, then send your brief — all in one flow.</p>
-    </div>
-    <a href="/commission-assistant" class="assistant-cta-btn">Try the Commission Ai Assistant →</a>
-  </div>
-</div>
-
-<!-- Commission Types -->
-<section class="commission-types">
-  <div class="section-header reveal">
-    <div>
-      <p class="eyebrow">What we create</p>
-      <h2 class="section-title">A portrait<br><em>with meaning.</em></h2>
-    </div>
-  </div>
-  <div class="types-grid">
-    <div class="type-card reveal d1">
-      <div class="type-num" aria-hidden="true">I</div>
-      <div class="type-icon"></div>
-      <div class="type-name">Personal<br>Portrait</div>
-      <p class="type-desc">A detailed handmade portrait capturing the personality and emotion of an individual — drawn from reference photographs you supply. The most personal thing you can own on a wall.</p>
-    </div>
-    <div class="type-card reveal d2">
-      <div class="type-num" aria-hidden="true">II</div>
-      <div class="type-icon"></div>
-      <div class="type-name">Family<br>Artwork</div>
-      <p class="type-desc">A meaningful artwork combining loved ones into a timeless piece for your home. Multiple subjects, one composition — drawn entirely by hand in charcoal or graphite.</p>
-    </div>
-    <div class="type-card reveal d3">
-      <div class="type-num" aria-hidden="true">III</div>
-      <div class="type-icon"></div>
-      <div class="type-name">Memorial<br>Piece</div>
-      <p class="type-desc">A respectful portrait created to preserve the memory of someone important. Drawn with the care and attention the subject deserves — a lasting record of who they were.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Process -->
-<section class="commission-process">
-  <div class="section-header reveal">
-    <div>
-      <p class="eyebrow">How it works</p>
-      <h2 class="section-title">The process.</h2>
-    </div>
-  </div>
-  <div class="process-steps">
-    <div class="process-step reveal d1">
-      <div class="step-num">01</div>
-      <div class="step-name">Consultation</div>
-      <p class="step-desc">We discuss your idea, preferred artwork size, reference images and the feeling you want the artwork to communicate. No commitment required at this stage.</p>
-    </div>
-    <div class="process-step reveal d2">
-      <div class="step-num">02</div>
-      <div class="step-name">Creation</div>
-      <p class="step-desc">The artwork is carefully developed through layers of charcoal and graphite to build realism, depth and detail. You receive progress updates throughout.</p>
-    </div>
-    <div class="process-step reveal d3">
-      <div class="step-num">03</div>
-      <div class="step-name">Completion</div>
-      <p class="step-desc">Your finished original artwork is reviewed, signed and prepared for secure delivery in a black presentation box with Certificate of Authenticity and wax seal.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Pricing -->
-<section class="commission-pricing">
-  <div class="section-header reveal">
-    <div>
-      <p class="eyebrow">Investment</p>
-      <h2 class="section-title">Commission<br><em>pricing.</em></h2>
-    </div>
-  </div>
-  <div class="pricing-grid">
-    <div class="pricing-card reveal d1">
-      <div class="pricing-size">A4 Portrait</div>
-      <div class="pricing-price">£250</div>
-      <div class="pricing-from">from</div>
-      <div class="pricing-details">210 × 297mm. Ideal for personal portraits and intimate subjects. Delivered framed-ready.</div>
-    </div>
-    <div class="pricing-card reveal d2">
-      <div class="pricing-size">A3 Portrait</div>
-      <div class="pricing-price">£500</div>
-      <div class="pricing-from">from</div>
-      <div class="pricing-details">297 × 420mm. The most popular size — substantial enough to be a statement piece.</div>
-    </div>
-    <div class="pricing-card reveal d3">
-      <div class="pricing-size">A2 Collector Piece</div>
-      <div class="pricing-price">£900</div>
-      <div class="pricing-from">from</div>
-      <div class="pricing-details">420 × 594mm. A collector-grade artwork for the serious collector or prominent wall space.</div>
-    </div>
-    <div class="pricing-card reveal d4">
-      <div class="pricing-size">Large Custom Artwork</div>
-      <div class="pricing-price">£1,500</div>
-      <div class="pricing-from">from</div>
-      <div class="pricing-details">Any size above A2. For ambitious commissions — multiple subjects, large formats, architectural scales.</div>
-    </div>
-  </div>
-</section>
-
-<!-- Form -->
-<section class="commission-form-section">
-  <div class="form-intro">
-    <p class="eyebrow reveal">Begin your commission</p>
-    <h2 class="reveal d1">Tell me<br>your<br><em>story.</em></h2>
-    <p class="reveal d2">
-      Tell me about the person, story or idea you want transformed into a unique handmade artwork. I'll respond within two business days to discuss your commission in detail.
-    </p>
-    <div class="form-note reveal d3">
-      All commissions begin with a free consultation. A 50% deposit is required before work commences, with the balance due on completion. Timelines are discussed at consultation — typically 3–6 weeks depending on size and complexity.
-    </div>
-  </div>
-
-  <!-- Netlify form — handled automatically on Netlify hosting -->
-  <div class="reveal d2">
-    <form class="enquiry-form" id="commissionForm">
-
-      <div class="form-row">
-        <div class="form-field">
-          <label for="name">Your Name *</label>
-          <input type="text" id="name" name="name" required placeholder="Full name">
-        </div>
-        <div class="form-field">
-          <label for="email">Email Address *</label>
-          <input type="email" id="email" name="email" required placeholder="your@email.com">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label for="commission-type">Commission Type *</label>
-          <select id="commission-type" name="commission-type" required>
-            <option value="" disabled selected>Select type</option>
-            <option value="personal-portrait">Personal Portrait</option>
-            <option value="family-artwork">Family Artwork</option>
-            <option value="memorial-piece">Memorial Piece</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label for="size">Preferred Size</label>
-          <select id="size" name="size">
-            <option value="" disabled selected>Select size</option>
-            <option value="a4">A4 (from £250)</option>
-            <option value="a3">A3 (from £500)</option>
-            <option value="a2">A2 (from £900)</option>
-            <option value="large">Large Custom (from £1,500)</option>
-            <option value="unsure">Not sure yet</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-field">
-        <label for="message">Tell Me About Your Commission *</label>
-        <textarea id="message" name="message" required placeholder="Describe the subject, the occasion, any reference images you have, and what you'd like the artwork to capture or communicate."></textarea>
-      </div>
-
-      <div class="form-submit">
-        <button type="submit" class="btn-primary">Send Enquiry</button>
-        <p class="form-terms">By submitting you agree to our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
-      </div>
-    </form>
-    <div class="form-success" id="formSuccess">
-      <strong style="font-family:var(--serif);font-size:20px;font-weight:300;color:var(--p2)">Thank you for your enquiry.</strong><br><br>
-      I'll be in touch within two business days to discuss your commission. Please check your email — including your spam folder just in case.
-    </div>
-  </div>
-</section>
-
-<footer class="footer-mono">
-  <div class="footer-glyph" aria-hidden="true">G · E</div>
-  <div class="footer-social">
-  <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-  </a>
-  <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
-  </a>
-  <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
-  </a>
-  <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-  </a>
-</div>
-  <div class="footer-grid">
-    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/fela2">The Stance</a></li><li><a href="/artworks/abstract">Fragments of Thought</a></li></ul></div>
-    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
-  </div>
-  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
-</footer>
 
 <script>
-const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
-const dot=document.getElementById('cursorDot');const ring=document.getElementById('cursorRing');
-if(window.matchMedia('(pointer: fine)').matches){let mx=0,my=0,rx=0,ry=0,tt=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});}
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+var API = 'https://goodereseh-website-production.up.railway.app';
+var msgs  = document.getElementById('cboxMessages');
+var input = document.getElementById('cboxInput');
+var send  = document.getElementById('cboxSend');
+var answers = { subject:'', occasion:'', moods:[], size:'', details:'' };
+var currentStep = 0;
 
-const API = 'https://goodereseh-website-production.up.railway.app';
-const form = document.getElementById('commissionForm');
-const success = document.getElementById('formSuccess');
-if (form) {
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = form.querySelector('[type="submit"]');
-    const orig = btn.textContent;
-    btn.textContent = 'Sending...';
-    btn.disabled = true;
-    try {
-      const formData = new FormData(form);
-      const body = Object.fromEntries(formData.entries());
-      const res = await fetch(`${API}/commission`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Something went wrong.');
-      form.style.display = 'none';
-      success.style.display = 'block';
-    } catch (err) {
-      btn.textContent = orig;
-      btn.disabled = false;
-      alert(err.message || 'Something went wrong. Please email us directly at art@goodereseh.com');
-    }
+var S2 = [
+  'A gift for someone special',
+  'A memorial — preserving a loved one',
+  'A family artwork for the home',
+  'A personal collector piece',
+  'Something else'
+];
+var S4 = [
+  { l:'A4 Portrait',        s:'210×297mm · From £250' },
+  { l:'A3 Portrait',        s:'297×420mm · From £500' },
+  { l:'A2 Collector Piece', s:'420×594mm · From £900' },
+  { l:'Large Custom',       s:'Above A2 · From £1,500' }
+];
+var MOODS = ['Strength','Tenderness','Joy','Nostalgia','Power','Serenity',
+             'Elegance','Warmth','Gravity','Mystery','Legacy','Playfulness'];
+
+function wait(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+
+function scrollBottom(){
+  setTimeout(function(){ msgs.scrollTop = msgs.scrollHeight; }, 60);
+}
+
+function addEl(cls, html){
+  var d = document.createElement('div');
+  d.className = cls;
+  d.innerHTML = html;
+  msgs.appendChild(d);
+  scrollBottom();
+  return d;
+}
+
+function addAI(html){
+  return addEl('msg ai',
+    '<div class="msg-av">G</div><div class="bubble">' + html + '</div>');
+}
+
+function addUser(html){
+  return addEl('msg user', '<div class="bubble">' + html + '</div>');
+}
+
+async function aiSay(html, delay){
+  if(delay === undefined) delay = 750;
+  var t = addAI('<div class="typing"><span></span><span></span><span></span></div>');
+  await wait(delay);
+  t.remove();
+  addAI(html);
+  scrollBottom();
+}
+
+function setInput(placeholder, enabled){
+  input.placeholder = placeholder || 'Type a message…';
+  input.disabled = !enabled;
+  send.disabled  = !enabled;
+  if(enabled) setTimeout(function(){ input.focus(); }, 100);
+}
+
+function disableInput(hint){
+  input.disabled = true;
+  send.disabled  = true;
+  input.placeholder = hint || 'Choose an option above…';
+}
+
+/* =========================================================
+   CONVERSATION
+   ========================================================= */
+
+async function start(){
+  await wait(600);
+  await aiSay(
+    '<p>Hello. I am the commission assistant for Good Ereseh.</p>' +
+    '<p>I will help you design a portrait commission brief in five steps, then generate an AI concept for you to see before committing.</p>',
+    800
+  );
+  var bw = addEl('begin-wrap', '<button class="begin-btn" onclick="step1()">Begin &rarr;</button>');
+  attachCursor(bw);
+  disableInput('Click Begin to start…');
+}
+
+async function step1(){
+  currentStep = 1;
+  msgs.querySelector('.begin-wrap') && msgs.querySelector('.begin-wrap').remove();
+  await aiSay('<p>Who is this portrait of?</p>', 650);
+  setInput('e.g. My grandmother Rose, aged 80…', true);
+  input.addEventListener('input', function(){
+    send.disabled = input.value.trim().length < 2;
   });
 }
+
+function handleSend(){
+  if(currentStep === 1) submitStep1();
+  else if(currentStep === 5) submitStep5();
+}
+
+async function submitStep1(){
+  var val = input.value.trim();
+  if(val.length < 2) return;
+  answers.subject = val;
+  input.value = '';
+  disableInput();
+  addUser('<p>' + val + '</p>');
+  await step2();
+}
+
+async function step2(){
+  currentStep = 2;
+  var first = answers.subject.split(' ')[0];
+  await aiSay('<p>' + first + ' — a meaningful subject.</p><p>What is this commission for?</p>', 850);
+  var html = S2.map(function(o,i){
+    return '<button class="opt-btn" data-i="'+i+'">'+o+'</button>';
+  }).join('');
+  var block = addEl('opts-row', html);
+  block.querySelectorAll('.opt-btn').forEach(function(b){
+    b.addEventListener('click', function(){ submitStep2(parseInt(b.dataset.i), block); });
+  });
+  attachCursor(block);
+  disableInput('Choose an option above…');
+}
+
+async function submitStep2(i, block){
+  answers.occasion = S2[i];
+  block.remove();
+  addUser('<p>' + S2[i] + '</p>');
+  await step3();
+}
+
+async function step3(){
+  currentStep = 3;
+  await aiSay('<p>Understood. What should this artwork communicate?</p><p>Choose everything that resonates.</p>', 850);
+  answers.moods = [];
+  var chips = MOODS.map(function(m,i){
+    return '<button class="chip" data-i="'+i+'">'+m+'</button>';
+  }).join('');
+  var block = addEl('moods-row',
+    '<div class="chips-wrap">'+chips+'</div>' +
+    '<button class="mood-cont" id="moodGo" disabled>Continue →</button>'
+  );
+  block.querySelectorAll('.chip').forEach(function(b){
+    b.addEventListener('click', function(){ toggleMood(b, parseInt(b.dataset.i), block); });
+  });
+  block.querySelector('#moodGo').addEventListener('click', function(){
+    submitStep3(block);
+  });
+  attachCursor(block);
+  disableInput('Select moods above…');
+}
+
+function toggleMood(btn, i, block){
+  btn.classList.toggle('on');
+  var v = MOODS[i];
+  if(btn.classList.contains('on')){
+    if(answers.moods.indexOf(v) === -1) answers.moods.push(v);
+  } else {
+    answers.moods = answers.moods.filter(function(m){ return m !== v; });
+  }
+  var g = block.querySelector('#moodGo');
+  if(g){ g.disabled = !answers.moods.length; g.classList.toggle('go', answers.moods.length > 0); }
+}
+
+async function submitStep3(block){
+  if(!answers.moods.length) return;
+  block.remove();
+  addUser('<p>' + answers.moods.join(', ') + '</p>');
+  await step4();
+}
+
+async function step4(){
+  currentStep = 4;
+  var m = answers.moods.slice(0,2).join(' and ').toLowerCase();
+  await aiSay('<p>' + (m.charAt(0).toUpperCase()+m.slice(1)) + ' — noted. What size are you thinking?</p>', 800);
+  var html = S4.map(function(s,i){
+    return '<button class="opt-btn" data-i="'+i+'">'+s.l+'<span class="opt-sub-line">'+s.s+'</span></button>';
+  }).join('');
+  var block = addEl('opts-row', html);
+  block.querySelectorAll('.opt-btn').forEach(function(b){
+    b.addEventListener('click', function(){ submitStep4(parseInt(b.dataset.i), block); });
+  });
+  attachCursor(block);
+  disableInput('Choose a size above…');
+}
+
+async function submitStep4(i, block){
+  answers.size = S4[i].l + ' (' + S4[i].s + ')';
+  block.remove();
+  addUser('<p>' + S4[i].l + '</p>');
+  await step5();
+}
+
+async function step5(){
+  currentStep = 5;
+  var first = answers.subject.split(' ')[0];
+  await aiSay(
+    '<p>Last question.</p>' +
+    '<p>Tell me about ' + first + ' — their appearance, personality, how they carry themselves. Include any details that will help capture them accurately.</p>',
+    950
+  );
+  input.style.minHeight = '80px';
+  setInput('e.g. She has kind eyes, silver hair she always wore up. Warm but dignified. Natural light photo available…', true);
+  send.disabled = false;
+}
+
+async function submitStep5(){
+  var val = input.value.trim();
+  answers.details = val;
+  input.value = '';
+  input.style.minHeight = '';
+  disableInput('Generating your concept…');
+  if(val) addUser('<p>' + val.replace(/</g,'&lt;') + '</p>');
+  await aiSay('<p>Thank you. Generating your portrait concept now…</p>', 700);
+  await wait(400);
+  runGeneration();
+}
+
+/* =========================================================
+   GENERATION
+   ========================================================= */
+
+async function runGeneration(){
+  var overlay = document.getElementById('genOverlay');
+  var st      = document.getElementById('genStatus');
+  var bar     = document.getElementById('genBar');
+  var pic     = document.getElementById('genPic');
+  var noise   = document.getElementById('genNoise');
+
+  pic.style.opacity   = '0';
+  noise.style.opacity = '1';
+  bar.style.width     = '0%';
+  overlay.classList.add('on');
+
+  var phases = [
+    { t:'Analysing your description',   p:15 },
+    { t:'Composing portrait structure', p:38 },
+    { t:'Rendering charcoal textures',  p:62 },
+    { t:'Adding depth and light',       p:84 },
+    { t:'Finalising concept',           p:96 }
+  ];
+
+  var prompt = 'hyperrealistic charcoal pencil portrait, ' +
+    answers.subject + ', ' + answers.moods.join(', ') + ', ' +
+    answers.details.substring(0,120) +
+    ', black and white fine art, cotton paper texture, dramatic studio lighting, ' +
+    'detailed eyes, rich tonal range';
+
+  var imageUrl = 'https://image.pollinations.ai/prompt/' +
+    encodeURIComponent(prompt) +
+    '?width=520&height=650&nologo=true&seed=' + Math.floor(Math.random()*99999);
+
+  pic.src = imageUrl;
+
+  for(var i=0; i<phases.length; i++){
+    st.style.opacity = '0';
+    await wait(220);
+    st.textContent = phases[i].t;
+    st.style.opacity = '1';
+    bar.style.width = phases[i].p + '%';
+    await wait(1050);
+  }
+
+  await new Promise(function(resolve){
+    if(pic.complete && pic.naturalWidth>0){ resolve(); return; }
+    pic.onload = resolve; pic.onerror = resolve;
+    setTimeout(resolve, 30000);
+  });
+
+  st.textContent = 'Concept ready';
+  bar.style.width = '100%';
+  noise.style.opacity = '0';
+  pic.style.opacity = '1';
+  await wait(2000);
+  overlay.classList.remove('on');
+  await showResult(imageUrl);
+}
+
+async function showResult(imageUrl){
+  await aiSay('<p>Here is your portrait concept, based on everything you have described.</p>', 650);
+
+  var cr = addEl('concept-row',
+    '<div class="concept-card">' +
+      '<img src="'+imageUrl+'" alt="AI Concept"' +
+        ' onerror="this.parentElement.innerHTML='<div style=&quot;padding:14px;font-size:12px;color:var(--g1);&quot;>Concept unavailable — brief detail is captured.</div>'">' +
+      '<div class="concept-card-note">AI concept based on your description. The actual drawing will be far richer — built by hand.</div>' +
+    '</div>'
+  );
+
+  await wait(800);
+  await aiSay(
+    '<p>To send your brief and hear back on pricing and timeline, enter your details below.</p>',
+    850
+  );
+
+  var fr = addEl('form-row',
+    '<div class="form-card" id="briefForm">' +
+      '<input type="text"  id="bfName"  placeholder="Full name"           autocomplete="name">' +
+      '<input type="email" id="bfEmail" placeholder="Email address"       autocomplete="email">' +
+      '<input type="tel"   id="bfPhone" placeholder="Phone (optional)"    autocomplete="tel">' +
+      '<button class="form-submit-btn" onclick="submitBrief()">Send Commission Brief →</button>' +
+      '<div class="form-err" id="fErr"></div>' +
+    '</div>' +
+    '<div class="done-card" id="doneDone">' +
+      '<strong>Brief received.</strong>' +
+      '<p>Good Ereseh will respond within two business days with pricing and next steps.</p>' +
+      '<a href="/gallery" class="link-btn">Browse the Collection →</a>' +
+      '<a href="/purchase?product=commission_deposit" class="link-btn primary">Pay 50% Deposit →</a>' +
+    '</div>'
+  );
+  attachCursor(fr);
+  disableInput('Fill in your details above…');
+  scrollBottom();
+}
+
+async function submitBrief(){
+  var name  = document.getElementById('bfName').value.trim();
+  var email = document.getElementById('bfEmail').value.trim();
+  var phone = document.getElementById('bfPhone').value.trim();
+  var errEl = document.getElementById('fErr');
+  var btn   = document.querySelector('.form-submit-btn');
+
+  if(!name||!email){ errEl.textContent='Please enter name and email.'; errEl.style.display='block'; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent='Invalid email.'; errEl.style.display='block'; return; }
+
+  var msg = ['COMMISSION BRIEF','================',
+    'Name:     '+name, 'Email:    '+email, 'Phone:    '+(phone||'Not provided'), '',
+    'Subject:  '+answers.subject, 'Occasion: '+answers.occasion,
+    'Mood:     '+answers.moods.join(', '), 'Size:     '+answers.size, '',
+    'Description:', answers.details||'Not provided'].join('
+');
+
+  btn.textContent='Sending…'; btn.disabled=true; errEl.style.display='none';
+
+  try {
+    var res = await fetch(API+'/commission',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ name:name, email:email, phone:phone,
+        'commission-type':answers.occasion||'AI Assistant', size:answers.size||'', message:msg })
+    });
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error||'Something went wrong.');
+    document.getElementById('briefForm').style.display='none';
+    var d = document.getElementById('doneDone');
+    d.style.display='flex';
+    scrollBottom();
+  } catch(err){
+    errEl.textContent=err.message||'Something went wrong. Email art@goodereseh.com';
+    errEl.style.display='block';
+    btn.textContent='Send Commission Brief →'; btn.disabled=false;
+  }
+}
+
+/* =========================================================
+   CURSOR / NAV / ENTER KEY
+   ========================================================= */
+
+function attachCursor(el){
+  el.querySelectorAll('a,button,input,textarea').forEach(function(e){
+    e.addEventListener('mouseenter',function(){ document.body.classList.add('cursor-hover'); });
+    e.addEventListener('mouseleave',function(){ document.body.classList.remove('cursor-hover'); });
+  });
+}
+
+input.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && !e.shiftKey && !send.disabled){
+    e.preventDefault(); handleSend();
+  }
+});
+input.addEventListener('input', function(){
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+
+var nav = document.getElementById('nav');
+window.addEventListener('scroll',function(){ nav.classList.toggle('scrolled',window.scrollY>60); },{passive:true});
+
+var dot=document.getElementById('cursorDot'), ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){
+  var mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    clearTimeout(tt);
+    tt=setTimeout(function(){
+      var t=document.createElement('div'); t.className='cursor-trail';
+      t.style.left=mx+'px'; t.style.top=my+'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend',function(){ t.remove(); });
+    },16);
+  });
+  (function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button').forEach(function(el){
+    el.addEventListener('mouseenter',function(){ document.body.classList.add('cursor-hover'); });
+    el.addEventListener('mouseleave',function(){ document.body.classList.remove('cursor-hover'); });
+  });
+}
+
+window.addEventListener('DOMContentLoaded', function(){ start(); });
 </script>
 </body>
 </html>
