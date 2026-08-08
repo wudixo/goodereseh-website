@@ -1,12 +1,26 @@
 module.exports = function (app) {
 
+    /*
+    |--------------------------------------------------------------------------
+    | CHAT HEALTH CHECK
+    |--------------------------------------------------------------------------
+    */
+
     app.get("/chat-test", function (req, res) {
+
         res.json({
             status: "working",
             google_key_set: !!process.env.GOOGLE_API_KEY
         });
+
     });
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | GOOD ERESEH AI CHAT
+    |--------------------------------------------------------------------------
+    */
 
     app.post("/chat", async function (req, res) {
 
@@ -17,108 +31,226 @@ module.exports = function (app) {
             const messages = req.body.messages;
             const system = req.body.system || "";
 
-            if (!messages || !messages.length) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | BASIC VALIDATION
+            |--------------------------------------------------------------------------
+            */
+
+            if (!messages || !Array.isArray(messages) || !messages.length) {
+
                 return res.status(400).json({
-                    error: "No messages"
+                    error: "Please send a message to continue."
                 });
+
             }
+
 
             if (!process.env.GOOGLE_API_KEY) {
+
+                console.error(
+                    "[CHAT] GOOGLE_API_KEY is missing"
+                );
+
                 return res.status(500).json({
-                    error: "GOOGLE_API_KEY not set"
+                    error:
+                        "The studio assistant is temporarily unavailable. Please try again shortly."
                 });
+
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | BUILD GEMINI CONVERSATION
+            |--------------------------------------------------------------------------
+            |
+            | Keep a reasonable amount of conversation history.
+            | This keeps the assistant aware of earlier answers without sending
+            | an unnecessarily large conversation on every request.
+            |--------------------------------------------------------------------------
+            */
+
+            const recentMessages =
+                messages.slice(-24);
 
             const contents = [];
 
 
-            for (const message of messages) {
+            for (const message of recentMessages) {
 
                 const role =
                     message.role === "assistant"
                         ? "model"
                         : "user";
 
+
                 const parts =
-                    convertParts(message.content);
+                    convertParts(
+                        message.content
+                    );
+
 
                 if (parts.length) {
+
                     contents.push({
                         role: role,
                         parts: parts
                     });
+
                 }
+
             }
 
 
             /*
-            Gemini requires the final conversation turn
-            to be a user message.
+            |--------------------------------------------------------------------------
+            | GEMINI REQUIRES A USER MESSAGE AS THE CURRENT TURN
+            |--------------------------------------------------------------------------
             */
+
             while (
                 contents.length &&
                 contents[contents.length - 1].role === "model"
             ) {
+
                 contents.pop();
+
             }
 
 
             if (!contents.length) {
+
                 return res.status(400).json({
-                    error: "No valid conversation content"
+                    error:
+                        "I couldn't understand that message. Please try again."
                 });
+
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | REQUEST BODY
+            |--------------------------------------------------------------------------
+            */
 
             const requestBody = {
 
                 contents: contents,
 
                 generationConfig: {
-                    maxOutputTokens: 1000,
-                    thinkingConfig: {
-                        thinkingLevel: "low"
-                    }
+
+                    maxOutputTokens:
+                        1000
+
                 }
 
             };
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | SYSTEM INSTRUCTION
+            |--------------------------------------------------------------------------
+            */
+
             if (system) {
 
                 requestBody.system_instruction = {
+
                     parts: [
                         {
                             text: system
                         }
                     ]
+
                 };
 
             }
 
 
-            const response = await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
-                {
-                    method: "POST",
+            /*
+            |--------------------------------------------------------------------------
+            | CALL GEMINI
+            |--------------------------------------------------------------------------
+            */
 
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-goog-api-key":
-                            process.env.GOOGLE_API_KEY
-                    },
+            const response =
+                await fetch(
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+                    {
 
-                    body: JSON.stringify(
-                        requestBody
-                    )
-                }
-            );
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "x-goog-api-key":
+                                process.env.GOOGLE_API_KEY
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                requestBody
+                            )
+
+                    }
+                );
 
 
             const data =
                 await response.json();
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | RATE LIMIT / QUOTA HANDLING
+            |--------------------------------------------------------------------------
+            */
+
+            if (response.status === 429) {
+
+                console.warn(
+                    "[CHAT] Gemini rate limit reached:",
+                    JSON.stringify(data)
+                );
+
+
+                const retrySeconds =
+                    getRetrySeconds(data);
+
+
+                return res
+                    .status(429)
+                    .json({
+
+                        error:
+                            retrySeconds
+                                ? `The studio assistant is busy at the moment. Please wait about ${retrySeconds} seconds and try again.`
+                                : "The studio assistant is busy at the moment. Please wait a short while and try again.",
+
+                        code:
+                            "AI_RATE_LIMIT",
+
+                        retryAfter:
+                            retrySeconds
+
+                    });
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | OTHER GEMINI ERRORS
+            |--------------------------------------------------------------------------
+            */
 
             if (!response.ok) {
 
@@ -127,21 +259,46 @@ module.exports = function (app) {
                     JSON.stringify(data)
                 );
 
-                return res.status(
-                    response.status
-                ).json({
-                    error:
-                        data?.error?.message ||
-                        "Gemini request failed"
-                });
+
+                if (
+                    response.status >= 500
+                ) {
+
+                    return res
+                        .status(503)
+                        .json({
+
+                            error:
+                                "The studio assistant is temporarily unavailable. Please try again shortly.",
+
+                            code:
+                                "AI_TEMPORARILY_UNAVAILABLE"
+
+                        });
+
+                }
+
+
+                return res
+                    .status(500)
+                    .json({
+
+                        error:
+                            "I couldn't process that message. Please try again.",
+
+                        code:
+                            "AI_REQUEST_FAILED"
+
+                    });
 
             }
 
 
-            console.log(
-                "[CHAT] Gemini response received"
-            );
-
+            /*
+            |--------------------------------------------------------------------------
+            | EXTRACT AI RESPONSE
+            |--------------------------------------------------------------------------
+            */
 
             const text =
                 extractText(data);
@@ -154,10 +311,18 @@ module.exports = function (app) {
                     JSON.stringify(data)
                 );
 
-                return res.status(500).json({
-                    error:
-                        "Gemini returned no text"
-                });
+
+                return res
+                    .status(502)
+                    .json({
+
+                        error:
+                            "I couldn't complete that response. Please try your message again.",
+
+                        code:
+                            "AI_EMPTY_RESPONSE"
+
+                    });
 
             }
 
@@ -168,7 +333,13 @@ module.exports = function (app) {
             );
 
 
-            res.json({
+            /*
+            |--------------------------------------------------------------------------
+            | RETURN MESSAGE TO COMMISSION PAGE
+            |--------------------------------------------------------------------------
+            */
+
+            return res.json({
                 text: text
             });
 
@@ -177,15 +348,22 @@ module.exports = function (app) {
         catch (error) {
 
             console.error(
-                "[CHAT] error:",
+                "[CHAT] unexpected error:",
                 error
             );
 
-            res.status(500).json({
-                error:
-                    error.message ||
-                    "AI request failed"
-            });
+
+            return res
+                .status(500)
+                .json({
+
+                    error:
+                        "The studio assistant is temporarily unavailable. Please try again shortly.",
+
+                    code:
+                        "AI_SERVER_ERROR"
+
+                });
 
         }
 
@@ -195,14 +373,30 @@ module.exports = function (app) {
 
 
 
+/*
+|--------------------------------------------------------------------------
+| CONVERT CHAT CONTENT TO GEMINI PARTS
+|--------------------------------------------------------------------------
+*/
+
 function convertParts(content) {
 
     if (!content) {
+
         return [];
+
     }
 
 
-    if (typeof content === "string") {
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPLE TEXT
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        typeof content === "string"
+    ) {
 
         return [
             {
@@ -213,11 +407,20 @@ function convertParts(content) {
     }
 
 
-    if (!Array.isArray(content)) {
+    /*
+    |--------------------------------------------------------------------------
+    | OTHER NON-ARRAY VALUE
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        !Array.isArray(content)
+    ) {
 
         return [
             {
-                text: String(content)
+                text:
+                    String(content)
             }
         ];
 
@@ -227,21 +430,42 @@ function convertParts(content) {
     const parts = [];
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | MULTIMODAL CONTENT
+    |--------------------------------------------------------------------------
+    */
+
     for (const item of content) {
 
+        /*
+        | Text
+        */
+
         if (
+            item &&
             item.type === "text" &&
             item.text
         ) {
 
             parts.push({
-                text: item.text
+                text:
+                    item.text
             });
 
         }
 
 
+        /*
+        | Customer reference photograph
+        |
+        | IMPORTANT:
+        | The photograph is sent to Gemini for visual understanding only.
+        | Gemini is NOT being asked to regenerate or replace the image.
+        */
+
         if (
+            item &&
             item.type === "image" &&
             item.source &&
             item.source.data
@@ -273,14 +497,24 @@ function convertParts(content) {
 
 
 
+/*
+|--------------------------------------------------------------------------
+| EXTRACT GEMINI RESPONSE TEXT
+|--------------------------------------------------------------------------
+*/
+
 function extractText(data) {
 
     if (
         !data ||
-        !Array.isArray(data.candidates) ||
+        !Array.isArray(
+            data.candidates
+        ) ||
         !data.candidates.length
     ) {
+
         return "";
+
     }
 
 
@@ -289,31 +523,109 @@ function extractText(data) {
 
 
     if (
+        !candidate ||
         !candidate.content ||
         !Array.isArray(
             candidate.content.parts
         )
     ) {
+
         return "";
+
     }
 
 
     return candidate.content.parts
+
         .filter(function (part) {
 
             return (
                 part &&
-                typeof part.text === "string" &&
+                typeof part.text ===
+                    "string" &&
                 !part.thought
             );
 
         })
+
         .map(function (part) {
 
             return part.text;
 
         })
+
         .join("\n")
+
         .trim();
+
+}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| READ GOOGLE RETRY DELAY
+|--------------------------------------------------------------------------
+*/
+
+function getRetrySeconds(data) {
+
+    try {
+
+        if (
+            !data ||
+            !data.error ||
+            !Array.isArray(
+                data.error.details
+            )
+        ) {
+
+            return null;
+
+        }
+
+
+        for (
+            const detail of
+            data.error.details
+        ) {
+
+            if (
+                detail &&
+                typeof detail.retryDelay ===
+                    "string"
+            ) {
+
+                const match =
+                    detail.retryDelay.match(
+                        /([\d.]+)s/
+                    );
+
+
+                if (match) {
+
+                    return Math.ceil(
+                        Number(match[1])
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "[CHAT] Could not read retry delay:",
+            error.message
+        );
+
+    }
+
+
+    return null;
 
 }
