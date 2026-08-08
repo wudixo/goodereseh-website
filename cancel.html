@@ -1,229 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Payment not completed — Good Ereseh">
+<title>Payment Not Completed — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+.cancel-hero {
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 160px 64px 80px;
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
 
-<title>Payment Cancelled | Good Ereseh</title>
+.cancel-hero::before {
+  content: 'G · E';
+  font-family: var(--serif);
+  font-size: 420px;
+  font-weight: 300;
+  color: rgba(189,179,168,.018);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+}
 
-<meta name="description" content="Your artwork payment was not completed. Return to Good Ereseh to continue your purchase.">
+.cancel-mark {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(189,179,168,.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  font-size: 18px;
+  color: var(--g1);
+  position: relative;
+  z-index: 1;
+  animation: markIn 1s var(--ease) forwards;
+}
 
-<link rel="stylesheet" href="css/style.css">
+@keyframes markIn {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
+.cancel-eyebrow {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .8s var(--ease) .3s forwards;
+}
+
+.cancel-eyebrow::before,
+.cancel-eyebrow::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--g0);
+}
+
+.cancel-title {
+  font-family: var(--serif);
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: .95;
+  letter-spacing: -.02em;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) .5s forwards;
+}
+
+.cancel-title em {
+  font-style: italic;
+  color: var(--g2);
+  display: block;
+}
+
+.cancel-lede {
+  font-size: 15px;
+  color: var(--g2);
+  max-width: 480px;
+  line-height: 1.85;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) .7s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Reassurance strip */
+.cancel-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--g0);
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) .9s forwards;
+}
+
+.cancel-note .dot {
+  width: 3px;
+  height: 3px;
+  background: var(--g0);
+  border-radius: 50%;
+}
+
+/* Options */
+.cancel-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: var(--c1);
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.cancel-option {
+  padding: 72px 52px;
+  border-right: 1px solid rgba(189,179,168,.07);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cancel-option:last-child { border-right: none; }
+
+.option-num {
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: .2em;
+  color: var(--g0);
+}
+
+.option-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.15;
+}
+
+.option-body {
+  font-size: 13px;
+  color: var(--g1);
+  line-height: 1.8;
+  flex: 1;
+}
+
+.cancel-cta {
+  padding: 120px 64px;
+  background: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+}
+
+.cancel-cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+}
+
+.cancel-cta h2 em { font-style: italic; color: var(--g3); }
+
+.cancel-cta-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 960px) {
+  .cancel-hero { padding: 140px 28px 60px; }
+  .cancel-options { grid-template-columns: 1fr; }
+  .cancel-option { border-right: none; border-bottom: 1px solid rgba(189,179,168,.07); padding: 52px 28px; }
+  .cancel-option:last-child { border-bottom: none; }
+  .cancel-cta { flex-direction: column; align-items: flex-start; padding: 80px 28px; gap: 36px; }
+  .cancel-cta-actions { flex-direction: column; align-items: flex-start; width: 100%; }
+}
+</style>
 </head>
-
-
 <body>
 
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="gallery.html">Gallery</a></li>
-
-<li><a href="about.html">About</a></li>
-
-<li><a href="commissions.html">Commissions</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
+<nav id="nav">
+  <a href="/" class="nav-mark">
+    <span class="mark-g">G · E</span>
+    <span class="mark-sub">Good Ereseh</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
-
-
-
-
-
-
-<main>
-
-
-<section class="cancel-page">
-
-
-<div class="cancel-container">
-
-
-<h1>
-Payment Not Completed
-</h1>
-
-
-
-<p class="cancel-message">
-
-Your artwork order has not been completed.
-
-</p>
-
-
-
-<p>
-
-No payment has been taken. You can return to the artwork page and try again whenever you are ready.
-
-</p>
-
-
-
-
-<div class="cancel-actions">
-
-
-<a href="gallery.html" class="purchase-button">
-
-Return To Gallery
-
-</a>
-
-
-
-<a href="contact.html" class="secondary-button">
-
-Contact Artist
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
+<!-- Hero -->
+<section class="cancel-hero">
+  <div class="cancel-mark">○</div>
+  <p class="cancel-eyebrow">Payment Not Completed</p>
+  <h1 class="cancel-title">
+    No charge<br>
+    <em>was made.</em>
+  </h1>
+  <p class="cancel-lede">
+    You left before completing payment. That's absolutely fine — your card has not been charged and nothing has been reserved. Take your time.
+  </p>
+  <div class="cancel-note">
+    <span>No payment taken</span>
+    <span class="dot"></span>
+    <span>No reservation held</span>
+    <span class="dot"></span>
+    <span>Come back whenever</span>
+  </div>
 </section>
 
-
-</main>
-
-
-
-
-
-
-
-<footer>
-
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-
-<h2>
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</h2>
-
-
-<p>
-Hyperrealistic Charcoal and Graphite Pencil Artist
-</p>
-
-
+<!-- Options -->
+<div class="cancel-options">
+  <div class="cancel-option reveal">
+    <div class="option-num">01</div>
+    <div class="option-title">Return to<br>the Gallery</div>
+    <p class="option-body">Browse the full collection and take your time choosing the right piece for your space.</p>
+    <a href="/gallery" class="btn-line" style="margin-top:8px">View all works <span class="arr">→</span></a>
+  </div>
+  <div class="cancel-option reveal d1">
+    <div class="option-num">02</div>
+    <div class="option-title">Try again<br>when ready</div>
+    <p class="option-body">The artwork will be available to purchase again. Use the back button or return to the gallery to find it.</p>
+    <a href="/gallery" class="btn-line" style="margin-top:8px">Back to collection <span class="arr">→</span></a>
+  </div>
+  <div class="cancel-option reveal d2">
+    <div class="option-num">03</div>
+    <div class="option-title">Get in<br>touch</div>
+    <p class="option-body">Have a question before purchasing, or interested in a commission? Send a message and I'll get back to you.</p>
+    <a href="/contact" class="btn-line" style="margin-top:8px">Contact <span class="arr">→</span></a>
+  </div>
 </div>
 
+<!-- CTA -->
+<section class="cancel-cta">
+  <h2 class="reveal">Still looking?<br><em>Browse the collection.</em></h2>
+  <div class="cancel-cta-actions reveal d2">
+    <a href="/gallery" class="btn-primary">View the Collection</a>
+    <a href="/commissions" class="btn-ghost"><span class="arr">→</span> Commission a portrait</a>
+  </div>
+</section>
 
-
-
-
-<div class="footer-links">
-
-
-<a href="index.html">
-Home
-</a>
-
-
-<a href="gallery.html">
-Gallery
-</a>
-
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="commissions.html">
-Commissions
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
-</div>
-
-
-
-
-
-<div class="footer-contact">
-
-
-<p>
-London, United Kingdom
-</p>
-
-
-<p>
-Email: art@goodereseh.com
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="footer-bottom">
-
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-
-</div>
-
-
-
+<!-- Footer -->
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/commissions">Commissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Collect</h5>
+      <ul>
+        <li><a href="/artworks/eye">Reflections</a></li>
+        <li><a href="/artworks/fela">Fela Kuti</a></li>
+        <li><a href="/artworks/benjamin">In God We Trust</a></li>
+        <li><a href="/artworks/lips">Unspoken</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li>
+        <li><a href="/commissions">Commission a portrait</a></li>
+        <li><a href="/privacy-policy.html">Privacy</a></li>
+        <li><a href="/terms-and-conditions.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 Good Ereseh. All Rights Reserved.</span>
+    <div class="footer-legal">
+      <a href="/shipping-policy.html">Shipping</a>
+      <a href="/returns-policy.html">Returns</a>
+    </div>
+  </div>
 </footer>
 
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
 
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
 
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0, my=0, rx=0, ry=0, tt=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    clearTimeout(tt);
+    tt = setTimeout(() => {
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = mx + 'px'; t.style.top = my + 'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend', () => t.remove());
+    }, 16);
+  });
+  (function loop() {
+    rx += (mx - rx) * .12; ry += (my - ry) * .12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+}
+
+const obs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+}), { threshold: .08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
-
 </html>
