@@ -1,252 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Purchase complete — Good Ereseh">
+<title>Purchase Complete — Good Ereseh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+<style>
+/* ── SUCCESS HERO ─────────────────────────────────────────── */
+.success-hero {
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 160px 64px 80px;
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
 
-<title>Purchase Complete | Good Ereseh</title>
+/* Subtle background monogram */
+.success-hero::before {
+  content: 'G · E';
+  font-family: var(--serif);
+  font-size: 420px;
+  font-weight: 300;
+  color: rgba(189,179,168,.018);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+}
 
-<meta name="description" content="Thank you for purchasing original artwork or fine art prints from Good Ereseh.">
+.success-mark {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(189,179,168,.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  font-size: 18px;
+  color: var(--g3);
+  position: relative;
+  z-index: 1;
+  animation: markIn 1s var(--ease) forwards;
+}
 
-<link rel="stylesheet" href="css/style.css">
+@keyframes markIn {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
+.success-eyebrow {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .8s var(--ease) .3s forwards;
+}
+
+.success-eyebrow::before,
+.success-eyebrow::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--g0);
+}
+
+.success-title {
+  font-family: var(--serif);
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: .95;
+  letter-spacing: -.02em;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) .5s forwards;
+}
+
+.success-title em {
+  font-style: italic;
+  color: var(--g3);
+  display: block;
+}
+
+.success-lede {
+  font-size: 15px;
+  color: var(--g2);
+  max-width: 520px;
+  line-height: 1.85;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) .7s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── ORDER CARD ───────────────────────────────────────────── */
+.order-section {
+  padding: 0 64px;
+  background: var(--c1);
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.order-card {
+  display: none;
+  align-items: center;
+  gap: 48px;
+  padding: 64px 0;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.order-card.visible { display: flex; }
+
+.order-img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
+  filter: brightness(.85) contrast(1.06) grayscale(8%);
+  background: var(--c2);
+}
+
+.order-details {
+  flex: 1;
+}
+
+.order-artwork {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 8px;
+  letter-spacing: -.01em;
+}
+
+.order-type {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 20px;
+}
+
+.order-meta {
+  display: flex;
+  gap: 40px;
+}
+
+.order-meta-item { }
+
+.order-meta-label {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g0);
+  margin-bottom: 4px;
+}
+
+.order-meta-value {
+  font-size: 14px;
+  color: var(--p1);
+}
+
+.order-reference { font-size: 12px; color: var(--g1); font-family: monospace; letter-spacing: .04em; }
+
+/* ── INFO SECTIONS ────────────────────────────────────────── */
+.success-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 0 64px;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.info-block {
+  padding: 72px 52px 72px 0;
+  border-right: 1px solid rgba(189,179,168,.07);
+}
+
+.info-block:last-child {
+  border-right: none;
+  padding-left: 52px;
+  padding-right: 0;
+}
+
+.info-block:nth-child(2) {
+  padding-left: 52px;
+}
+
+.info-num {
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: .2em;
+  color: var(--g0);
+  margin-bottom: 20px;
+}
+
+.info-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 14px;
+}
+
+.info-body {
+  font-size: 13px;
+  color: var(--g1);
+  line-height: 1.85;
+}
+
+.info-body a {
+  color: var(--g3);
+  transition: color .3s;
+}
+
+.info-body a:hover { color: var(--p1); }
+
+/* ── CTA ──────────────────────────────────────────────────── */
+.success-cta {
+  padding: 120px 64px;
+  background: var(--c1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+}
+
+.success-cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--p2);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+}
+
+.success-cta h2 em { font-style: italic; color: var(--g3); }
+
+.success-cta-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 960px) {
+  .success-hero { padding: 140px 28px 60px; }
+  .order-section { padding: 0 28px; }
+  .order-card { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .order-img { width: 100%; height: 240px; }
+  .order-meta { flex-direction: column; gap: 16px; }
+  .success-info { grid-template-columns: 1fr; padding: 0 28px; }
+  .info-block { border-right: none; border-bottom: 1px solid rgba(189,179,168,.07); padding: 48px 0; }
+  .info-block:last-child { padding-left: 0; }
+  .info-block:nth-child(2) { padding-left: 0; }
+  .success-cta { flex-direction: column; align-items: flex-start; padding: 80px 28px; gap: 36px; }
+  .success-cta-actions { flex-direction: column; align-items: flex-start; width: 100%; }
+}
+</style>
 </head>
-
-
 <body>
 
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-
-<header>
-
-<nav>
-
-<div class="logo">
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</div>
-
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="gallery.html">Gallery</a></li>
-
-<li><a href="about.html">About</a></li>
-
-<li><a href="commissions.html">Commissions</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
+<nav id="nav">
+  <a href="/" class="nav-mark">
+    <span class="mark-g">G · E</span>
+    <span class="mark-sub">Good Ereseh</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/gallery">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/commissions" class="nav-commission">Commission</a></li>
+  </ul>
 </nav>
 
-</header>
-
-
-
-
-
-
-<main>
-
-
-<section class="success-page">
-
-
-<div class="success-container">
-
-
-<h1>
-Thank You For Your Purchase
-</h1>
-
-
-
-<p class="success-message">
-
-Your artwork order has been successfully received.
-
-</p>
-
-
-
-<p>
-
-Thank you for supporting Good Ereseh. Your artwork will be carefully prepared and handled with the attention expected from a handmade fine art piece.
-
-</p>
-
-
-
-
-<div class="success-details">
-
-
-<h2>
-Collector Information
-</h2>
-
-
-<p>
-Original artworks are signed by the artist and supplied with a Certificate of Authenticity.
-</p>
-
-
-<p>
-Limited edition prints are produced on premium archival paper and prepared for secure delivery.
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="success-actions">
-
-
-<a href="gallery.html" class="purchase-button">
-
-Continue Exploring Artwork
-
-</a>
-
-
-
-<a href="commissions.html" class="secondary-button">
-
-Request A Commission
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
+<!-- Hero -->
+<section class="success-hero">
+  <div class="success-mark">✓</div>
+  <p class="success-eyebrow">Purchase Complete</p>
+  <h1 class="success-title">
+    Thank<br>
+    <em>you.</em>
+  </h1>
+  <p class="success-lede">
+    Your artwork order has been received. Thank you for supporting Good Ereseh — your piece is now being prepared with the care and attention expected of a handmade fine art work.
+  </p>
 </section>
 
-
-</main>
-
-
-
-
-
-
-<footer>
-
-
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-
-<h2>
-
-<a href="index.html">
-GOOD ERESEH
-</a>
-
-</h2>
-
-
-<p>
-Hyperrealistic Charcoal and Graphite Pencil Artist
-</p>
-
-
+<!-- Order card (shown when order details load from backend) -->
+<div class="order-section">
+  <div class="order-card" id="orderCard">
+    <img class="order-img" id="orderImg" src="" alt="">
+    <div class="order-details">
+      <div class="order-artwork" id="orderArtwork"></div>
+      <div class="order-type" id="orderType"></div>
+      <div class="order-meta">
+        <div class="order-meta-item">
+          <div class="order-meta-label">Amount Paid</div>
+          <div class="order-meta-value">£<span id="orderPrice"></span></div>
+        </div>
+        <div class="order-meta-item">
+          <div class="order-meta-label">Order Reference</div>
+          <div class="order-meta-value order-reference" id="orderRef"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-
-
-
-<div class="footer-links">
-
-
-<a href="index.html">
-Home
-</a>
-
-
-<a href="gallery.html">
-Gallery
-</a>
-
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="commissions.html">
-Commissions
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
+<!-- Info -->
+<div class="success-info">
+  <div class="info-block reveal">
+    <div class="info-num">01</div>
+    <div class="info-title">Confirmation Email</div>
+    <p class="info-body">
+      A confirmation email has been sent to the address you provided at checkout. Please check your inbox — and your spam folder just in case.
+    </p>
+  </div>
+  <div class="info-block reveal d1">
+    <div class="info-num">02</div>
+    <div class="info-title">Delivery Timeline</div>
+    <p class="info-body">
+      Original artworks are carefully packaged and dispatched within 5–7 business days. Fine art prints are usually dispatched within 2–4 business days. You'll receive a shipping notification once your order is on its way.
+    </p>
+  </div>
+  <div class="info-block reveal d2">
+    <div class="info-num">03</div>
+    <div class="info-title">Questions?</div>
+    <p class="info-body">
+      Reach out any time at <a href="mailto:art@goodereseh.com">art@goodereseh.com</a> and include your order reference above. Original artworks are signed and supplied with a Certificate of Authenticity.
+    </p>
+  </div>
 </div>
 
+<!-- CTA -->
+<section class="success-cta">
+  <h2 class="reveal">Continue<br><em>exploring.</em></h2>
+  <div class="success-cta-actions reveal d2">
+    <a href="/gallery" class="btn-primary">View the Collection</a>
+    <a href="/commissions" class="btn-ghost"><span class="arr">→</span> Commission a portrait</a>
+  </div>
+</section>
 
-
-
-
-<div class="footer-contact">
-
-
-<p>
-London, United Kingdom
-</p>
-
-
-<p>
-Email: art@goodereseh.com
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="footer-bottom">
-
-
-<p>
-© 2026 Good Ereseh. All Rights Reserved.
-</p>
-
-
-</div>
-
-
-
+<!-- Footer -->
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/commissions">Commissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Collect</h5>
+      <ul>
+        <li><a href="/artworks/eye">Reflections</a></li>
+        <li><a href="/artworks/fela">Fela Kuti</a></li>
+        <li><a href="/artworks/fela2">The Stance</a></li>
+        <li><a href="/artworks/abstract">Fragments of Thought</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li>
+        <li><a href="/commissions">Commission a portrait</a></li>
+        <li><a href="/privacy-policy.html">Privacy</a></li>
+        <li><a href="/terms-and-conditions.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 Good Ereseh. All Rights Reserved.</span>
+    <div class="footer-legal">
+      <a href="/shipping-policy.html">Shipping</a>
+      <a href="/returns-policy.html">Returns</a>
+    </div>
+  </div>
 </footer>
 
+<script>
+/* ── Order details from backend ─────────────────────────── */
+const API = 'https://goodereseh-website-production.up.railway.app';
 
+(async function loadOrder() {
+  const sessionId = new URLSearchParams(window.location.search).get('session_id');
+  if (!sessionId) return;
+  try {
+    const res = await fetch(`${API}/order-details/${encodeURIComponent(sessionId)}`);
+    if (!res.ok) return;
+    const order = await res.json();
+    if (!order.artwork) return;
 
+    const card = document.getElementById('orderCard');
+    const img  = document.getElementById('orderImg');
+
+    if (order.image) { img.src = order.image; img.alt = order.artwork; }
+    else { img.style.display = 'none'; }
+
+    document.getElementById('orderArtwork').textContent = order.artwork || '';
+    document.getElementById('orderType').textContent    = order.type    || '';
+    document.getElementById('orderPrice').textContent   = order.price   || '';
+    document.getElementById('orderRef').textContent     = order.reference || order.stripe_session_id?.slice(-12) || '';
+
+    card.classList.add('visible');
+  } catch (e) {
+    // Fails silently — generic thank-you page is a fine fallback
+    console.error('Order details unavailable:', e);
+  }
+})();
+
+/* ── Shared: nav, cursor, reveals ────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0, my=0, rx=0, ry=0, tt=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    clearTimeout(tt);
+    tt = setTimeout(() => {
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = mx + 'px'; t.style.top = my + 'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend', () => t.remove());
+    }, 16);
+  });
+  (function loop() {
+    rx += (mx - rx) * .12; ry += (my - ry) * .12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+}
+
+const obs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+}), { threshold: .08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
-
 </html>
