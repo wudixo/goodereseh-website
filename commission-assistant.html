@@ -3,811 +3,313 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Start your commission — tell Good Ereseh about your portrait and see an AI concept before you commit.">
 <title>Commission Assistant — Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
+.chat-page{min-height:100vh;background:var(--ink);display:flex;flex-direction:column;position:relative;}
+.chat-page::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(79,70,229,.06) 0%,rgba(6,182,212,.03) 50%,transparent 70%);pointer-events:none;z-index:0;animation:ambientPulse 4s ease-in-out infinite;}
+@keyframes ambientPulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1);}50%{opacity:1;transform:translateX(-50%) scale(1.08);}}
+.chat-wrap{flex:1;display:flex;flex-direction:column;max-width:760px;width:100%;margin:0 auto;padding:100px 24px 0;position:relative;z-index:1;}
+.chat-header{text-align:center;padding:32px 0 40px;}
+.chat-avatar-large{width:60px;height:60px;border-radius:50%;background:var(--c2);border:1px solid rgba(189,179,168,.1);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:300;color:var(--g3);margin:0 auto 16px;position:relative;}
+.chat-avatar-large::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,#4f46e5,#0ea5e9,#06b6d4,#7c3aed,#4f46e5);animation:spinGlow 4s linear infinite;z-index:-1;filter:blur(4px);opacity:.6;}
+@keyframes spinGlow{to{transform:rotate(360deg);}}
+.chat-header-title{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p2);margin-bottom:6px;}
+.chat-header-sub{font-size:11px;color:var(--g1);letter-spacing:.1em;}
+.chat-messages{flex:1;display:flex;flex-direction:column;gap:20px;padding-bottom:220px;min-height:300px;}
+.msg{display:flex;gap:12px;align-items:flex-end;animation:msgIn .4s var(--ease) forwards;opacity:0;}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{width:32px;height:32px;border-radius:50%;background:var(--c2);border:1px solid rgba(189,179,168,.1);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:11px;color:var(--g3);flex-shrink:0;position:relative;}
+.msg-avatar::after{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#4f46e5,#0ea5e9,#4f46e5);animation:spinGlow 3s linear infinite;z-index:-1;filter:blur(3px);opacity:.5;}
+.msg.ai .msg-bubble{background:var(--c1);border:1px solid rgba(189,179,168,.07);border-bottom-left-radius:0;max-width:80%;}
+.msg.user .msg-bubble{background:var(--c2);border:1px solid rgba(189,179,168,.1);border-bottom-right-radius:0;max-width:80%;margin-left:auto;}
+.msg-bubble{padding:14px 18px;font-size:14px;color:var(--p1);line-height:1.7;border-radius:4px;}
+.msg-bubble p+p{margin-top:8px;}
+.typing-dots{display:flex;gap:5px;padding:6px 4px;align-items:center;}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--g1);animation:typeDot 1.2s ease-in-out infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes typeDot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.chat-input-area{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(to top,var(--ink) 70%,transparent);padding:24px;z-index:100;display:none;}
+.chat-input-area.visible{display:block;}
+.chat-input-inner{max-width:760px;margin:0 auto;}
+.chat-text-row{display:flex;gap:10px;align-items:center;background:var(--c1);border:1px solid rgba(189,179,168,.12);padding:4px 4px 4px 18px;transition:border-color .3s;}
+.chat-text-row:focus-within{border-color:rgba(79,70,229,.5);}
+.chat-text-input{flex:1;background:none;border:none;outline:none;color:var(--p1);font-family:var(--sans);font-size:14px;font-weight:300;padding:10px 0;caret-color:#0ea5e9;}
+.chat-text-input::placeholder{color:var(--g0);}
+.chat-send-btn{padding:10px 20px;background:linear-gradient(90deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:.12em;cursor:none;transition:opacity .3s;}
+.chat-send-btn:hover{opacity:.85;}
+.chat-send-btn:disabled{opacity:.3;}
+.chat-options{display:flex;flex-direction:column;gap:6px;}
+.chat-opt{padding:13px 18px;background:var(--c1);border:1px solid rgba(189,179,168,.08);color:var(--g2);font-family:var(--sans);font-size:13px;text-align:left;cursor:none;transition:border-color .3s,color .3s,background .3s;}
+.chat-opt:hover{border-color:rgba(79,70,229,.4);color:var(--p1);background:var(--c2);}
+.chat-moods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.mood-chip{padding:8px 16px;background:var(--c1);border:1px solid rgba(189,179,168,.08);color:var(--g2);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:none;transition:border-color .3s,color .3s,background .3s;font-family:var(--sans);}
+.mood-chip.on{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.06);}
+.chat-mood-confirm{padding:11px 24px;background:linear-gradient(90deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:none;opacity:.4;transition:opacity .3s;}
+.chat-mood-confirm.ready{opacity:1;}
 
-/* ── ASSISTANT LAYOUT ────────────────────────────────────── */
-.assistant {
-  min-height: 100vh;
-  background: var(--ink);
-  display: flex;
-  flex-direction: column;
-}
+/* Generation overlay */
+.gen-overlay{position:fixed;inset:0;background:var(--ink);z-index:9000;align-items:center;justify-content:center;flex-direction:column;gap:40px;display:none;}
+.gen-overlay.active{display:flex;}
+.gen-canvas-wrap{position:relative;width:280px;height:350px;overflow:hidden;background:var(--c2);}
+.gen-canvas-wrap::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.04) 1px,transparent 1px);background-size:20px 20px;z-index:1;}
+.gen-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#0ea5e9,#7c3aed,#0ea5e9,transparent);z-index:3;animation:genScan 1.8s ease-in-out infinite;box-shadow:0 0 12px rgba(14,165,233,.8),0 0 24px rgba(124,58,237,.4);}
+@keyframes genScan{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
+.gen-corner{position:absolute;width:18px;height:18px;z-index:4;}
+.gen-corner.tl{top:8px;left:8px;border-top:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
+.gen-corner.tr{top:8px;right:8px;border-top:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
+.gen-corner.bl{bottom:8px;left:8px;border-bottom:1px solid #0ea5e9;border-left:1px solid #0ea5e9;}
+.gen-corner.br{bottom:8px;right:8px;border-bottom:1px solid #0ea5e9;border-right:1px solid #0ea5e9;}
+.gen-noise{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 1.5s ease;}
+.gen-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:1;opacity:0;transition:opacity 1.5s ease;filter:brightness(.9) contrast(1.1) grayscale(15%);}
+.gen-status-wrap{text-align:center;}
+.gen-title{font-family:var(--serif);font-size:13px;font-weight:300;color:var(--g3);letter-spacing:.1em;margin-bottom:12px;}
+.gen-status-text{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--g1);transition:opacity .4s;}
+.gen-dots{display:flex;gap:6px;justify-content:center;margin-top:12px;}
+.gen-dots span{width:4px;height:4px;border-radius:50%;background:#0ea5e9;animation:typeDot 1.2s ease-in-out infinite;}
+.gen-dots span:nth-child(2){animation-delay:.2s;}
+.gen-dots span:nth-child(3){animation-delay:.4s;}
+.gen-bar{width:280px;height:1px;background:var(--c3);overflow:hidden;}
+.gen-bar-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#0ea5e9,#06b6d4);width:0%;transition:width .8s var(--ease);}
 
-/* Progress bar */
-.assist-progress {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--c2);
-  z-index: 300;
-}
-
-.assist-progress-fill {
-  height: 100%;
-  background: var(--g3);
-  transition: width .6s var(--ease);
-}
-
-/* Step container */
-.assist-body {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 120px 64px 80px;
-  position: relative;
-}
-
-.step {
-  width: 100%;
-  max-width: 680px;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .5s var(--ease), transform .5s var(--ease);
-  position: absolute;
-  pointer-events: none;
-}
-
-.step.active {
-  opacity: 1;
-  transform: translateY(0);
-  position: relative;
-  pointer-events: all;
-}
-
-.step-counter {
-  font-size: 8px;
-  font-weight: 400;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--g0);
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.step-counter::before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 1px;
-  background: var(--g0);
-}
-
-.step-q {
-  font-family: var(--serif);
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 300;
-  color: var(--p2);
-  line-height: 1.15;
-  letter-spacing: -.01em;
-  margin-bottom: 10px;
-}
-
-.step-q em { font-style: italic; color: var(--g3); }
-
-.step-hint {
-  font-size: 13px;
-  color: var(--g1);
-  margin-bottom: 40px;
-  line-height: 1.7;
-}
-
-/* Text input */
-.assist-input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(189,179,168,.2);
-  color: var(--p1);
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 300;
-  padding: 12px 0;
-  outline: none;
-  transition: border-color .3s;
-  caret-color: var(--g3);
-}
-
-.assist-input:focus { border-bottom-color: var(--g3); }
-.assist-input::placeholder { color: var(--g0); }
-
-/* Textarea */
-.assist-textarea {
-  width: 100%;
-  background: var(--c1);
-  border: 1px solid rgba(189,179,168,.08);
-  color: var(--p1);
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 300;
-  padding: 20px 24px;
-  outline: none;
-  resize: vertical;
-  min-height: 140px;
-  line-height: 1.8;
-  transition: border-color .3s;
-}
-
-.assist-textarea:focus { border-color: rgba(189,179,168,.25); }
-.assist-textarea::placeholder { color: var(--g0); }
-
-/* Option buttons */
-.option-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3px;
-  margin-bottom: 40px;
-}
-
-.option-grid.cols-1 { grid-template-columns: 1fr; }
-.option-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-
-.opt-btn {
-  padding: 20px 24px;
-  background: var(--c1);
-  border: 1px solid rgba(189,179,168,.06);
-  color: var(--g2);
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: .06em;
-  text-align: left;
-  cursor: none;
-  transition: border-color .3s, background .3s, color .3s;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.opt-btn .opt-label { font-size: 13px; color: var(--p1); }
-.opt-btn .opt-sub   { font-size: 10px; color: var(--g0); letter-spacing: .08em; }
-
-.opt-btn:hover {
-  border-color: rgba(189,179,168,.2);
-  background: var(--c2);
-  color: var(--p1);
-}
-
-.opt-btn.selected {
-  border-color: var(--g3);
-  background: var(--c2);
-  color: var(--p2);
-}
-
-.opt-btn.selected .opt-label { color: var(--p2); }
-
-/* Multi-select mood chips */
-.mood-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 40px;
-}
-
-.mood-chip {
-  padding: 10px 20px;
-  background: var(--c1);
-  border: 1px solid rgba(189,179,168,.08);
-  color: var(--g2);
-  font-size: 11px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: none;
-  transition: border-color .3s, background .3s, color .3s;
-  font-family: var(--sans);
-}
-
-.mood-chip:hover { border-color: rgba(189,179,168,.2); color: var(--p1); }
-.mood-chip.selected { border-color: var(--g3); background: var(--c2); color: var(--p2); }
-
-/* Next / back buttons */
-.assist-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 40px;
-}
-
-.btn-next {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 32px;
-  background: var(--p2);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  border: none;
-  cursor: none;
-  transition: background .3s;
-}
-
-.btn-next:hover { background: var(--g3); }
-.btn-next:disabled { opacity: .4; cursor: not-allowed; }
-
-.btn-back {
-  font-size: 9px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--g1);
-  background: none;
-  border: none;
-  cursor: none;
-  transition: color .3s;
-  font-family: var(--sans);
-}
-
-.btn-back:hover { color: var(--g3); }
-
-/* ── RESULT STEP ─────────────────────────────────────────── */
-.result-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  width: 100%;
-  max-width: 1000px;
-  align-items: start;
-}
-
-.concept-panel { position: relative; }
-
-.concept-img {
-  width: 100%;
-  aspect-ratio: 4/5;
-  object-fit: cover;
-  display: block;
-  filter: brightness(.9) contrast(1.1) grayscale(20%);
-  background: var(--c2);
-}
-
-.concept-loading {
-  width: 100%;
-  aspect-ratio: 4/5;
-  background: var(--c2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.concept-loading-bar {
-  width: 120px;
-  height: 1px;
-  background: var(--c3);
-  overflow: hidden;
-}
-
-.concept-loading-fill {
-  height: 100%;
-  background: var(--g2);
-  animation: loadBar 2s var(--ease) infinite;
-}
-
-@keyframes loadBar {
-  0%   { transform: translateX(-100%); }
-  50%  { transform: translateX(0); }
-  100% { transform: translateX(100%); }
-}
-
-.concept-loading-text {
-  font-size: 9px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--g0);
-}
-
-.concept-note {
-  margin-top: 12px;
-  font-size: 10px;
-  color: var(--g0);
-  line-height: 1.6;
-  letter-spacing: .04em;
-}
-
-.brief-panel {}
-
-.brief-title {
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 300;
-  color: var(--p2);
-  margin-bottom: 24px;
-  line-height: 1.1;
-}
-
-.brief-rows {
-  border-top: 1px solid rgba(189,179,168,.07);
-  margin-bottom: 32px;
-}
-
-.brief-row {
-  display: flex;
-  gap: 16px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(189,179,168,.07);
-}
-
-.brief-label {
-  font-size: 8px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--g0);
-  width: 80px;
-  flex-shrink: 0;
-  padding-top: 2px;
-}
-
-.brief-value {
-  font-size: 13px;
-  color: var(--p1);
-  line-height: 1.6;
-}
-
-/* Contact fields */
-.brief-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin-bottom: 20px;
-}
-
-.brief-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.brief-field label {
-  font-size: 8px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--g1);
-}
-
-.brief-field input {
-  background: var(--c1);
-  border: 1px solid rgba(189,179,168,.08);
-  color: var(--p1);
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 300;
-  padding: 12px 16px;
-  outline: none;
-  transition: border-color .3s;
-}
-
-.brief-field input:focus { border-color: rgba(189,179,168,.28); }
-.brief-field input::placeholder { color: var(--g0); }
-
-.btn-send {
-  width: 100%;
-  padding: 16px;
-  background: var(--p2);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  border: none;
-  cursor: none;
-  transition: background .3s;
-}
-
-.btn-send:hover { background: var(--g3); }
-.btn-send:disabled { opacity: .5; }
-
-.send-success {
-  display: none;
-  padding: 20px 24px;
-  background: rgba(100,180,100,.06);
-  border: 1px solid rgba(100,180,100,.15);
-  font-size: 13px;
-  color: var(--p1);
-  line-height: 1.7;
-}
-
-.error-msg {
-  display: none;
-  margin-top: 12px;
-  padding: 12px 16px;
-  background: rgba(200,80,80,.08);
-  border: 1px solid rgba(200,80,80,.2);
-  font-size: 11px;
-  color: #d48888;
-}
-
-/* ── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 960px) {
-  .assist-body { padding: 100px 28px 60px; }
-  .option-grid { grid-template-columns: 1fr; }
-  .option-grid.cols-3 { grid-template-columns: 1fr 1fr; }
-  .result-layout { grid-template-columns: 1fr; gap: 40px; }
-  .assist-body { align-items: flex-start; }
-}
+/* Concept in chat */
+.concept-in-chat{width:100%;max-width:320px;overflow:hidden;position:relative;}
+.concept-in-chat img{width:100%;display:block;filter:brightness(.9) contrast(1.1) grayscale(15%);}
+.concept-in-chat-note{padding:10px 14px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;border-top:1px solid rgba(189,179,168,.07);}
+.brief-form-msg{background:var(--c1);border:1px solid rgba(189,179,168,.07);padding:20px;display:flex;flex-direction:column;gap:10px;max-width:80%;}
+.brief-form-msg input{background:var(--c2);border:1px solid rgba(189,179,168,.08);color:var(--p1);font-family:var(--sans);font-size:13px;font-weight:300;padding:11px 14px;outline:none;transition:border-color .3s;width:100%;}
+.brief-form-msg input:focus{border-color:rgba(79,70,229,.4);}
+.brief-form-msg input::placeholder{color:var(--g0);}
+.btn-send-brief{padding:12px;background:linear-gradient(90deg,#4f46e5,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:none;transition:opacity .3s;}
+.btn-send-brief:hover{opacity:.85;}
+.btn-send-brief:disabled{opacity:.4;}
+.send-done{padding:14px 18px;background:rgba(100,180,100,.06);border:1px solid rgba(100,180,100,.15);font-size:13px;color:var(--p1);line-height:1.7;display:none;}
+.send-err{font-size:11px;color:#d48888;display:none;padding:8px 0;}
+@media(max-width:760px){.chat-wrap{padding:90px 16px 0;}.chat-input-area{padding:16px;}.gen-canvas-wrap{width:240px;height:300px;}.gen-bar{width:240px;}.msg.ai .msg-bubble,.msg.user .msg-bubble{max-width:90%;}}
 </style>
 </head>
 <body>
-
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- Progress bar -->
-<div class="assist-progress">
-  <div class="assist-progress-fill" id="progressFill" style="width:0%"></div>
+<div class="gen-overlay" id="genOverlay">
+  <div class="gen-canvas-wrap">
+    <div class="gen-corner tl"></div><div class="gen-corner tr"></div>
+    <div class="gen-corner bl"></div><div class="gen-corner br"></div>
+    <div class="gen-scan"></div>
+    <div class="gen-noise" id="genNoise"></div>
+    <img class="gen-img" id="genImg" src="" alt="">
+  </div>
+  <div class="gen-bar"><div class="gen-bar-fill" id="genBarFill"></div></div>
+  <div class="gen-status-wrap">
+    <div class="gen-title">Good Ereseh &middot; Commission Assistant</div>
+    <div class="gen-status-text" id="genStatusText">Analysing your description</div>
+    <div class="gen-dots"><span></span><span></span><span></span></div>
+  </div>
 </div>
 
 <nav id="nav">
-  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
+  <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
   <ul class="nav-links">
-    <li><a href="/gallery">Gallery</a></li>
-    <li><a href="/about">About</a></li>
+    <li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li>
     <li><a href="/commissions" class="active">Commissions</a></li>
     <li><a href="/contact">Contact</a></li>
     <li><a href="/commissions" class="nav-commission">Commission</a></li>
   </ul>
 </nav>
 
-<div class="assistant">
-  <div class="assist-body" id="assistBody">
-
-    <!-- Step 1: Subject -->
-    <div class="step active" id="step1">
-      <p class="step-counter">Step 1 of 5</p>
-      <h2 class="step-q">Who is this portrait <em>of?</em></h2>
-      <p class="step-hint">A name, a relationship, or a description. There are no wrong answers here.</p>
-      <input class="assist-input" id="s1Input" type="text" placeholder="e.g. My grandmother Rose, aged 80..." maxlength="200" autocomplete="off">
-      <div class="assist-nav">
-        <span></span>
-        <button class="btn-next" id="s1Next" onclick="goTo(2)" disabled>Continue →</button>
-      </div>
+<div class="chat-page">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <div class="chat-avatar-large">G</div>
+      <div class="chat-header-title">Commission Assistant</div>
+      <div class="chat-header-sub">Good Ereseh &middot; Charcoal &amp; Graphite Artist &middot; London</div>
     </div>
-
-    <!-- Step 2: Occasion -->
-    <div class="step" id="step2">
-      <p class="step-counter">Step 2 of 5</p>
-      <h2 class="step-q">What is this <em>for?</em></h2>
-      <p class="step-hint">The occasion shapes everything — the weight, the mood, the detail.</p>
-      <div class="option-grid cols-1">
-        <button class="opt-btn" data-s2="Gift for someone special" onclick="selectOpt(this,'s2')">
-          <span class="opt-label">A gift for someone special</span>
-        </button>
-        <button class="opt-btn" data-s2="Memorial piece" onclick="selectOpt(this,'s2')">
-          <span class="opt-label">A memorial — preserving someone's memory</span>
-        </button>
-        <button class="opt-btn" data-s2="Family artwork" onclick="selectOpt(this,'s2')">
-          <span class="opt-label">A family artwork for the home</span>
-        </button>
-        <button class="opt-btn" data-s2="Personal collector piece" onclick="selectOpt(this,'s2')">
-          <span class="opt-label">A personal collector piece — for myself</span>
-        </button>
-        <button class="opt-btn" data-s2="Other" onclick="selectOpt(this,'s2')">
-          <span class="opt-label">Something else</span>
-        </button>
-      </div>
-      <div class="assist-nav">
-        <button class="btn-back" onclick="goTo(1)">← Back</button>
-        <button class="btn-next" id="s2Next" onclick="goTo(3)" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Mood -->
-    <div class="step" id="step3">
-      <p class="step-counter">Step 3 of 5</p>
-      <h2 class="step-q">What should it <em>communicate?</em></h2>
-      <p class="step-hint">Choose everything that feels right. These inform how the drawing is approached.</p>
-      <div class="mood-grid" id="moodGrid">
-        <button class="mood-chip" onclick="toggleMood(this)">Strength</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Tenderness</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Joy</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Nostalgia</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Power</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Serenity</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Elegance</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Warmth</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Gravity</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Playfulness</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Mystery</button>
-        <button class="mood-chip" onclick="toggleMood(this)">Legacy</button>
-      </div>
-      <div class="assist-nav">
-        <button class="btn-back" onclick="goTo(2)">← Back</button>
-        <button class="btn-next" id="s3Next" onclick="goTo(4)" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- Step 4: Size -->
-    <div class="step" id="step4">
-      <p class="step-counter">Step 4 of 5</p>
-      <h2 class="step-q">What <em>size</em> are you thinking?</h2>
-      <p class="step-hint">All prices are starting points — final quote after consultation.</p>
-      <div class="option-grid">
-        <button class="opt-btn" data-s4="A4 Portrait (from £250)" onclick="selectOpt(this,'s4')">
-          <span class="opt-label">A4 Portrait</span>
-          <span class="opt-sub">210 × 297mm · From £250</span>
-        </button>
-        <button class="opt-btn" data-s4="A3 Portrait (from £500)" onclick="selectOpt(this,'s4')">
-          <span class="opt-label">A3 Portrait</span>
-          <span class="opt-sub">297 × 420mm · From £500</span>
-        </button>
-        <button class="opt-btn" data-s4="A2 Collector Piece (from £900)" onclick="selectOpt(this,'s4')">
-          <span class="opt-label">A2 Collector Piece</span>
-          <span class="opt-sub">420 × 594mm · From £900</span>
-        </button>
-        <button class="opt-btn" data-s4="Large Custom Artwork (from £1,500)" onclick="selectOpt(this,'s4')">
-          <span class="opt-label">Large Custom</span>
-          <span class="opt-sub">Above A2 · From £1,500</span>
-        </button>
-      </div>
-      <div class="assist-nav">
-        <button class="btn-back" onclick="goTo(3)">← Back</button>
-        <button class="btn-next" id="s4Next" onclick="goTo(5)" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- Step 5: Details -->
-    <div class="step" id="step5">
-      <p class="step-counter">Step 5 of 5</p>
-      <h2 class="step-q">Anything else I should <em>know?</em></h2>
-      <p class="step-hint">Describe the person — how they carry themselves, what makes them them. The more you give, the more the drawing can hold.</p>
-      <textarea class="assist-textarea" id="s5Input" placeholder="e.g. She has kind eyes and always wore her silver hair up. She laughed easily and loved her garden. I want the portrait to feel warm but dignified..." maxlength="800"></textarea>
-      <div class="assist-nav">
-        <button class="btn-back" onclick="goTo(4)">← Back</button>
-        <button class="btn-next" onclick="generateConcept()">See your concept →</button>
-      </div>
-    </div>
-
-    <!-- Step 6: Result -->
-    <div class="step" id="step6">
-      <div class="result-layout">
-
-        <!-- Concept image -->
-        <div class="concept-panel">
-          <div class="concept-loading" id="conceptLoading">
-            <div class="concept-loading-bar"><div class="concept-loading-fill"></div></div>
-            <div class="concept-loading-text">Generating your concept</div>
-          </div>
-          <img class="concept-img" id="conceptImg" src="" alt="AI concept sketch" style="display:none" onload="conceptLoaded()" onerror="conceptFailed()">
-          <p class="concept-note">This is an AI-generated concept based on your description. The actual charcoal drawing will be a unique handmade artwork — far richer in detail and character.</p>
-        </div>
-
-        <!-- Brief + form -->
-        <div class="brief-panel">
-          <h2 class="brief-title">Your commission brief</h2>
-
-          <div class="brief-rows" id="briefRows"></div>
-
-          <div class="brief-fields">
-            <div class="brief-field">
-              <label for="briefName">Your Name *</label>
-              <input type="text" id="briefName" placeholder="Full name" required>
-            </div>
-            <div class="brief-field">
-              <label for="briefEmail">Email Address *</label>
-              <input type="email" id="briefEmail" placeholder="your@email.com" required>
-            </div>
-          </div>
-
-          <button class="btn-send" id="sendBtn" onclick="submitBrief()">Send this brief to Good Ereseh</button>
-          <div class="error-msg" id="sendError"></div>
-
-          <div class="send-success" id="sendSuccess">
-            <strong style="font-family:var(--serif);font-size:18px;font-weight:300;color:var(--p2)">Brief received.</strong><br><br>
-            Thank you — I'll review your commission brief and respond within two business days to discuss the next steps.
-          </div>
-        </div>
-
-      </div>
-    </div>
-
+    <div class="chat-messages" id="chatMessages"></div>
   </div>
 </div>
 
-<footer class="footer-mono">
-  <div class="footer-glyph" aria-hidden="true">G · E</div>
-  <div class="footer-social">
-    <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
-    </a>
-    <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-    </a>
-  </div>
-  <div class="footer-grid">
-    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/benjamin">In God We Trust</a></li><li><a href="/artworks/lips">Unspoken</a></li></ul></div>
-    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/privacy-policy.html">Privacy</a></li><li><a href="/terms-and-conditions.html">Terms</a></li></ul></div>
-  </div>
-  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/shipping-policy.html">Shipping</a><a href="/returns-policy.html">Returns</a></div></div>
-</footer>
+<div class="chat-input-area" id="chatInputArea"></div>
 
 <script>
-const API = 'https://goodereseh-website-production.up.railway.app';
+const API='https://goodereseh-website-production.up.railway.app';
+const chat=document.getElementById('chatMessages');
+const answers={};
 
-/* ── State ── */
-const answers = { subject:'', occasion:'', moods:[], size:'', details:'' };
+function scrollDown(){setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),80);}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
-/* ── Progress ── */
-const STEPS = 6;
-function setProgress(n) {
-  document.getElementById('progressFill').style.width = ((n-1)/(STEPS-1)*100) + '%';
+function addMsg(role,html){
+  const isAI=role==='ai';
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML=isAI?'<div class="msg-avatar">G</div><div class="msg-bubble">'+html+'</div>':'<div class="msg-bubble">'+html+'</div>';
+  chat.appendChild(div);scrollDown();return div;
 }
 
-/* ── Navigation ── */
-function goTo(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  const next = document.getElementById('step'+n);
-  setTimeout(() => next.classList.add('active'), 10);
-  setProgress(n);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+async function aiSay(html,delay=900){
+  const t=addMsg('ai','<div class="typing-dots"><span></span><span></span><span></span></div>');
+  await wait(delay);t.remove();addMsg('ai',html);await wait(100);scrollDown();
 }
 
-/* ── Step 1: subject input ── */
-const s1 = document.getElementById('s1Input');
-const s1Btn = document.getElementById('s1Next');
-s1.addEventListener('input', () => {
-  answers.subject = s1.value.trim();
-  s1Btn.disabled = answers.subject.length < 2;
-});
-s1.addEventListener('keydown', e => { if (e.key === 'Enter' && answers.subject.length >= 2) goTo(2); });
-
-/* ── Step 2: occasion ── */
-function selectOpt(btn, key) {
-  btn.closest('.option-grid').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  answers[key] = btn.dataset[key];
-  document.getElementById(key === 's2' ? 's2Next' : 's4Next').disabled = false;
-}
-
-/* ── Step 3: moods ── */
-function toggleMood(btn) {
-  btn.classList.toggle('selected');
-  answers.moods = [...document.querySelectorAll('.mood-chip.selected')].map(c => c.textContent.trim());
-  document.getElementById('s3Next').disabled = answers.moods.length === 0;
-}
-
-/* ── Step 5: details ── */
-document.getElementById('s5Input').addEventListener('input', function() {
-  answers.details = this.value.trim();
-});
-
-/* ── Generate concept ── */
-function generateConcept() {
-  answers.details = document.getElementById('s5Input').value.trim();
-  goTo(6);
-
-  // Build brief rows
-  const briefData = [
-    { label: 'Subject',   value: answers.subject },
-    { label: 'Occasion',  value: answers.s2 || answers.occasion },
-    { label: 'Mood',      value: answers.moods.join(', ') },
-    { label: 'Size',      value: answers.s4 || answers.size },
-    { label: 'Details',   value: answers.details || '—' },
-  ];
-
-  const rows = briefData.map(r => `
-    <div class="brief-row">
-      <span class="brief-label">${r.label}</span>
-      <span class="brief-value">${r.value}</span>
-    </div>`).join('');
-  document.getElementById('briefRows').innerHTML = rows;
-
-  // Build Pollinations.ai prompt
-  const mood = answers.moods.slice(0,3).join(' ') || 'dignified';
-  const prompt = `hyperrealistic charcoal graphite portrait drawing ${answers.subject} ${mood} black and white fine art pencil on paper dramatic lighting detailed`;
-  const seed = Math.floor(Math.random() * 9999);
-  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=480&height=600&nologo=true&seed=${seed}`;
-
-  const img = document.getElementById('conceptImg');
-  img.src = imageUrl;
-}
-
-function conceptLoaded() {
-  document.getElementById('conceptLoading').style.display = 'none';
-  document.getElementById('conceptImg').style.display = 'block';
-}
-
-function conceptFailed() {
-  document.getElementById('conceptLoading').innerHTML = `
-    <div style="font-size:11px;color:var(--g1);text-align:center;padding:20px;line-height:1.7">
-      Concept image unavailable right now.<br>Your brief has all the detail we need.
-    </div>`;
-}
-
-/* ── Submit brief ── */
-async function submitBrief() {
-  const name  = document.getElementById('briefName').value.trim();
-  const email = document.getElementById('briefEmail').value.trim();
-  const errEl = document.getElementById('sendError');
-  const btn   = document.getElementById('sendBtn');
-
-  errEl.style.display = 'none';
-
-  if (!name || !email) {
-    errEl.textContent = 'Please enter your name and email.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  const message = [
-    `Subject: ${answers.subject}`,
-    `Occasion: ${answers.s2 || ''}`,
-    `Mood: ${answers.moods.join(', ')}`,
-    `Size: ${answers.s4 || ''}`,
-    `Details: ${answers.details || 'None provided'}`,
-  ].join('\n');
-
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(`${API}/commission`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        email,
-        'commission-type': answers.s2 || 'From assistant',
-        size: answers.s4 || '',
-        message,
-      })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Something went wrong.');
-    btn.style.display = 'none';
-    document.getElementById('sendSuccess').style.display = 'block';
-  } catch (err) {
-    errEl.textContent = err.message || 'Something went wrong. Please email art@goodereseh.com directly.';
-    errEl.style.display = 'block';
-    btn.textContent = 'Send this brief to Good Ereseh';
-    btn.disabled = false;
-  }
-}
-
-/* ── Nav / cursor ── */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
-
-const dot = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
-if (window.matchMedia('(pointer: fine)').matches) {
-  let mx=0,my=0,rx=0,ry=0,tt=0;
-  document.addEventListener('mousemove', e => {
-    mx=e.clientX; my=e.clientY;
-    dot.style.left=mx+'px'; dot.style.top=my+'px';
-    clearTimeout(tt);
-    tt=setTimeout(()=>{
-      const t=document.createElement('div');
-      t.className='cursor-trail';
-      t.style.left=mx+'px'; t.style.top=my+'px';
-      document.body.appendChild(t);
-      t.addEventListener('animationend',()=>t.remove());
-    },16);
-  });
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
-  document.querySelectorAll('a,button').forEach(el=>{
+function showInput(html){
+  const a=document.getElementById('chatInputArea');
+  a.innerHTML='<div class="chat-input-inner">'+html+'</div>';
+  a.classList.add('visible');
+  a.querySelectorAll('a,button,input,textarea').forEach(el=>{
     el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
   });
 }
+function hideInput(){const a=document.getElementById('chatInputArea');a.classList.remove('visible');a.innerHTML='';}
+
+async function start(){
+  await wait(600);
+  await aiSay('<p>Hello. I'm the commission assistant for Good Ereseh.</p><p>I'll help you build a portrait brief in five questions — then generate an AI concept so you can see the direction before committing.</p>',700);
+  showInput('<button class="chat-send-btn" style="width:100%;padding:14px;" onclick="step1()">Begin &rarr;</button>');
+}
+
+async function step1(){
+  hideInput();
+  await aiSay('<p>Who is this portrait of?</p>',600);
+  showInput('<div class="chat-text-row"><input class="chat-text-input" id="s1in" placeholder="e.g. My grandmother Rose, aged 80&hellip;" maxlength="200" autocomplete="off"><button class="chat-send-btn" id="s1btn" onclick="submitStep1()" disabled>Send</button></div>');
+  const inp=document.getElementById('s1in'),btn=document.getElementById('s1btn');
+  inp.addEventListener('input',()=>{btn.disabled=inp.value.trim().length<2;});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!btn.disabled)submitStep1();});
+  setTimeout(()=>inp.focus(),100);
+}
+
+async function submitStep1(){
+  const val=document.getElementById('s1in').value.trim();
+  if(val.length<2)return;
+  answers.subject=val;hideInput();addMsg('user','<p>'+val+'</p>');await step2();
+}
+
+async function step2(){
+  const first=answers.subject.split(' ')[0];
+  await aiSay('<p>'+first+' &mdash; a meaningful subject.</p><p>What is this commission for?</p>',800);
+  const opts=['A gift for someone special','A memorial &mdash; preserving someone's memory','A family artwork for the home','A personal collector piece','Something else'];
+  showInput('<div class="chat-options">'+opts.map((o,i)=>'<button class="chat-opt" onclick="submitStep2(''+['gift','memorial','family','personal','other'][i]+'',''+o+'')">'+o+'</button>').join('')+'</div>');
+}
+
+async function submitStep2(key,label){
+  answers.occasion=label;hideInput();addMsg('user','<p>'+label+'</p>');await step3();
+}
+
+async function step3(){
+  await aiSay('<p>Understood. What should this artwork communicate?</p><p>Choose everything that resonates.</p>',800);
+  const moods=['Strength','Tenderness','Joy','Nostalgia','Power','Serenity','Elegance','Warmth','Gravity','Mystery','Legacy','Playfulness'];
+  answers.moods=[];
+  showInput('<div class="chat-moods" id="moodContainer">'+moods.map(m=>'<button class="mood-chip" onclick="toggleMood(this,''+m+'')">'+m+'</button>').join('')+'</div><button class="chat-mood-confirm" id="moodConfirm" onclick="submitStep3()" disabled>Continue &rarr;</button>');
+}
+
+function toggleMood(btn,val){
+  btn.classList.toggle('on');
+  if(btn.classList.contains('on')){if(!answers.moods.includes(val))answers.moods.push(val);}
+  else{answers.moods=answers.moods.filter(m=>m!==val);}
+  const c=document.getElementById('moodConfirm');
+  if(c){c.disabled=answers.moods.length===0;c.classList.toggle('ready',answers.moods.length>0);}
+}
+
+async function submitStep3(){
+  if(!answers.moods.length)return;
+  hideInput();addMsg('user','<p>'+answers.moods.join(', ')+'</p>');await step4();
+}
+
+async function step4(){
+  const mood=answers.moods.slice(0,2).join(' and ').toLowerCase();
+  await aiSay('<p>'+(mood.charAt(0).toUpperCase()+mood.slice(1))+' &mdash; noted. What size are you thinking?</p>',800);
+  const sizes=[{l:'A4 Portrait',s:'210 × 297mm · From £250'},{l:'A3 Portrait',s:'297 × 420mm · From £500'},{l:'A2 Collector Piece',s:'420 × 594mm · From £900'},{l:'Large Custom',s:'Above A2 · From £1,500'}];
+  showInput('<div class="chat-options">'+sizes.map(s=>'<button class="chat-opt" onclick="submitStep4(''+s.l+' ('+s.s+')')"><span style="color:var(--p1)">'+s.l+'</span><span style="display:block;font-size:10px;color:var(--g0);margin-top:2px;letter-spacing:.06em">'+s.s+'</span></button>').join('')+'</div>');
+}
+
+async function submitStep4(val){
+  answers.size=val;hideInput();addMsg('user','<p>'+val+'</p>');await step5();
+}
+
+async function step5(){
+  const first=answers.subject.split(' ')[0];
+  await aiSay('<p>One last question.</p><p>Tell me about '+first+' &mdash; how they carry themselves, what makes them them. The more you share, the more the drawing can hold.</p>',900);
+  showInput('<div style="display:flex;flex-direction:column;gap:8px;"><textarea id="s5in" rows="3" style="background:var(--c1);border:1px solid rgba(189,179,168,.1);padding:12px 14px;resize:none;width:100%;font-size:14px;color:var(--p1);font-family:var(--sans);outline:none;line-height:1.7;caret-color:#0ea5e9;" placeholder="e.g. She has kind eyes and always wore her silver hair up&hellip;" maxlength="600"></textarea><button class="chat-send-btn" style="align-self:flex-end;padding:11px 28px;" onclick="submitStep5()">Generate my concept &rarr;</button></div>');
+}
+
+async function submitStep5(){
+  const val=document.getElementById('s5in').value.trim();
+  answers.details=val;hideInput();
+  if(val)addMsg('user','<p>'+val+'</p>');
+  await aiSay('<p>Perfect. I have everything I need.</p><p>Generating your portrait concept now&hellip;</p>',700);
+  await wait(600);runGeneration();
+}
+
+async function runGeneration(){
+  const overlay=document.getElementById('genOverlay'),statusEl=document.getElementById('genStatusText'),barFill=document.getElementById('genBarFill'),genImg=document.getElementById('genImg'),genNoise=document.getElementById('genNoise');
+  overlay.classList.add('active');
+  const phases=[{text:'Analysing your description',pct:20},{text:'Composing portrait structure',pct:45},{text:'Rendering charcoal detail',pct:70},{text:'Finalising concept',pct:90}];
+  const mood=answers.moods.slice(0,3).join(' ')||'dignified';
+  const prompt='hyperrealistic charcoal graphite portrait '+answers.subject+' '+mood+' black white fine art pencil drawing on cotton paper dramatic lighting professional artwork';
+  const seed=Math.floor(Math.random()*9999);
+  const imageUrl='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt)+'?width=480&height=600&nologo=true&seed='+seed;
+  genImg.src=imageUrl;
+  for(const phase of phases){
+    statusEl.style.opacity='0';await wait(200);
+    statusEl.textContent=phase.text;statusEl.style.opacity='1';
+    barFill.style.width=phase.pct+'%';await wait(1200);
+  }
+  await new Promise(resolve=>{
+    if(genImg.complete&&genImg.naturalWidth>0){resolve();}
+    else{genImg.onload=resolve;genImg.onerror=resolve;setTimeout(resolve,9000);}
+  });
+  statusEl.textContent='Concept ready';barFill.style.width='100%';
+  genNoise.style.opacity='0';genImg.style.opacity='1';
+  await wait(2000);
+  overlay.classList.remove('active');
+  await showResult(imageUrl);
+}
+
+async function showResult(imageUrl){
+  await aiSay('<p>Here's your portrait concept, based on everything you've shared.</p>',600);
+  addMsg('ai','<div class="concept-in-chat"><img src="'+imageUrl+'" alt="AI Portrait Concept"><div class="concept-in-chat-note">AI concept based on your description. The actual charcoal drawing will be far richer &mdash; built by hand over weeks.</div></div>');
+  await wait(1000);
+  await aiSay('<p>To send this brief to Good Ereseh, enter your details below. You'll hear back within two business days.</p>',900);
+  addMsg('ai','<div class="brief-form-msg" id="briefForm"><input type="text" id="briefName" placeholder="Your full name" required><input type="email" id="briefEmail" placeholder="Email address" required><button class="btn-send-brief" id="sendBriefBtn" onclick="submitBrief()">Send brief to Good Ereseh &rarr;</button><div class="send-err" id="sendErr"></div></div><div class="send-done" id="sendDone"><strong style="font-family:var(--serif);font-size:17px;font-weight:300;color:var(--p2)">Brief received.</strong><br><br>Good Ereseh will review your commission and respond within two business days.</div>');
+  scrollDown();
+}
+
+async function submitBrief(){
+  const name=document.getElementById('briefName').value.trim(),email=document.getElementById('briefEmail').value.trim();
+  const errEl=document.getElementById('sendErr'),btn=document.getElementById('sendBriefBtn');
+  if(!name||!email){errEl.textContent='Please enter your name and email.';errEl.style.display='block';return;}
+  const message=['Subject: '+answers.subject,'Occasion: '+answers.occasion,'Mood: '+answers.moods.join(', '),'Size: '+answers.size,'Details: '+(answers.details||'None provided')].join('
+');
+  btn.textContent='Sending…';btn.disabled=true;errEl.style.display='none';
+  try{
+    const res=await fetch(API+'/commission',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,'commission-type':answers.occasion||'AI Assistant',size:answers.size||'',message})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Something went wrong.');
+    document.getElementById('briefForm').style.display='none';
+    document.getElementById('sendDone').style.display='block';
+    scrollDown();
+  }catch(err){
+    errEl.textContent=err.message||'Something went wrong. Please email art@goodereseh.com directly.';
+    errEl.style.display='block';btn.textContent='Send brief to Good Ereseh →';btn.disabled=false;
+  }
+}
+
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+if(window.matchMedia('(pointer: fine)').matches){
+  let mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});
+}
+start();
 </script>
 </body>
 </html>

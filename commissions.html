@@ -12,9 +12,9 @@
 <style>
 /* Commission types */
 .assistant-cta {
-  background: var(--c2);
+  background: var(--ink);
   border-bottom: 1px solid rgba(189,179,168,.07);
-  padding: 28px 64px;
+  padding: 32px 64px;
 }
 
 .assistant-cta-inner {
@@ -22,7 +22,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  max-width: 1100px;
 }
 
 .assistant-cta-label {
@@ -40,29 +39,62 @@
   line-height: 1.6;
 }
 
+/* Animated AI button */
 .assistant-cta-btn {
   flex-shrink: 0;
-  padding: 13px 28px;
-  border: 1px solid rgba(189,179,168,.2);
-  color: var(--p1);
+  position: relative;
+  padding: 14px 32px;
   font-size: 9px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: .18em;
   text-transform: uppercase;
+  color: #fff;
   white-space: nowrap;
-  transition: border-color .3s, background .3s, color .3s;
+  border: none;
+  cursor: none;
+  z-index: 0;
+  display: inline-block;
+  background: transparent;
 }
 
-.assistant-cta-btn:hover {
-  border-color: var(--g3);
-  background: var(--g3);
-  color: var(--ink);
+/* Animated gradient background */
+.assistant-cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
+  background-size: 300% 100%;
+  animation: aiFlow 3s ease infinite;
+  z-index: -1;
 }
+
+/* Glow effect */
+.assistant-cta-btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, #4f46e5, #0ea5e9, #06b6d4, #7c3aed, #4f46e5);
+  background-size: 300% 100%;
+  animation: aiFlow 3s ease infinite;
+  z-index: -2;
+  filter: blur(8px);
+  opacity: .5;
+}
+
+@keyframes aiFlow {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
+}
+
+.assistant-cta-btn:hover::after { opacity: .8; filter: blur(12px); }
 
 @media (max-width: 960px) {
   .assistant-cta { padding: 28px; }
   .assistant-cta-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .assistant-cta-btn { align-self: flex-start; }
 }
+
 
 /* Commission types */
 .commission-types {
@@ -387,7 +419,7 @@
       <p class="assistant-cta-label">Not sure where to start?</p>
       <p class="assistant-cta-desc">Answer five questions, see an AI concept of your portrait, then send your brief — all in one flow.</p>
     </div>
-    <a href="/commission-assistant" class="assistant-cta-btn">Try the Commission Assistant →</a>
+    <a href="/commission-assistant" class="assistant-cta-btn">Try the Commission Ai Assistant →</a>
   </div>
 </div>
 
