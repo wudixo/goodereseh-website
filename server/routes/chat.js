@@ -1,12 +1,10 @@
 module.exports = function (app) {
 
     app.get("/chat-test", function (req, res) {
-
         res.json({
             status: "working",
             google_key_set: !!process.env.GOOGLE_API_KEY
         });
-
     });
 
 
@@ -20,62 +18,51 @@ module.exports = function (app) {
             const system = req.body.system || "";
 
             if (!messages || !messages.length) {
-
                 return res.status(400).json({
                     error: "No messages"
                 });
-
             }
 
             if (!process.env.GOOGLE_API_KEY) {
-
                 return res.status(500).json({
                     error: "GOOGLE_API_KEY not set"
                 });
-
             }
 
 
-            const contents = [];
+            const input = [];
 
 
             for (const message of messages) {
 
                 const role =
                     message.role === "assistant"
-                        ? "model"
-                        : "user";
+                        ? "Assistant"
+                        : "User";
 
 
-                const parts =
-                    convertParts(message.content);
+                const parts = normalizeContent(
+                    message.content,
+                    role
+                );
 
 
-                if (parts.length) {
-
-                    contents.push({
-                        role: role,
-                        parts: parts
-                    });
-
-                }
-
+                input.push(...parts);
             }
 
 
             const body = {
+                model: "gemini-3.5-flash",
 
-                model: "gemini-3.6-flash",
-
-                input: buildInteractionInput(contents),
+                input: input,
 
                 system_instruction:
                     system || undefined,
 
                 generation_config: {
-                    max_output_tokens: 1000
+                    max_output_tokens: 1000,
+                    thinking_level: "minimal"
                 }
-
             };
 
 
@@ -86,7 +73,8 @@ module.exports = function (app) {
 
                     headers: {
                         "Content-Type": "application/json",
-                        "x-goog-api-key": process.env.GOOGLE_API_KEY
+                        "x-goog-api-key":
+                            process.env.GOOGLE_API_KEY
                     },
 
                     body: JSON.stringify(body)
@@ -94,15 +82,14 @@ module.exports = function (app) {
             );
 
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
 
             if (!response.ok) {
 
                 console.error(
                     "[CHAT] Gemini API error:",
-                    data
+                    JSON.stringify(data)
                 );
 
                 return res.status(
@@ -112,13 +99,25 @@ module.exports = function (app) {
                         data?.error?.message ||
                         "Gemini request failed"
                 });
-
             }
 
 
             const text =
-                extractText(data) ||
-                "Thank you. Could you tell me a little more about what you have in mind for this commission?";
+                extractText(data);
+
+
+            if (!text || !text.trim()) {
+
+                console.error(
+                    "[CHAT] No output text:",
+                    JSON.stringify(data)
+                );
+
+                return res.status(500).json({
+                    error:
+                        "Gemini returned no text"
+                });
+            }
 
 
             console.log(
@@ -140,7 +139,6 @@ module.exports = function (app) {
                 error
             );
 
-
             res.status(500).json({
                 error:
                     error.message ||
@@ -155,34 +153,45 @@ module.exports = function (app) {
 
 
 
-function convertParts(content) {
+function normalizeContent(
+    content,
+    role
+) {
+
+    const parts = [];
+
 
     if (!content) {
-        return [];
+        return parts;
     }
 
 
     if (typeof content === "string") {
 
-        return [{
+        parts.push({
             type: "text",
-            text: content
-        }];
+            text:
+                role +
+                ": " +
+                content
+        });
 
+        return parts;
     }
 
 
     if (!Array.isArray(content)) {
 
-        return [{
+        parts.push({
             type: "text",
-            text: String(content)
-        }];
+            text:
+                role +
+                ": " +
+                String(content)
+        });
 
+        return parts;
     }
-
-
-    const parts = [];
 
 
     for (const item of content) {
@@ -194,7 +203,10 @@ function convertParts(content) {
 
             parts.push({
                 type: "text",
-                text: item.text
+                text:
+                    role +
+                    ": " +
+                    item.text
             });
 
         }
@@ -207,20 +219,14 @@ function convertParts(content) {
         ) {
 
             parts.push({
-
                 type: "image",
 
-                inline_data: {
+                data:
+                    item.source.data,
 
-                    mime_type:
-                        item.source.media_type ||
-                        "image/jpeg",
-
-                    data:
-                        item.source.data
-
-                }
-
+                mime_type:
+                    item.source.media_type ||
+                    "image/jpeg"
             });
 
         }
@@ -234,62 +240,13 @@ function convertParts(content) {
 
 
 
-function buildInteractionInput(contents) {
-
-    const input = [];
-
-
-    for (const message of contents) {
-
-        for (const part of message.parts) {
-
-            if (
-                part.type === "text"
-            ) {
-
-                input.push({
-                    type: "text",
-                    text:
-                        message.role === "model"
-                            ? "Assistant: " + part.text
-                            : "User: " + part.text
-                });
-
-            }
-
-
-            if (
-                part.type === "image"
-            ) {
-
-                input.push({
-                    type: "image",
-                    inline_data:
-                        part.inline_data
-                });
-
-            }
-
-        }
-
-    }
-
-
-    return input;
-
-}
-
-
-
 function extractText(data) {
 
     if (
         typeof data.output_text ===
         "string"
     ) {
-
         return data.output_text;
-
     }
 
 
@@ -297,7 +254,8 @@ function extractText(data) {
         Array.isArray(data.outputs)
     ) {
 
-        const pieces = [];
+        const textParts = [];
+
 
         for (const output of data.outputs) {
 
@@ -307,19 +265,44 @@ function extractText(data) {
                 "string"
             ) {
 
-                pieces.push(
+                textParts.push(
                     output.text
                 );
 
             }
 
+
+            if (
+                output &&
+                Array.isArray(output.content)
+            ) {
+
+                for (
+                    const part of output.content
+                ) {
+
+                    if (
+                        part &&
+                        typeof part.text ===
+                        "string"
+                    ) {
+
+                        textParts.push(
+                            part.text
+                        );
+
+                    }
+
+                }
+
+            }
+
         }
 
-        return pieces.join("\n");
 
+        return textParts.join("\n");
     }
 
 
     return "";
-
 }
