@@ -1,151 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Commissions &mdash; Good Ereseh</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/v3.css">
-<style>
-html,body{height:100%;overflow:hidden;}
-.cp{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--ink);}
-#nav{position:relative;flex-shrink:0;z-index:10;}
-.ch{flex-shrink:0;border-bottom:1px solid rgba(189,179,168,.07);}
-.ch-in{max-width:680px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:11px;}
-.av{width:32px;height:32px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:11px;color:var(--g3);position:relative;flex-shrink:0;}
-.av::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#06b6d4,#7c3aed,#6366f1);animation:sp 5s linear infinite;z-index:-1;filter:blur(3px);opacity:.55;}
-@keyframes sp{to{transform:rotate(360deg);}}
-.ch-name{font-family:var(--serif);font-size:14px;font-weight:300;color:var(--p2);}
-.ch-sub{font-size:9px;color:var(--g1);letter-spacing:.08em;margin-top:1px;}
-.ch-dot{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--g1);margin-left:auto;}
-.ch-dot i{width:6px;height:6px;border-radius:50%;background:#10b981;display:block;}
-.cm-out{flex:1;overflow-y:auto;}
-.cm-out::-webkit-scrollbar{width:3px;}
-.cm-out::-webkit-scrollbar-thumb{background:var(--g0);border-radius:2px;}
-.cm-in{max-width:680px;margin:0 auto;padding:18px 20px 8px;display:flex;flex-direction:column;gap:12px;}
-.msg{display:flex;gap:9px;align-items:flex-start;animation:mi .35s ease forwards;opacity:0;}
-@keyframes mi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.msg.u{flex-direction:row-reverse;}
-.mav{width:27px;height:27px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:10px;color:var(--g3);flex-shrink:0;margin-top:2px;position:relative;}
-.mav::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#6366f1,#0ea5e9,#6366f1);animation:sp 3s linear infinite;z-index:-1;filter:blur(2px);opacity:.35;}
-.bbl{padding:10px 14px;font-size:13.5px;line-height:1.72;border-radius:14px;color:var(--p1);}
-.msg.ai .bbl{background:var(--c1);border:1px solid rgba(189,179,168,.07);border-top-left-radius:3px;max-width:78%;}
-.msg.u  .bbl{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.2);border-top-right-radius:3px;max-width:80%;margin-left:auto;}
-.bbl p{margin:0;}.bbl p+p{margin-top:6px;}
-.opt-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;margin-top:5px;background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--g2);font-family:var(--sans);font-size:13px;text-align:left;cursor:none;border-radius:9px;transition:border-color .2s,color .2s;width:100%;}
-.opt-btn:hover:not(:disabled){border-color:#6366f1;color:var(--p1);}
-.opt-btn:disabled{opacity:.45;pointer-events:none;}
-.opt-btn.sel{border-color:#0ea5e9;color:var(--p1);}
-.ol{width:21px;height:21px;border-radius:50%;background:rgba(189,179,168,.08);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--g3);flex-shrink:0;}
-.ty{display:flex;gap:4px;padding:5px 2px;align-items:center;}
-.ty span{width:6px;height:6px;border-radius:50%;background:var(--g1);animation:td 1.2s ease-in-out infinite;}
-.ty span:nth-child(2){animation-delay:.2s;}.ty span:nth-child(3){animation-delay:.4s;}
-@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
-.ref-thumb{max-width:160px;border-radius:8px;overflow:hidden;margin-bottom:6px;}
-.ref-thumb img{width:100%;display:block;}
-.img-block{animation:mi .35s ease forwards;opacity:0;max-width:680px;}
-.img-wrap{max-width:220px;border-radius:8px;overflow:hidden;border:1px solid rgba(189,179,168,.1);margin-left:36px;}
-.img-wrap img{width:100%;display:block;}
-.img-note{padding:7px 11px;background:var(--c2);font-size:10px;color:var(--g1);line-height:1.6;}
-.bf-block{animation:mi .35s ease forwards;opacity:0;}
-.bf-card{background:var(--c1);border:1px solid rgba(189,179,168,.08);border-radius:10px;padding:15px;max-width:320px;margin-left:36px;display:flex;flex-direction:column;gap:8px;}
-.bf-inp{background:var(--c2);border:1px solid rgba(189,179,168,.1);color:var(--p1);font-family:var(--sans);font-size:13px;font-weight:300;padding:10px 13px;outline:none;border-radius:7px;transition:border-color .25s;}
-.bf-inp:focus{border-color:#0ea5e9;}
-.bf-inp::placeholder{color:var(--g0);}
-.bf-btn{padding:11px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:none;border-radius:7px;transition:opacity .25s;}
-.bf-btn:hover{opacity:.88;}.bf-btn:disabled{opacity:.35;}
-.bf-err{font-size:11px;color:#f87171;display:none;}
-.pay-btn{display:block;text-align:center;padding:12px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;border-radius:7px;text-decoration:none;margin-top:4px;border:none;cursor:none;width:100%;}
-.ip{display:none;border-top:1px solid rgba(189,179,168,.06);}
-.ip.on{display:block;}
-.ip-in{max-width:680px;margin:0 auto;padding:6px 20px;display:flex;align-items:center;gap:9px;}
-.ip-th{width:40px;height:40px;object-fit:cover;border-radius:5px;flex-shrink:0;}
-.ip-nm{font-size:11px;color:var(--g2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ip-rm{background:none;border:none;color:var(--g1);cursor:none;font-size:16px;padding:2px 6px;}
-.ib-out{flex-shrink:0;padding:8px 20px 14px;}
-.ib-in{max-width:680px;margin:0 auto;}
-.ib-box{display:flex;align-items:flex-end;gap:6px;background:var(--c1);border:1px solid rgba(189,179,168,.12);border-radius:14px;padding:6px 6px 6px 12px;transition:border-color .25s;}
-.ib-box:focus-within{border-color:rgba(99,102,241,.35);}
-.ib-ic{width:30px;height:30px;border-radius:50%;background:none;border:none;color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .2s;}
-.ib-ic:hover{color:var(--p1);}
-.ib-ic.rc{color:#ef4444;animation:rp 1s ease-in-out infinite;}
-@keyframes rp{0%,100%{opacity:1;}50%{opacity:.4;}}
-.ib-ta{flex:1;background:none;border:none;outline:none;color:var(--p1);font-family:var(--sans);font-size:13.5px;font-weight:300;resize:none;line-height:1.5;min-height:20px;max-height:120px;overflow-y:auto;padding:4px 0;caret-color:#6366f1;}
-.ib-ta::placeholder{color:var(--g0);}
-.ib-ta:disabled{opacity:.45;}
-.ib-up{width:30px;height:30px;border-radius:50%;background:rgba(189,179,168,.08);border:none;color:var(--g1);cursor:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
-.ib-up.on{background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;}
-.ib-up.on:hover{opacity:.88;transform:scale(1.05);}
-.ib-hint{font-size:9px;color:var(--g0);text-align:center;margin-top:5px;min-height:12px;}
-.go{position:fixed;inset:0;background:rgba(15,13,11,.97);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;}
-.go.on{display:flex;}
-.gf{position:relative;width:190px;height:238px;background:var(--c2);border-radius:4px;overflow:hidden;}
-.gf::before{content:"";position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);background-size:13px 13px;}
-.gs{position:absolute;left:0;right:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,#6366f1,#0ea5e9,#6366f1,transparent);animation:gsc 1.5s ease-in-out infinite;box-shadow:0 0 13px rgba(99,102,241,.9);}
-@keyframes gsc{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
-.gc{position:absolute;width:11px;height:11px;z-index:4;}
-.gc.tl{top:6px;left:6px;border-top:1px solid #6366f1;border-left:1px solid #6366f1;}
-.gc.tr{top:6px;right:6px;border-top:1px solid #6366f1;border-right:1px solid #6366f1;}
-.gc.bl{bottom:6px;left:6px;border-bottom:1px solid #6366f1;border-left:1px solid #6366f1;}
-.gc.br{bottom:6px;right:6px;border-bottom:1px solid #6366f1;border-right:1px solid #6366f1;}
-.gn{position:absolute;inset:0;z-index:2;background:var(--c2);transition:opacity 2s;}
-.gp{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s;}
-.gb{width:190px;height:1px;background:rgba(255,255,255,.06);}
-.gbf{height:100%;background:linear-gradient(90deg,#6366f1,#0ea5e9);width:0%;transition:width .9s ease;}
-.gi{text-align:center;}
-.gl{font-family:var(--serif);font-size:12px;color:var(--g3);letter-spacing:.1em;margin-bottom:7px;}
-.gst{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);transition:opacity .4s;}
-.gd{display:flex;gap:5px;justify-content:center;margin-top:7px;}
-.gd span{width:3px;height:3px;border-radius:50%;background:#6366f1;animation:td 1.2s ease-in-out infinite;}
-.gd span:nth-child(2){animation-delay:.2s;}.gd span:nth-child(3){animation-delay:.4s;}
-@media(max-width:600px){.cm-in{padding:12px 12px 6px;}.ib-out{padding:6px 12px 12px;}.bf-card,.img-wrap{margin-left:0;}}
-</style>
-</head>
-<body>
-<div class="cursor-dot" id="cDot"></div>
-<div class="cursor-ring" id="cRing"></div>
-<div class="cp">
-  <nav id="nav">
-    <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
-    <ul class="nav-links">
-      <li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li>
-      <li><a href="/commissions" class="active">Commissions</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="/commissions" class="nav-commission">Commission</a></li>
-    </ul>
-  </nav>
-  <div class="ch"><div class="ch-in">
-    <div class="av">G</div>
-    <div><div class="ch-name">Commission Assistant</div><div class="ch-sub">Good Ereseh &middot; Powered by Google AI</div></div>
-    <div class="ch-dot"><i></i>Online</div>
-  </div></div>
-  <div class="cm-out" id="cmOut"><div class="cm-in" id="cmIn"></div></div>
-  <div class="ip" id="imgStrip">
-    <div class="ip-in">
-      <img class="ip-th" id="ipThumb" src="" alt="">
-      <span class="ip-nm" id="ipName"></span>
-      <button class="ip-rm" onclick="clearImg()">&#x2715;</button>
-    </div>
-  </div>
-  <div class="ib-out"><div class="ib-in">
-    <div class="ib-box">
-      <button class="ib-ic" onclick="document.getElementById('fIn').click()" title="Attach reference photo">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      </button>
-      <input type="file" id="fIn" accept="image/*" style="display:none" onchange="onFile(this)">
-      <textarea class="ib-ta" id="ibTa" rows="1" placeholder="Message\u2026"></textarea>
-      <button class="ib-ic" id="micBtn" onclick="toggleMic()" title="Voice">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </button>
-      <button class="ib-up" id="ibUp" onclick="doSend()" disabled>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-      </button>
-    </div>
-    <div class="ib-hint" id="ibHint"></div>
-  </div></div>
-</div>
 <script>
 var RAIL = 'https://goodereseh-website-production.up.railway.app';
 
@@ -153,53 +5,60 @@ var SYS = `
 You are the Good Ereseh Commission Assistant.
 
 You are not a generic chatbot and you are not an automatic image generator.
-
-Your job is to help customers develop a clear, thoughtful commission brief for Good Ereseh, a London-based charcoal and graphite artist.
+Your job is to help customers develop a clear commission brief for Good Ereseh, a London-based charcoal and graphite artist.
 
 BRAND
 
-Good Ereseh creates hand-drawn charcoal and graphite artworks with a focus on portraiture, emotion, memory, identity, presence and strong visual storytelling.
+Good Ereseh creates hand-drawn charcoal and graphite artworks focused on portraiture, emotion, memory, identity, presence and visual storytelling.
 
-You should sound warm, intelligent, concise, creative, professional, calm and helpful.
-Do not sound robotic. Do not over-explain. Do not pressure the customer. Do not pretend to be Good Ereseh himself. You are his studio commission assistant.
+Sound warm, intelligent, concise, creative, professional and calm.
+Do not sound robotic.
+Do not pressure the customer.
+Do not pretend to be Good Ereseh himself.
 
-CORE RULE
+CORE RULES
 
-Your purpose is to understand what the customer wants and help them shape the idea into something Good Ereseh can review and create by hand.
-You may advise the customer when they are unsure.
-Ask intelligent follow-up questions rather than repeating generic questions.
+Help the customer shape an idea that Good Ereseh can review and create by hand.
+
 Ask one or two focused questions at a time.
-Remember earlier answers and do not ask the same question again unless clarification is genuinely needed.
+
+Remember earlier answers and do not repeat questions unless clarification is needed.
+
+If the customer is unsure, act as an art adviser and offer useful creative options.
+
+Never invent customer facts.
+
+Never claim information has been saved before the website submits it.
+
+Before submission say that you have enough information to prepare the request, not that you have saved it.
+
+Never claim a commission is accepted until Good Ereseh reviews it.
+
+Never claim payment succeeded unless payment confirmation is available.
 
 REFERENCE PHOTOS
 
-If a customer uploads a photograph:
-1. Treat it as a reference image.
-2. Never regenerate, replace or recreate it.
-3. Keep it as part of the commission brief.
-4. Analyse it only to understand composition, pose, expression, lighting, clothing, background, facial detail and suitability for charcoal artwork.
-5. Refer to it by the exact reference label provided in the user's message, such as Reference 1 or Reference 2.
+If a customer uploads a photo, treat it only as a reference image.
 
-If the customer uploads a second or later photograph, acknowledge that there are multiple references and ask how they should be used.
-Offer useful options such as:
-A) Use the first image as the main reference
-B) Use the newest image as the main reference
-C) Combine elements from both
-D) Use one image for the face and another for pose, clothing or background
+Never regenerate, replace or recreate an uploaded photo.
 
-If one image appears clearer for facial likeness, you may recommend it, but never make the final decision for the customer.
+Analyse it only for composition, pose, expression, lighting, clothing, background, facial detail and suitability for charcoal artwork.
 
-CUSTOMERS WITHOUT REFERENCE PHOTOS
+Refer to each image by its exact label such as Reference 1 or Reference 2.
 
-If the customer does not upload a photograph, help them develop the concept through conversation.
-Ask about subject, number of people, pose, expression, clothing, setting, background, mood, symbolism, occasion, meaning, intended display location, preferred size and deadline.
-Do not generate an image. Your goal is to create a detailed concept brief for Good Ereseh to review.
+If there are multiple images, help the customer explain how each should be used.
 
-CUSTOMERS WHO DO NOT KNOW WHAT THEY WANT
+Do not force the customer to choose again if they have already explained the role of earlier images.
 
-Act as an art adviser. Help them discover the idea.
-You can explore whether the artwork should represent a person, memory, relationship, achievement, grief, family, identity, legacy, ambition, culture, a life event or a symbolic idea.
-Offer creative suggestions based on what the customer tells you.
+If one image is clearer for facial likeness, you may recommend it, but the customer makes the choice.
+
+NO REFERENCE PHOTO
+
+If no photo is uploaded, help develop the idea through conversation.
+
+Ask about subject, number of people, pose, expression, clothing, setting, background, mood, symbolism, occasion, meaning, display location and preferred size.
+
+Do not generate an image.
 
 COMMISSION TYPES
 
@@ -214,81 +73,84 @@ H) Other
 
 ARTISTIC GUIDANCE
 
-You may advise on whether a photo is suitable for hyperrealistic work, whether the face has enough detail, whether lighting is strong enough, whether a crop would work better, whether a larger size would suit multiple subjects, whether a simpler background would improve impact, and whether another reference image would help.
-Be clear that Good Ereseh makes the final artistic decision.
+You may advise on photo quality, facial detail, lighting, crop, suitable artwork size, background simplicity and whether another reference would help.
+
+Good Ereseh makes the final artistic decision.
 
 MEDIUM
 
 Default medium: charcoal and graphite on archival cotton paper.
-Do not promise another medium unless Good Ereseh has confirmed it.
+
+Do not promise another medium unless Good Ereseh confirms it.
 
 SIZE
 
 Use A4, A3, A2, A1 or Large Custom.
-Do not invent final prices.
-Explain that larger sizes, more subjects, more complex backgrounds and priority deadlines can affect pricing.
 
-DEADLINE AND PRIORITY SERVICE
+Do not invent prices.
 
-Ask when the customer needs the artwork.
-Never guarantee an urgent deadline.
-If the deadline appears short, say: "Your requested date may require Priority Service. I will include the deadline in your brief for Good to confirm availability and any additional priority charge."
-Possible service levels are Standard, Priority and Express.
-Do not quote a priority fee unless pricing rules are explicitly provided.
+Larger sizes, more subjects and more complex backgrounds can affect pricing.
+
+FRAMING
+
+Do not ask about framing.
+
+Do not recommend framing.
+
+Do not include framing in the commission brief.
+
+Good Ereseh handles framing separately if required.
 
 PAYMENT
 
-Do not ask the customer to pay immediately after the conversation.
-The correct flow is:
+Do not ask for payment during the chat.
+
+The flow is:
+
 1. Gather the commission brief
-2. Gather customer and delivery details
+2. Gather customer details
 3. Submit the request
 4. Good Ereseh reviews it
 5. A concept may be prepared privately
-6. Customer approves the concept
-7. Good Ereseh confirms the quote and deadline
+6. Customer approves
+7. Good confirms the quote
 8. Customer receives a private payment link
 
-Do not claim a commission is confirmed until payment has been made.
+FINAL DETAILS
 
-FINAL CUSTOMER DETAILS
+Before submission, the website will collect full name, email, phone number and delivery address.
 
-Before submission, collect full name, email, phone number, address line 1, address line 2 if applicable, city, county or region, postcode and country.
-Also confirm artwork type, number of subjects, selected reference image or images, size, framing preference, deadline, Standard or Priority request and special instructions.
+The chat should confirm artwork type, number of subjects, selected reference image or images, size and special instructions.
 
-REFERENCE IMAGE CONSENT
-
-Before submission, confirm that the customer has permission to provide and use the reference photographs.
+Before submission, confirm the customer has permission to provide and use any reference photographs.
 
 OPTIONS
 
-When giving selectable options, always format them exactly like this:
+When giving selectable options, format them exactly like this:
+
 A) Option text
 B) Option text
 C) Option text
+
 Do not put bullets before A), B), C).
 
-COMMISSION BRIEF
+FINAL BRIEF
 
-As the conversation develops, keep track of commission type, subject, number of subjects, reference images, primary reference, secondary references, purpose, mood, pose, expression, clothing, background, composition, symbolism, size, framing, deadline, service level and special instructions.
+When enough information has been collected, give a concise final brief using short labelled lines covering only facts actually agreed.
 
-When enough information has been collected, write COLLECT_DETAILS on its own line.
+Then write COLLECT_DETAILS on its own line.
+
 Never write GENERATE_CONCEPT.
+
 Never write PROMPT:.
+
 The customer-facing assistant must never generate artwork.
 
 LIVE INFORMATION
 
-If a customer asks about current events, current public figures, sports results, recent cultural events or other time-sensitive information, do not pretend you know the latest information unless live search results have been provided. Tell the customer Good Ereseh will verify the current reference before preparing the concept.
+If asked about time-sensitive information, do not pretend you know the latest information unless live search results have been provided.
 
-SAFETY AND QUALITY
-
-Do not invent customer facts.
-Do not claim information has been saved until the website actually submits it.
-Do not claim payment has succeeded unless payment confirmation is available.
-Do not claim a commission has been accepted by Good Ereseh unless it has actually been reviewed.
-
-Your goal is to make the customer feel guided by a real art studio assistant while producing a detailed commission brief that Good Ereseh can act on.
+Say Good Ereseh will verify the current reference before preparing the concept.
 `;
 
 var chatHistory = [];
@@ -297,377 +159,2619 @@ var pendingRef = null;
 var collecting = false;
 var recog = null;
 var recOn = false;
+var finalBrief = '';
 
-var cmIn  = document.getElementById('cmIn');
+var cmIn = document.getElementById('cmIn');
 var cmOut = document.getElementById('cmOut');
-var ibTa  = document.getElementById('ibTa');
-var ibUp  = document.getElementById('ibUp');
-var hint  = document.getElementById('ibHint');
+var ibTa = document.getElementById('ibTa');
+var ibUp = document.getElementById('ibUp');
+var hint = document.getElementById('ibHint');
 
-function wait(ms){ return new Promise(function(r){setTimeout(r,ms);}); }
-function sb(){ setTimeout(function(){ cmOut.scrollTop=cmOut.scrollHeight; },60); }
-function esc(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; }
-function cur(el){ el.querySelectorAll('button,input,textarea,select').forEach(function(e){
-  e.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
-  e.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
-}); }
 
-function addAI(html){
-  var d=document.createElement('div'); d.className='msg ai';
-  d.innerHTML='<div class="mav">G</div><div class="bbl">'+html+'</div>';
-  cmIn.appendChild(d); sb(); cur(d); return d;
-}
-
-function addUser(text, imgUrl, label){
-  var d=document.createElement('div'); d.className='msg u';
-  var img=imgUrl?'<div class="ref-thumb"><div style="font-size:10px;color:var(--g1);margin-bottom:5px;">'+esc(label||'Reference')+'</div><img src="'+imgUrl+'" alt="'+esc(label||'Reference')+'"></div>':'';
-  d.innerHTML='<div class="bbl">'+img+(text?'<p>'+esc(text)+'</p>':'')+'</div>';
-  cmIn.appendChild(d); sb(); return d;
-}
-
-async function aiTyping(ms){
-  var t=document.createElement('div'); t.className='msg ai';
-  t.innerHTML='<div class="mav">G</div><div class="bbl"><div class="ty"><span></span><span></span><span></span></div></div>';
-  cmIn.appendChild(t); sb();
-  await wait(ms||700);
-  t.remove();
-}
-
-function renderAI(text){
-  var lines=String(text||'').split('\n');
-  var html='', inP=false;
-  lines.forEach(function(line){
-    var m=line.match(/^([A-H])\)\s+(.+)$/);
-    if(m){
-      if(inP){html+='</p>';inP=false;}
-      html+='<button class="opt-btn" data-letter="'+m[1]+'" data-full="'+esc(m[1]+') '+m[2])+'" onclick="pickOpt(this)"><span class="ol">'+m[1]+'</span>'+esc(m[2])+'</button>';
-    } else {
-      var s=line.trim();
-      if(s==='COLLECT_DETAILS') return;
-      if(s){if(!inP){html+='<p>';inP=true;}else{html+=' ';}html+=esc(s);}
-      else if(inP){html+='</p>';inP=false;}
-    }
-  });
-  if(inP)html+='</p>';
-  return html;
-}
-
-async function callAI(userText, refObj){
-  var content=[];
-  if(refObj && refObj.b64 && refObj.type){
-    content.push({type:'image',source:{type:'base64',media_type:refObj.type,data:refObj.b64}});
-  }
-  if(userText) content.push({type:'text',text:userText});
-  if(!content.length) return null;
-
-  chatHistory.push({
-    role:'user',
-    content:content.length===1 && content[0].type==='text' ? userText : content
-  });
-
-  try{
-    var res=await fetch(RAIL+'/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:SYS,messages:chatHistory})
+function wait(ms) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, ms);
     });
-    var data=await res.json();
-    if(!res.ok) throw new Error(data.error||'Error');
-    chatHistory.push({role:'assistant',content:data.text});
-    return data.text;
-  }catch(err){
-    console.error('callAI error:',err.message);
-    return 'The studio assistant is temporarily unavailable. Please wait a moment and try again.';
-  }
 }
 
-async function processAI(text){
-  if(!text || !String(text).trim()){
-    addAI(renderAI('I did not quite catch that. Could you please try again or rephrase your message?'));
-    return;
-  }
-  if(text.includes('COLLECT_DETAILS')){
-    var clean=text.replace('COLLECT_DETAILS','').trim();
-    if(clean) addAI(renderAI(clean));
-    await wait(250);
-    showBriefForm();
-    return;
-  }
-  addAI(renderAI(text));
+
+function sb() {
+
+    setTimeout(function() {
+
+        cmOut.scrollTop =
+            cmOut.scrollHeight;
+
+    }, 60);
+
 }
 
-function pickOpt(btn){
-  if(btn.disabled||collecting) return;
-  btn.closest('.bbl').querySelectorAll('.opt-btn').forEach(function(b){b.disabled=true;});
-  btn.classList.add('sel');
-  var full=btn.dataset.full||btn.textContent.trim();
-  addUser(full);
-  disableInput();
-  sendToAI(full,null);
-}
 
-function doSend(){
-  if(collecting) return;
-  var text=ibTa.value.trim();
-  if(!text && !pendingRef) return;
+function esc(value) {
 
-  var ref=pendingRef;
-  var refLabel=ref ? ref.label : null;
-  var preview=ref ? ref.preview : null;
-
-  ibTa.value='';
-  ibTa.style.height='auto';
-  if(ref) clearPendingRef(false);
-  refreshSend();
-
-  addUser(text,preview,refLabel);
-  disableInput();
-
-  var aiText=text;
-  if(ref){
-    var refCount=references.length;
-    var context='The customer has uploaded '+refLabel+'. This image is an original reference photograph. Do not regenerate or replace it. Analyse it only for the commission. ';
-    if(refCount>1){
-      context+='There are now '+refCount+' reference photographs in this commission. Ask the customer which reference should be primary or whether elements from multiple references should be combined. ';
+    if (!value) {
+        return '';
     }
-    aiText=context+(text?('Customer message: '+text):'Ask how they would like this reference used in the artwork.');
-  }
 
-  sendToAI(aiText,ref);
+    return String(value)
+
+        .replace(/&/g, '&amp;')
+
+        .replace(/</g, '&lt;')
+
+        .replace(/>/g, '&gt;')
+
+        .replace(/"/g, '&quot;');
+
 }
 
-async function sendToAI(text,refObj){
-  if(collecting) return;
-  await aiTyping(700);
-  var aiText=await callAI(text,refObj);
-  await processAI(aiText);
-  enableInput();
-}
 
-ibTa.addEventListener('input',function(){
-  ibTa.style.height='auto';
-  ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px';
-  refreshSend();
-});
+function cur(el) {
 
-ibTa.addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&!e.shiftKey&&!ibUp.disabled){e.preventDefault();doSend();}
-});
+    el.querySelectorAll(
+        'button,input,textarea,select'
+    )
 
-function refreshSend(){
-  var ok=ibTa.value.trim().length>0||!!pendingRef;
-  ibUp.disabled=!ok;
-  ibUp.classList.toggle('on',ok);
-}
-function enableInput(){ibTa.disabled=false;hint.textContent='';setTimeout(function(){ibTa.focus();},80);refreshSend();}
-function disableInput(){ibTa.disabled=true;ibUp.disabled=true;ibUp.classList.remove('on');hint.textContent='';}
+    .forEach(function(item) {
 
-function onFile(input){
-  var file=input.files[0]; if(!file) return;
-  if(references.length>=6){
-    addAI('<p>You can attach up to 6 reference photographs to one commission request.</p>');
-    input.value='';
-    return;
-  }
+        item.addEventListener(
+            'mouseenter',
+            function() {
 
-  var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image();
-  img.onload=function(){
-    var w=img.width,h=img.height;
-    var max=1200;
-    if(w>max){h=Math.round(h*max/w);w=max;}
-    if(h>max){w=Math.round(w*max/h);h=max;}
-    canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);
-    var du=canvas.toDataURL('image/jpeg',0.82);
-    var ref={
-      id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
-      label:'Reference '+(references.length+1),
-      name:file.name,
-      b64:du.split(',')[1],
-      type:'image/jpeg',
-      preview:du
-    };
-    references.push(ref);
-    pendingRef=ref;
-    updatePendingStrip();
-    refreshSend();
-    input.value='';
-  };
-  img.src=URL.createObjectURL(file);
-}
+                document.body
+                    .classList
+                    .add(
+                        'cursor-hover'
+                    );
 
-function updatePendingStrip(){
-  var strip=document.getElementById('imgStrip');
-  if(!pendingRef){strip.classList.remove('on');return;}
-  document.getElementById('ipThumb').src=pendingRef.preview;
-  document.getElementById('ipName').textContent=pendingRef.label+' · '+pendingRef.name;
-  strip.classList.add('on');
-}
+            }
+        );
 
-function clearPendingRef(removeFromReferences){
-  if(pendingRef && removeFromReferences!==false){
-    references=references.filter(function(r){return r.id!==pendingRef.id;});
-  }
-  pendingRef=null;
-  document.getElementById('imgStrip').classList.remove('on');
-  refreshSend();
-}
 
-function clearImg(){clearPendingRef(true);}
+        item.addEventListener(
+            'mouseleave',
+            function() {
 
-function buildConversationSummary(){
-  return chatHistory.map(function(m){
-    var speaker=m.role==='assistant'?'Assistant':'Customer';
-    if(typeof m.content==='string') return speaker+': '+m.content;
-    if(Array.isArray(m.content)){
-      var txt=m.content.filter(function(p){return p.type==='text';}).map(function(p){return p.text;}).join(' ');
-      return speaker+': '+txt;
-    }
-    return '';
-  }).filter(Boolean).join('\n\n');
-}
+                document.body
+                    .classList
+                    .remove(
+                        'cursor-hover'
+                    );
 
-function showBriefForm(){
-  if(collecting) return;
-  collecting=true;
-  var blk=document.createElement('div');
-  blk.className='bf-block';
-  blk.innerHTML=`
-    <div class="bf-card" id="bfCard" style="max-width:430px;">
-      <div style="font-family:var(--serif);font-size:18px;color:var(--p2);margin-bottom:4px;">Your details</div>
-      <div style="font-size:11px;color:var(--g1);line-height:1.6;margin-bottom:5px;">Your commission is not confirmed yet. Good Ereseh will review the brief, prepare the concept where needed, and send your quote and private payment link after approval.</div>
-      <input class="bf-inp" type="text" id="bfN" placeholder="Full name" autocomplete="name">
-      <input class="bf-inp" type="email" id="bfE" placeholder="Email address" autocomplete="email">
-      <input class="bf-inp" type="tel" id="bfP" placeholder="Phone number" autocomplete="tel">
-      <input class="bf-inp" type="text" id="bfA1" placeholder="Address line 1" autocomplete="address-line1">
-      <input class="bf-inp" type="text" id="bfA2" placeholder="Address line 2 (optional)" autocomplete="address-line2">
-      <input class="bf-inp" type="text" id="bfCity" placeholder="City" autocomplete="address-level2">
-      <input class="bf-inp" type="text" id="bfCounty" placeholder="County / Region" autocomplete="address-level1">
-      <input class="bf-inp" type="text" id="bfPost" placeholder="Postcode" autocomplete="postal-code">
-      <input class="bf-inp" type="text" id="bfCountry" placeholder="Country" autocomplete="country-name">
+            }
+        );
 
-      <textarea class="bf-inp" id="bfNotes" rows="3" placeholder="Final notes or delivery instructions"></textarea>
-      <label style="display:flex;gap:8px;align-items:flex-start;font-size:10px;color:var(--g2);line-height:1.55;">
-        <input type="checkbox" id="bfConsent" style="margin-top:3px;">
-        <span>I confirm I have permission to provide and use any reference photographs submitted with this commission.</span>
-      </label>
-      <button class="bf-btn" onclick="submitBrief()">Submit Commission Request →</button>
-      <div class="bf-err" id="bfErr"></div>
-    </div>
-    <div id="payWrap" style="display:none;"></div>
-  `;
-  cmIn.appendChild(blk);sb();cur(blk);disableInput();
-}
-
-async function submitBrief(){
-  var name=document.getElementById('bfN').value.trim();
-  var email=document.getElementById('bfE').value.trim();
-  var phone=document.getElementById('bfP').value.trim();
-  var address1=document.getElementById('bfA1').value.trim();
-  var address2=document.getElementById('bfA2').value.trim();
-  var city=document.getElementById('bfCity').value.trim();
-  var county=document.getElementById('bfCounty').value.trim();
-  var postcode=document.getElementById('bfPost').value.trim();
-  var country=document.getElementById('bfCountry').value.trim();
-  var notes=document.getElementById('bfNotes').value.trim();
-  var consent=document.getElementById('bfConsent').checked;
-  var err=document.getElementById('bfErr');
-  var btn=document.querySelector('.bf-btn');
-
-  if(!name||!email||!phone||!address1||!city||!postcode||!country){
-    err.textContent='Please complete your contact and delivery details.';err.style.display='block';return;
-  }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    err.textContent='Please enter a valid email address.';err.style.display='block';return;
-  }
-  if(!consent){
-    err.textContent='Please confirm the reference-photo permission statement.';err.style.display='block';return;
-  }
-
-  var summary=buildConversationSummary();
-  var referencePayload=references.map(function(r){return {label:r.label,name:r.name,imageB64:r.b64,imageType:r.type};});
-
-  btn.textContent='Submitting…';btn.disabled=true;err.style.display='none';
-
-  try{
-    var res=await fetch(RAIL+'/commission',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        name:name,
-        email:email,
-        phone:phone,
-        'commission-type':'AI Guided Commission',
-        size:'',
-        message:summary,
-        references:referencePayload,
-        address:{
-    line1:address1,
-    line2:address2,
-    city:city,
-    county:county,
-    postcode:postcode,
-    country:country
-},
-      
-        notes:notes,
-        referenceConsent:consent
-      })
     });
 
-    var data=await res.json();
-    if(!res.ok) throw new Error(data.error||'Unable to submit commission request.');
+}
 
-    document.getElementById('bfCard').style.display='none';
-    var pw=document.getElementById('payWrap');pw.style.display='block';
-    pw.innerHTML='<div class="bf-card" style="max-width:430px;"><div style="font-family:var(--serif);font-size:19px;color:var(--p2);">Commission request received.</div><p style="font-size:12px;color:var(--g2);line-height:1.75;margin-top:8px;">'+(data.commissionNumber?('Reference: <strong>'+esc(data.commissionNumber)+'</strong><br><br>'):'')+'Good Ereseh will review your brief and reference photographs. If a concept is required, it will be prepared and sent to you for approval. Your final quote, turnaround and private payment link will follow after review.</p></div>';
+
+function addAI(html) {
+
+    var div =
+        document.createElement(
+            'div'
+        );
+
+    div.className =
+        'msg ai';
+
+
+    div.innerHTML =
+
+        '<div class="mav">G</div>' +
+
+        '<div class="bbl">' +
+
+        html +
+
+        '</div>';
+
+
+    cmIn.appendChild(div);
+
     sb();
-  }catch(e){
-    err.textContent=e.message||'Error. Email art@goodereseh.com';err.style.display='block';
-    btn.textContent='Submit Commission Request →';btn.disabled=false;
-  }
+
+    cur(div);
+
+    return div;
+
 }
 
-function toggleMic(){
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  var micBtn=document.getElementById('micBtn');
-  if(!SR){addAI('<p>Voice input is not supported in this browser. Please type your message instead.</p>');return;}
-  if(recOn){if(recog)recog.stop();recOn=false;micBtn.classList.remove('rc');return;}
-  recog=new SR();recog.lang='en-GB';recog.continuous=false;recog.interimResults=true;
-  recog.onstart=function(){recOn=true;micBtn.classList.add('rc');};
-  recog.onresult=function(e){var t=Array.from(e.results).map(function(r){return r[0].transcript;}).join('');ibTa.value=t;ibTa.style.height='auto';ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px';refreshSend();};
-  recog.onend=function(){recOn=false;micBtn.classList.remove('rc');};
-  recog.onerror=function(){recOn=false;micBtn.classList.remove('rc');};
-  recog.start();
+
+function addUser(
+    text,
+    imgUrl,
+    label
+) {
+
+    var div =
+        document.createElement(
+            'div'
+        );
+
+    div.className =
+        'msg u';
+
+
+    var image = '';
+
+
+    if (imgUrl) {
+
+        image =
+
+            '<div class="ref-thumb">' +
+
+                '<div style="font-size:10px;color:var(--g1);margin-bottom:5px;">' +
+
+                    esc(
+                        label ||
+                        'Reference'
+                    ) +
+
+                '</div>' +
+
+                '<img src="' +
+                    imgUrl +
+                    '" alt="">' +
+
+            '</div>';
+
+    }
+
+
+    div.innerHTML =
+
+        '<div class="bbl">' +
+
+        image +
+
+        (
+            text
+
+                ? '<p>' +
+                    esc(text) +
+                    '</p>'
+
+                : ''
+        ) +
+
+        '</div>';
+
+
+    cmIn.appendChild(div);
+
+    sb();
+
 }
 
-var navEl=document.getElementById('nav');
-window.addEventListener('scroll',function(){navEl.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
-var cdot=document.getElementById('cDot'),cring=document.getElementById('cRing');
-if(window.matchMedia('(pointer: fine)').matches){
-  var mx=0,my=0,rx=0,ry=0,tt=0;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(function(){var t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',function(){t.remove();});},16);});
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(loop);})();
-  document.querySelectorAll('a,button').forEach(function(el){el.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});el.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});});
+
+async function aiTyping(ms) {
+
+    var typing =
+        document.createElement(
+            'div'
+        );
+
+
+    typing.className =
+        'msg ai';
+
+
+    typing.innerHTML =
+
+        '<div class="mav">G</div>' +
+
+        '<div class="bbl">' +
+
+            '<div class="ty">' +
+
+                '<span></span>' +
+
+                '<span></span>' +
+
+                '<span></span>' +
+
+            '</div>' +
+
+        '</div>';
+
+
+    cmIn.appendChild(
+        typing
+    );
+
+
+    sb();
+
+
+    await wait(
+        ms || 700
+    );
+
+
+    typing.remove();
+
 }
 
-window.addEventListener('DOMContentLoaded',function(){
-  setTimeout(function(){
-    addAI(renderAI(
-      "Hello. I am the commission assistant for Good Ereseh.\n\n"+
-      "I can help you shape an idea, review your reference photographs, and prepare a clear brief for Good to review. I will not alter or regenerate any photographs you upload.\n\n"+
-      "What type of commission are you considering?\n\n"+
-      "A) Personal Portrait\n"+
-      "B) Family Artwork\n"+
-      "C) Couple Portrait\n"+
-      "D) Memorial Piece\n"+
-      "E) Conceptual Artwork\n"+
-      "F) Gift Commission\n"+
-      "G) Cultural or Legacy Piece\n"+
-      "H) I am not sure yet"
-    ));
-    enableInput();
-  },500);
-});
+
+function renderAI(text) {
+
+    var lines =
+        String(
+            text || ''
+        )
+        .split('\n');
+
+
+    var html = '';
+
+    var inParagraph =
+        false;
+
+
+    lines.forEach(
+        function(line) {
+
+            var option =
+                line.match(
+                    /^([A-H])\)\s+(.+)$/
+                );
+
+
+            if (option) {
+
+                if (
+                    inParagraph
+                ) {
+
+                    html +=
+                        '</p>';
+
+                    inParagraph =
+                        false;
+
+                }
+
+
+                html +=
+
+                    '<button class="opt-btn"' +
+
+                    ' data-full="' +
+
+                    esc(
+                        option[1] +
+                        ') ' +
+                        option[2]
+                    ) +
+
+                    '"' +
+
+                    ' onclick="pickOpt(this)">' +
+
+                    '<span class="ol">' +
+
+                    option[1] +
+
+                    '</span>' +
+
+                    esc(
+                        option[2]
+                    ) +
+
+                    '</button>';
+
+
+                return;
+
+            }
+
+
+            var cleaned =
+                line.trim();
+
+
+            if (
+                cleaned ===
+                'COLLECT_DETAILS'
+            ) {
+
+                return;
+
+            }
+
+
+            if (cleaned) {
+
+                if (
+                    !inParagraph
+                ) {
+
+                    html +=
+                        '<p>';
+
+                    inParagraph =
+                        true;
+
+                }
+
+                else {
+
+                    html +=
+                        ' ';
+
+                }
+
+
+                html +=
+                    esc(cleaned);
+
+            }
+
+            else if (
+                inParagraph
+            ) {
+
+                html +=
+                    '</p>';
+
+                inParagraph =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    if (inParagraph) {
+
+        html +=
+            '</p>';
+
+    }
+
+
+    return html;
+
+}
+
+
+async function callAI(
+    userText,
+    refObj,
+    displayText
+) {
+
+    var content = [];
+
+
+    if (
+        refObj &&
+        refObj.b64 &&
+        refObj.type
+    ) {
+
+        content.push({
+
+            type:
+                'image',
+
+            source: {
+
+                type:
+                    'base64',
+
+                media_type:
+                    refObj.type,
+
+                data:
+                    refObj.b64
+
+            }
+
+        });
+
+    }
+
+
+    if (userText) {
+
+        content.push({
+
+            type:
+                'text',
+
+            text:
+                userText
+
+        });
+
+    }
+
+
+    if (!content.length) {
+
+        return null;
+
+    }
+
+
+    chatHistory.push({
+
+        role:
+            'user',
+
+        content:
+
+            content.length === 1 &&
+            content[0].type === 'text'
+
+                ? userText
+
+                : content,
+
+        displayText:
+
+            displayText !== undefined
+
+                ? displayText
+
+                : userText
+
+    });
+
+
+    try {
+
+        var response =
+            await fetch(
+
+                RAIL +
+                '/chat',
+
+                {
+
+                    method:
+                        'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/json'
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            system:
+                                SYS,
+
+                            messages:
+                                chatHistory
+
+                        })
+
+                }
+
+            );
+
+
+        var data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.error ||
+
+                'Unable to reach the studio assistant.'
+
+            );
+
+        }
+
+
+        chatHistory.push({
+
+            role:
+                'assistant',
+
+            content:
+                data.text,
+
+            displayText:
+                data.text
+
+        });
+
+
+        return data.text;
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            'callAI error:',
+
+            error.message
+
+        );
+
+
+        return (
+            'The studio assistant is temporarily unavailable. ' +
+            'Please wait a moment and try again.'
+        );
+
+    }
+
+}
+
+
+function disableAllOptions() {
+
+    document
+        .querySelectorAll(
+            '.opt-btn'
+        )
+        .forEach(
+            function(button) {
+
+                button.disabled =
+                    true;
+
+            }
+        );
+
+}
+
+
+function wantsDetailsForm(text) {
+
+    var value =
+        String(
+            text || ''
+        )
+        .toLowerCase();
+
+
+    return (
+
+        /fill\s+(the\s+)?form/.test(value) ||
+
+        /complete\s+(the\s+)?form/.test(value) ||
+
+        /submit\s+(my\s+)?commission/.test(value) ||
+
+        /ready\s+to\s+submit/.test(value) ||
+
+        /that\s+is\s+all/.test(value) ||
+
+        /that's\s+all/.test(value)
+
+    );
+
+}
+
+
+async function processAI(text) {
+
+    if (
+        !text ||
+        !String(text).trim()
+    ) {
+
+        addAI(
+            renderAI(
+                'I did not quite catch that. Could you please try again or rephrase your message?'
+            )
+        );
+
+        return;
+
+    }
+
+
+    if (
+        text.includes(
+            'COLLECT_DETAILS'
+        )
+    ) {
+
+        var clean =
+            text
+                .replace(
+                    'COLLECT_DETAILS',
+                    ''
+                )
+                .trim();
+
+
+        finalBrief =
+            clean;
+
+
+        disableAllOptions();
+
+
+        if (clean) {
+
+            addAI(
+                renderAI(
+                    clean
+                )
+            );
+
+        }
+
+
+        await wait(250);
+
+
+        showBriefForm();
+
+
+        return;
+
+    }
+
+
+    addAI(
+        renderAI(
+            text
+        )
+    );
+
+}
+
+
+function pickOpt(button) {
+
+    if (
+        button.disabled ||
+        collecting
+    ) {
+
+        return;
+
+    }
+
+
+    button
+        .closest(
+            '.bbl'
+        )
+        .querySelectorAll(
+            '.opt-btn'
+        )
+        .forEach(
+            function(item) {
+
+                item.disabled =
+                    true;
+
+            }
+        );
+
+
+    button
+        .classList
+        .add(
+            'sel'
+        );
+
+
+    var full =
+
+        button.dataset.full ||
+
+        button
+            .textContent
+            .trim();
+
+
+    addUser(
+        full
+    );
+
+
+    disableInput();
+
+
+    sendToAI(
+        full,
+        null,
+        full
+    );
+
+}
+
+
+function doSend() {
+
+    if (collecting) {
+
+        return;
+
+    }
+
+
+    var text =
+        ibTa.value.trim();
+
+
+    if (
+        !text &&
+        !pendingRef
+    ) {
+
+        return;
+
+    }
+
+
+    var ref =
+        pendingRef;
+
+
+    var refLabel =
+
+        ref
+
+            ? ref.label
+
+            : null;
+
+
+    var preview =
+
+        ref
+
+            ? ref.preview
+
+            : null;
+
+
+    ibTa.value =
+        '';
+
+
+    ibTa.style.height =
+        'auto';
+
+
+    if (ref) {
+
+        clearPendingRef(
+            false
+        );
+
+    }
+
+
+    refreshSend();
+
+
+    addUser(
+        text,
+        preview,
+        refLabel
+    );
+
+
+    disableInput();
+
+
+    var aiText =
+        text;
+
+
+    var displayText =
+        text;
+
+
+    if (ref) {
+
+        var refCount =
+            references.length;
+
+
+        var context =
+
+            'The customer has uploaded ' +
+
+            refLabel +
+
+            '. This image is an original reference photograph. ' +
+
+            'Do not regenerate or replace it. ' +
+
+            'Analyse it only for the commission. ';
+
+
+        if (
+            refCount > 1
+        ) {
+
+            context +=
+
+                'There are now ' +
+
+                refCount +
+
+                ' reference photographs. ' +
+
+                'Ask how this new reference should be used in relation to the earlier references. ' +
+
+                'Do not force the customer to choose again if the role of earlier images is already clear. ';
+
+        }
+
+
+        aiText =
+
+            context +
+
+            (
+                text
+
+                    ? 'Customer message: ' +
+                        text
+
+                    : 'Ask how they would like this reference used in the artwork.'
+            );
+
+
+        displayText =
+
+            text ||
+
+            (
+                'Uploaded ' +
+                refLabel
+            );
+
+    }
+
+
+    if (
+        !ref &&
+        wantsDetailsForm(
+            text
+        )
+    ) {
+
+        aiText =
+
+            'The customer is ready to submit. ' +
+
+            'Based on the conversation so far, write a concise final commission brief using short labelled lines for artwork type, subjects, reference images and how each should be used, size, composition or background, and special instructions that were actually agreed. ' +
+
+            'Do not invent anything. ' +
+
+            'Do not mention framing. ' +
+
+            'Then write COLLECT_DETAILS on its own line. ' +
+
+            'Customer message: ' +
+
+            text;
+
+    }
+
+
+    sendToAI(
+        aiText,
+        ref,
+        displayText
+    );
+
+}
+
+
+async function sendToAI(
+    text,
+    refObj,
+    displayText
+) {
+
+    if (collecting) {
+
+        return;
+
+    }
+
+
+    await aiTyping(
+        700
+    );
+
+
+    var aiText =
+        await callAI(
+            text,
+            refObj,
+            displayText
+        );
+
+
+    await processAI(
+        aiText
+    );
+
+
+    if (!collecting) {
+
+        enableInput();
+
+    }
+
+}
+
+
+ibTa.addEventListener(
+    'input',
+    function() {
+
+        ibTa.style.height =
+            'auto';
+
+
+        ibTa.style.height =
+
+            Math.min(
+                ibTa.scrollHeight,
+                120
+            ) +
+
+            'px';
+
+
+        refreshSend();
+
+    }
+);
+
+
+ibTa.addEventListener(
+    'keydown',
+    function(event) {
+
+        if (
+            event.key ===
+                'Enter' &&
+
+            !event.shiftKey &&
+
+            !ibUp.disabled
+        ) {
+
+            event.preventDefault();
+
+            doSend();
+
+        }
+
+    }
+);
+
+
+function refreshSend() {
+
+    var ok =
+
+        ibTa.value
+            .trim()
+            .length > 0 ||
+
+        !!pendingRef;
+
+
+    ibUp.disabled =
+        !ok;
+
+
+    ibUp
+        .classList
+        .toggle(
+            'on',
+            ok
+        );
+
+}
+
+
+function enableInput() {
+
+    ibTa.disabled =
+        false;
+
+
+    hint.textContent =
+        '';
+
+
+    setTimeout(
+        function() {
+
+            ibTa.focus();
+
+        },
+        80
+    );
+
+
+    refreshSend();
+
+}
+
+
+function disableInput() {
+
+    ibTa.disabled =
+        true;
+
+
+    ibUp.disabled =
+        true;
+
+
+    ibUp
+        .classList
+        .remove(
+            'on'
+        );
+
+
+    hint.textContent =
+        '';
+
+}
+
+
+function onFile(input) {
+
+    var file =
+        input.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    if (
+        references.length >=
+        6
+    ) {
+
+        addAI(
+            '<p>You can attach up to 6 reference photographs to one commission request.</p>'
+        );
+
+        input.value =
+            '';
+
+        return;
+
+    }
+
+
+    var canvas =
+        document.createElement(
+            'canvas'
+        );
+
+
+    var ctx =
+        canvas.getContext(
+            '2d'
+        );
+
+
+    var image =
+        new Image();
+
+
+    image.onload =
+        function() {
+
+            var width =
+                image.width;
+
+
+            var height =
+                image.height;
+
+
+            var max =
+                1200;
+
+
+            if (
+                width >
+                max
+            ) {
+
+                height =
+                    Math.round(
+                        height *
+                        max /
+                        width
+                    );
+
+                width =
+                    max;
+
+            }
+
+
+            if (
+                height >
+                max
+            ) {
+
+                width =
+                    Math.round(
+                        width *
+                        max /
+                        height
+                    );
+
+                height =
+                    max;
+
+            }
+
+
+            canvas.width =
+                width;
+
+
+            canvas.height =
+                height;
+
+
+            ctx.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            var dataUrl =
+                canvas.toDataURL(
+                    'image/jpeg',
+                    0.82
+                );
+
+
+            var ref = {
+
+                id:
+
+                    'ref_' +
+
+                    Date.now() +
+
+                    '_' +
+
+                    Math.random()
+                        .toString(36)
+                        .slice(
+                            2,
+                            7
+                        ),
+
+                label:
+
+                    'Reference ' +
+
+                    (
+                        references.length +
+                        1
+                    ),
+
+                name:
+                    file.name,
+
+                b64:
+                    dataUrl
+                        .split(',')[1],
+
+                type:
+                    'image/jpeg',
+
+                preview:
+                    dataUrl
+
+            };
+
+
+            references.push(
+                ref
+            );
+
+
+            pendingRef =
+                ref;
+
+
+            updatePendingStrip();
+
+
+            refreshSend();
+
+
+            input.value =
+                '';
+
+        };
+
+
+    image.src =
+        URL.createObjectURL(
+            file
+        );
+
+}
+
+
+function updatePendingStrip() {
+
+    var strip =
+        document.getElementById(
+            'imgStrip'
+        );
+
+
+    if (!pendingRef) {
+
+        strip
+            .classList
+            .remove(
+                'on'
+            );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        'ipThumb'
+    ).src =
+        pendingRef.preview;
+
+
+    document.getElementById(
+        'ipName'
+    ).textContent =
+
+        pendingRef.label +
+
+        ' · ' +
+
+        pendingRef.name;
+
+
+    strip
+        .classList
+        .add(
+            'on'
+        );
+
+}
+
+
+function clearPendingRef(
+    removeFromReferences
+) {
+
+    if (
+        pendingRef &&
+        removeFromReferences !==
+            false
+    ) {
+
+        references =
+            references.filter(
+                function(ref) {
+
+                    return (
+                        ref.id !==
+                        pendingRef.id
+                    );
+
+                }
+            );
+
+    }
+
+
+    pendingRef =
+        null;
+
+
+    document.getElementById(
+        'imgStrip'
+    )
+    .classList
+    .remove(
+        'on'
+    );
+
+
+    refreshSend();
+
+}
+
+
+function clearImg() {
+
+    clearPendingRef(
+        true
+    );
+
+}
+
+
+function cleanHistoryText(message) {
+
+    var text =
+
+        message.displayText !==
+        undefined
+
+            ? message.displayText
+
+            : (
+                typeof message.content ===
+                'string'
+
+                    ? message.content
+
+                    : ''
+            );
+
+
+    if (
+        !text &&
+        Array.isArray(
+            message.content
+        )
+    ) {
+
+        text =
+            message.content
+
+                .filter(
+                    function(part) {
+
+                        return (
+                            part.type ===
+                            'text'
+                        );
+
+                    }
+                )
+
+                .map(
+                    function(part) {
+
+                        return part.text;
+
+                    }
+                )
+
+                .join(' ');
+
+    }
+
+
+    text =
+        String(
+            text || ''
+        )
+
+        .replace(
+            /COLLECT_DETAILS/g,
+            ''
+        )
+
+        .trim();
+
+
+    if (
+        /^The customer has uploaded Reference \d+/i
+            .test(
+                text
+            )
+    ) {
+
+        return '';
+
+    }
+
+
+    return text;
+
+}
+
+
+function buildConversationSummary() {
+
+    return chatHistory
+
+        .map(
+            function(message) {
+
+                var text =
+                    cleanHistoryText(
+                        message
+                    );
+
+
+                if (!text) {
+
+                    return '';
+
+                }
+
+
+                return (
+
+                    message.role ===
+                    'assistant'
+
+                        ? 'Assistant: '
+
+                        : 'Customer: '
+
+                ) +
+
+                text;
+
+            }
+        )
+
+        .filter(Boolean)
+
+        .join(
+            '\n\n'
+        );
+
+}
+
+
+function buildConversationPayload() {
+
+    return chatHistory
+
+        .map(
+            function(message) {
+
+                var text =
+                    cleanHistoryText(
+                        message
+                    );
+
+
+                if (!text) {
+
+                    return null;
+
+                }
+
+
+                return {
+
+                    role:
+
+                        message.role ===
+                        'assistant'
+
+                            ? 'assistant'
+
+                            : 'user',
+
+                    text:
+                        text
+
+                };
+
+            }
+        )
+
+        .filter(Boolean);
+
+}
+
+
+function showBriefForm() {
+
+    if (collecting) {
+
+        return;
+
+    }
+
+
+    collecting =
+        true;
+
+
+    disableAllOptions();
+
+
+    var block =
+        document.createElement(
+            'div'
+        );
+
+
+    block.className =
+        'bf-block';
+
+
+    block.innerHTML = `
+
+        <div
+            class="bf-card"
+            id="bfCard"
+            style="max-width:430px;"
+        >
+
+            <div
+                style="
+                    font-family:var(--serif);
+                    font-size:18px;
+                    color:var(--p2);
+                    margin-bottom:4px;
+                "
+            >
+                Your details
+            </div>
+
+
+            <div
+                style="
+                    font-size:11px;
+                    color:var(--g1);
+                    line-height:1.6;
+                    margin-bottom:5px;
+                "
+            >
+                Your commission is not confirmed yet.
+                Good Ereseh will review the brief and send your quote and private payment link after approval.
+            </div>
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfN"
+                placeholder="Full name"
+                autocomplete="name"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="email"
+                id="bfE"
+                placeholder="Email address"
+                autocomplete="email"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="tel"
+                id="bfP"
+                placeholder="Phone number"
+                autocomplete="tel"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfA1"
+                placeholder="Address line 1"
+                autocomplete="address-line1"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfA2"
+                placeholder="Address line 2 (optional)"
+                autocomplete="address-line2"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfCity"
+                placeholder="City"
+                autocomplete="address-level2"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfCounty"
+                placeholder="County / Region"
+                autocomplete="address-level1"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfPost"
+                placeholder="Postcode"
+                autocomplete="postal-code"
+            >
+
+
+            <input
+                class="bf-inp"
+                type="text"
+                id="bfCountry"
+                placeholder="Country"
+                autocomplete="country-name"
+            >
+
+
+            <textarea
+                class="bf-inp"
+                id="bfNotes"
+                rows="3"
+                placeholder="Final notes or delivery instructions"
+            ></textarea>
+
+
+            <label
+                style="
+                    display:flex;
+                    gap:8px;
+                    align-items:flex-start;
+                    font-size:10px;
+                    color:var(--g2);
+                    line-height:1.55;
+                "
+            >
+
+                <input
+                    type="checkbox"
+                    id="bfConsent"
+                    style="margin-top:3px;"
+                >
+
+                <span>
+                    I confirm I have permission to provide and use any reference photographs submitted with this commission.
+                </span>
+
+            </label>
+
+
+            <button
+                class="bf-btn"
+                onclick="submitBrief()"
+            >
+                Submit Commission Request →
+            </button>
+
+
+            <div
+                class="bf-err"
+                id="bfErr"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="payWrap"
+            style="display:none;"
+        ></div>
+
+    `;
+
+
+    cmIn.appendChild(
+        block
+    );
+
+
+    sb();
+
+    cur(block);
+
+    disableInput();
+
+}
+
+
+async function submitBrief() {
+
+    var name =
+        document
+            .getElementById(
+                'bfN'
+            )
+            .value
+            .trim();
+
+
+    var email =
+        document
+            .getElementById(
+                'bfE'
+            )
+            .value
+            .trim();
+
+
+    var phone =
+        document
+            .getElementById(
+                'bfP'
+            )
+            .value
+            .trim();
+
+
+    var address1 =
+        document
+            .getElementById(
+                'bfA1'
+            )
+            .value
+            .trim();
+
+
+    var address2 =
+        document
+            .getElementById(
+                'bfA2'
+            )
+            .value
+            .trim();
+
+
+    var city =
+        document
+            .getElementById(
+                'bfCity'
+            )
+            .value
+            .trim();
+
+
+    var county =
+        document
+            .getElementById(
+                'bfCounty'
+            )
+            .value
+            .trim();
+
+
+    var postcode =
+        document
+            .getElementById(
+                'bfPost'
+            )
+            .value
+            .trim();
+
+
+    var country =
+        document
+            .getElementById(
+                'bfCountry'
+            )
+            .value
+            .trim();
+
+
+    var notes =
+        document
+            .getElementById(
+                'bfNotes'
+            )
+            .value
+            .trim();
+
+
+    var consent =
+        document
+            .getElementById(
+                'bfConsent'
+            )
+            .checked;
+
+
+    var errorBox =
+        document
+            .getElementById(
+                'bfErr'
+            );
+
+
+    var button =
+        document
+            .querySelector(
+                '.bf-btn'
+            );
+
+
+    if (
+        !name ||
+        !email ||
+        !phone ||
+        !address1 ||
+        !city ||
+        !postcode ||
+        !country
+    ) {
+
+        errorBox.textContent =
+            'Please complete your contact and delivery details.';
+
+
+        errorBox.style.display =
+            'block';
+
+
+        return;
+
+    }
+
+
+    if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            .test(
+                email
+            )
+    ) {
+
+        errorBox.textContent =
+            'Please enter a valid email address.';
+
+
+        errorBox.style.display =
+            'block';
+
+
+        return;
+
+    }
+
+
+    if (
+        references.length &&
+        !consent
+    ) {
+
+        errorBox.textContent =
+            'Please confirm the reference-photo permission statement.';
+
+
+        errorBox.style.display =
+            'block';
+
+
+        return;
+
+    }
+
+
+    var summary =
+
+        finalBrief ||
+
+        buildConversationSummary();
+
+
+    var conversationPayload =
+        buildConversationPayload();
+
+
+    var referencePayload =
+
+        references.map(
+            function(ref) {
+
+                return {
+
+                    label:
+                        ref.label,
+
+                    name:
+                        ref.name,
+
+                    imageB64:
+                        ref.b64,
+
+                    imageType:
+                        ref.type
+
+                };
+
+            }
+        );
+
+
+    button.textContent =
+        'Submitting…';
+
+
+    button.disabled =
+        true;
+
+
+    errorBox.style.display =
+        'none';
+
+
+    try {
+
+        var response =
+            await fetch(
+
+                RAIL +
+                '/commission',
+
+                {
+
+                    method:
+                        'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/json'
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            name:
+                                name,
+
+                            email:
+                                email,
+
+                            phone:
+                                phone,
+
+                            'commission-type':
+                                'AI Guided Commission',
+
+                            size:
+                                '',
+
+                            message:
+                                summary,
+
+                            conversation:
+                                conversationPayload,
+
+                            references:
+                                referencePayload,
+
+                            address: {
+
+                                line1:
+                                    address1,
+
+                                line2:
+                                    address2,
+
+                                city:
+                                    city,
+
+                                county:
+                                    county,
+
+                                postcode:
+                                    postcode,
+
+                                country:
+                                    country
+
+                            },
+
+                            notes:
+                                notes,
+
+                            referenceConsent:
+
+                                references.length
+
+                                    ? consent
+
+                                    : true
+
+                        })
+
+                }
+
+            );
+
+
+        var data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.error ||
+
+                'Unable to submit commission request.'
+
+            );
+
+        }
+
+
+        document
+            .getElementById(
+                'bfCard'
+            )
+            .style
+            .display =
+                'none';
+
+
+        var wrap =
+            document.getElementById(
+                'payWrap'
+            );
+
+
+        wrap.style.display =
+            'block';
+
+
+        wrap.innerHTML =
+
+            '<div class="bf-card" style="max-width:430px;">' +
+
+                '<div style="font-family:var(--serif);font-size:19px;color:var(--p2);">' +
+
+                    'Commission request received.' +
+
+                '</div>' +
+
+                '<p style="font-size:12px;color:var(--g2);line-height:1.75;margin-top:8px;">' +
+
+                    (
+                        data.commissionNumber
+
+                            ? (
+                                'Reference: <strong>' +
+
+                                esc(
+                                    data.commissionNumber
+                                ) +
+
+                                '</strong><br><br>'
+                            )
+
+                            : ''
+                    ) +
+
+                    'Good Ereseh will review your brief and reference photographs. ' +
+
+                    'Your quote and private payment link will follow after review.' +
+
+                '</p>' +
+
+            '</div>';
+
+
+        sb();
+
+    }
+
+    catch (error) {
+
+        errorBox.textContent =
+
+            error.message ||
+
+            'Error. Email art@goodereseh.com';
+
+
+        errorBox.style.display =
+            'block';
+
+
+        button.textContent =
+            'Submit Commission Request →';
+
+
+        button.disabled =
+            false;
+
+    }
+
+}
+
+
+function toggleMic() {
+
+    var SpeechRecognition =
+
+        window.SpeechRecognition ||
+
+        window.webkitSpeechRecognition;
+
+
+    var micButton =
+        document.getElementById(
+            'micBtn'
+        );
+
+
+    if (!SpeechRecognition) {
+
+        addAI(
+            '<p>Voice input is not supported in this browser. Please type your message instead.</p>'
+        );
+
+        return;
+
+    }
+
+
+    if (recOn) {
+
+        if (recog) {
+
+            recog.stop();
+
+        }
+
+
+        recOn =
+            false;
+
+
+        micButton
+            .classList
+            .remove(
+                'rc'
+            );
+
+
+        return;
+
+    }
+
+
+    recog =
+        new SpeechRecognition();
+
+
+    recog.lang =
+        'en-GB';
+
+
+    recog.continuous =
+        false;
+
+
+    recog.interimResults =
+        true;
+
+
+    recog.onstart =
+        function() {
+
+            recOn =
+                true;
+
+
+            micButton
+                .classList
+                .add(
+                    'rc'
+                );
+
+        };
+
+
+    recog.onresult =
+        function(event) {
+
+            var text =
+
+                Array.from(
+                    event.results
+                )
+
+                .map(
+                    function(result) {
+
+                        return (
+                            result[0]
+                                .transcript
+                        );
+
+                    }
+                )
+
+                .join('');
+
+
+            ibTa.value =
+                text;
+
+
+            ibTa.style.height =
+                'auto';
+
+
+            ibTa.style.height =
+
+                Math.min(
+                    ibTa.scrollHeight,
+                    120
+                ) +
+
+                'px';
+
+
+            refreshSend();
+
+        };
+
+
+    recog.onend =
+        function() {
+
+            recOn =
+                false;
+
+
+            micButton
+                .classList
+                .remove(
+                    'rc'
+                );
+
+        };
+
+
+    recog.onerror =
+        function() {
+
+            recOn =
+                false;
+
+
+            micButton
+                .classList
+                .remove(
+                    'rc'
+                );
+
+        };
+
+
+    recog.start();
+
+}
+
+
+var navEl =
+    document.getElementById(
+        'nav'
+    );
+
+
+window.addEventListener(
+
+    'scroll',
+
+    function() {
+
+        navEl
+            .classList
+            .toggle(
+
+                'scrolled',
+
+                window.scrollY >
+                60
+
+            );
+
+    },
+
+    {
+        passive:
+            true
+    }
+
+);
+
+
+var cdot =
+    document.getElementById(
+        'cDot'
+    );
+
+
+var cring =
+    document.getElementById(
+        'cRing'
+    );
+
+
+if (
+    window
+        .matchMedia(
+            '(pointer: fine)'
+        )
+        .matches
+) {
+
+    var mx =
+        0;
+
+    var my =
+        0;
+
+    var rx =
+        0;
+
+    var ry =
+        0;
+
+    var trailTimer =
+        0;
+
+
+    document.addEventListener(
+
+        'mousemove',
+
+        function(event) {
+
+            mx =
+                event.clientX;
+
+            my =
+                event.clientY;
+
+
+            cdot.style.left =
+                mx +
+                'px';
+
+
+            cdot.style.top =
+                my +
+                'px';
+
+
+            clearTimeout(
+                trailTimer
+            );
+
+
+            trailTimer =
+                setTimeout(
+
+                    function() {
+
+                        var trail =
+                            document.createElement(
+                                'div'
+                            );
+
+
+                        trail.className =
+                            'cursor-trail';
+
+
+                        trail.style.left =
+                            mx +
+                            'px';
+
+
+                        trail.style.top =
+                            my +
+                            'px';
+
+
+                        document.body
+                            .appendChild(
+                                trail
+                            );
+
+
+                        trail.addEventListener(
+
+                            'animationend',
+
+                            function() {
+
+                                trail.remove();
+
+                            }
+
+                        );
+
+                    },
+
+                    16
+
+                );
+
+        }
+
+    );
+
+
+    (
+        function loop() {
+
+            rx +=
+                (
+                    mx -
+                    rx
+                ) *
+                0.12;
+
+
+            ry +=
+                (
+                    my -
+                    ry
+                ) *
+                0.12;
+
+
+            cring.style.left =
+                rx +
+                'px';
+
+
+            cring.style.top =
+                ry +
+                'px';
+
+
+            requestAnimationFrame(
+                loop
+            );
+
+        }
+    )();
+
+
+    document
+        .querySelectorAll(
+            'a,button'
+        )
+        .forEach(
+            function(element) {
+
+                element
+                    .addEventListener(
+
+                        'mouseenter',
+
+                        function() {
+
+                            document.body
+                                .classList
+                                .add(
+                                    'cursor-hover'
+                                );
+
+                        }
+
+                    );
+
+
+                element
+                    .addEventListener(
+
+                        'mouseleave',
+
+                        function() {
+
+                            document.body
+                                .classList
+                                .remove(
+                                    'cursor-hover'
+                                );
+
+                        }
+
+                    );
+
+            }
+        );
+
+}
+
+
+window.addEventListener(
+
+    'DOMContentLoaded',
+
+    function() {
+
+        setTimeout(
+
+            function() {
+
+                addAI(
+                    renderAI(
+
+                        "Hello. I am the commission assistant for Good Ereseh.\n\n" +
+
+                        "I can help you shape an idea, review your reference photographs, and prepare a clear brief for Good to review. I will not alter or regenerate any photographs you upload.\n\n" +
+
+                        "What type of commission are you considering?\n\n" +
+
+                        "A) Personal Portrait\n" +
+
+                        "B) Family Artwork\n" +
+
+                        "C) Couple Portrait\n" +
+
+                        "D) Memorial Piece\n" +
+
+                        "E) Conceptual Artwork\n" +
+
+                        "F) Gift Commission\n" +
+
+                        "G) Cultural or Legacy Piece\n" +
+
+                        "H) I am not sure yet"
+
+                    )
+                );
+
+
+                enableInput();
+
+            },
+
+            500
+
+        );
+
+    }
+
+);
 </script>
-</body>
-</html>

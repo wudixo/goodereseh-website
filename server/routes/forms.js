@@ -8,9 +8,10 @@ const supabase = require("../supabase");
 
 const router = express.Router();
 
-const resend = new Resend(
-    process.env.RESEND_API_KEY
-);
+const resend =
+    new Resend(
+        process.env.RESEND_API_KEY
+    );
 
 const OWNER_EMAIL =
     process.env.OWNER_EMAIL ||
@@ -19,7 +20,8 @@ const OWNER_EMAIL =
 const STORAGE_BUCKET =
     "commission-references";
 
-const MAX_REFERENCES = 6;
+const MAX_REFERENCES =
+    6;
 
 const MAX_IMAGE_BYTES =
     4 * 1024 * 1024;
@@ -28,13 +30,13 @@ const ALLOWED_IMAGE_TYPES =
     new Set([
         "image/jpeg",
         "image/png",
-        "image/webp"
+        "image/webp",
     ]);
 
 
 /*
 |--------------------------------------------------------------------------
-| CONTACT FORM
+| CONTACT
 |--------------------------------------------------------------------------
 */
 
@@ -46,7 +48,8 @@ router.post(
             name,
             email,
             message
-        } = req.body || {};
+        } =
+            req.body || {};
 
 
         if (
@@ -58,8 +61,10 @@ router.post(
             return res
                 .status(400)
                 .json({
+
                     error:
                         "Name, email and message are required."
+
                 });
 
         }
@@ -68,65 +73,66 @@ router.post(
         try {
 
             const result =
-                await resend.emails.send({
+                await resend
+                    .emails
+                    .send({
 
-                    from:
-                        "Good Ereseh Website <art@goodereseh.com>",
+                        from:
+                            "Good Ereseh Website <art@goodereseh.com>",
 
-                    to:
-                        OWNER_EMAIL,
+                        to:
+                            OWNER_EMAIL,
 
-                    replyTo:
-                        email,
+                        replyTo:
+                            email,
 
-                    subject:
-                        "New Contact Message | " +
-                        name,
+                        subject:
+                            "New Contact Message | " +
+                            name,
 
-                    html: `
+                        html: `
 
-                        <div
-                            style="
-                                max-width:650px;
-                                margin:0 auto;
-                                padding:30px;
-                                font-family:Arial,sans-serif;
-                                color:#1a1812;
-                                line-height:1.7;
-                            "
-                        >
+                            <div
+                                style="
+                                    max-width:650px;
+                                    margin:0 auto;
+                                    padding:30px;
+                                    font-family:Arial,sans-serif;
+                                    color:#1a1812;
+                                    line-height:1.7;
+                                "
+                            >
 
-                            <h2>
-                                New Website Message
-                            </h2>
+                                <h2>
+                                    New Website Message
+                                </h2>
 
-                            <p>
-                                <strong>Name:</strong>
-                                ${escapeHtml(name)}
-                            </p>
+                                <p>
+                                    <strong>Name:</strong>
+                                    ${escapeHtml(name)}
+                                </p>
 
-                            <p>
-                                <strong>Email:</strong>
-                                ${escapeHtml(email)}
-                            </p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    ${escapeHtml(email)}
+                                </p>
 
-                            <p>
-                                <strong>Message:</strong>
-                            </p>
+                                <p>
+                                    <strong>Message:</strong>
+                                </p>
 
-                            <p>
-                                ${escapeHtml(message)
-                                    .replace(
+                                <p>
+                                    ${escapeHtml(message).replace(
                                         /\n/g,
                                         "<br>"
                                     )}
-                            </p>
+                                </p>
 
-                        </div>
+                            </div>
 
-                    `
+                        `
 
-                });
+                    });
 
 
             if (result.error) {
@@ -136,11 +142,14 @@ router.post(
                     result.error
                 );
 
+
                 return res
                     .status(500)
                     .json({
+
                         error:
                             "Failed to send message."
+
                     });
 
             }
@@ -163,8 +172,10 @@ router.post(
             return res
                 .status(500)
                 .json({
+
                     error:
                         "Failed to send message."
+
                 });
 
         }
@@ -176,7 +187,7 @@ router.post(
 
 /*
 |--------------------------------------------------------------------------
-| COMMISSION REQUEST
+| COMMISSION
 |--------------------------------------------------------------------------
 */
 
@@ -188,75 +199,92 @@ router.post(
             req.body || {};
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CUSTOMER DETAILS
-        |--------------------------------------------------------------------------
-        */
-
         const name =
-            clean(body.name);
+            clean(
+                body.name
+            );
+
 
         const email =
-            clean(body.email);
+            clean(
+                body.email
+            );
+
 
         const phone =
-            clean(body.phone);
+            clean(
+                body.phone
+            );
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | COMMISSION DETAILS
-        |--------------------------------------------------------------------------
-        */
 
         const type =
             clean(
+
                 body["commission-type"] ||
+
                 body.commissionType ||
+
                 body.type
+
             );
 
 
         const size =
-            clean(body.size);
+            clean(
+                body.size
+            );
 
 
         const message =
             clean(
+
                 body.message ||
+
                 body.brief ||
+
                 body.description
+
             );
 
 
         const notes =
-            clean(body.notes);
+            clean(
+                body.notes
+            );
+
+
+        const conversation =
+            normaliseConversation(
+
+                body.conversation ||
+
+                body.messages ||
+
+                body.chatHistory
+
+            );
 
 
         const completeBrief =
+
             notes
-                ? message +
+
+                ? (
+                    message +
+
                     "\n\nFinal notes:\n" +
+
                     notes
+                )
+
                 : message;
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DELIVERY ADDRESS
-        |--------------------------------------------------------------------------
-        */
-
         const address =
-            normaliseAddress(body);
+            normaliseAddress(
+                body
+            );
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | REFERENCE PHOTO CONSENT
-        |--------------------------------------------------------------------------
-        */
 
         const consent =
             toBoolean(
@@ -274,12 +302,6 @@ router.post(
             );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | REFERENCE PHOTOS
-        |--------------------------------------------------------------------------
-        */
-
         let references =
             normaliseReferences(
 
@@ -291,12 +313,6 @@ router.post(
 
             );
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | SUPPORT OLD SINGLE IMAGE PAYLOAD
-        |--------------------------------------------------------------------------
-        */
 
         if (
             !references.length &&
@@ -353,7 +369,9 @@ router.post(
 
 
         if (
-            !isValidEmail(email)
+            !isValidEmail(
+                email
+            )
         ) {
 
             return res
@@ -422,12 +440,6 @@ router.post(
 
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE COMMISSION REFERENCE NUMBER
-        |--------------------------------------------------------------------------
-        */
-
         const commissionNumber =
             createCommissionNumber();
 
@@ -441,7 +453,7 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | UPLOAD PHOTOS TO PRIVATE SUPABASE STORAGE
+            | UPLOAD REFERENCES
             |--------------------------------------------------------------------------
             */
 
@@ -473,11 +485,11 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | SAVE COMMISSION TO SUPABASE
+            | DATABASE
             |--------------------------------------------------------------------------
             */
 
-            const databaseRecord = {
+            const baseRecord = {
 
                 commission_number:
                     commissionNumber,
@@ -490,9 +502,6 @@ router.post(
 
                 customer_phone:
                     phone,
-
-                customer_address:
-                    address,
 
                 description:
                     completeBrief,
@@ -509,8 +518,27 @@ router.post(
                 medium:
                     "Charcoal and Graphite",
 
+                payment_status:
+                    "unpaid",
+
+                commission_status:
+                    "requested"
+
+            };
+
+
+            const expandedRecord = {
+
+                ...baseRecord,
+
+                customer_address:
+                    address,
+
                 reference_consent:
                     consent,
+
+                conversation:
+                    conversation,
 
                 commission_brief: {
 
@@ -529,21 +557,12 @@ router.post(
                     references:
                         uploadedReferences
 
-                },
-
-                payment_status:
-                    "unpaid",
-
-                commission_status:
-                    "requested"
+                }
 
             };
 
 
-            let {
-                data: commission,
-                error: commissionError
-            } =
+            let result =
                 await supabase
 
                     .from(
@@ -551,7 +570,7 @@ router.post(
                     )
 
                     .insert(
-                        databaseRecord
+                        expandedRecord
                     )
 
                     .select()
@@ -559,64 +578,23 @@ router.post(
                     .single();
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | FALLBACK IF SOME NEW COLUMNS ARE NOT AVAILABLE
-            |--------------------------------------------------------------------------
-            */
-
             if (
-                commissionError &&
+                result.error &&
                 isMissingColumnError(
-                    commissionError
+                    result.error
                 )
             ) {
 
                 console.warn(
+
                     "Using compatible commission schema:",
-                    commissionError.message
+
+                    result.error.message
+
                 );
 
 
-                const basicRecord = {
-
-                    commission_number:
-                        commissionNumber,
-
-                    customer_name:
-                        name,
-
-                    customer_email:
-                        email,
-
-                    customer_phone:
-                        phone,
-
-                    description:
-                        completeBrief,
-
-                    reference_images:
-                        uploadedReferences,
-
-                    generated_concept_image:
-                        null,
-
-                    artwork_size:
-                        size,
-
-                    medium:
-                        "Charcoal and Graphite",
-
-                    payment_status:
-                        "unpaid",
-
-                    commission_status:
-                        "requested"
-
-                };
-
-
-                const fallback =
+                result =
                     await supabase
 
                         .from(
@@ -624,31 +602,24 @@ router.post(
                         )
 
                         .insert(
-                            basicRecord
+                            baseRecord
                         )
 
                         .select()
 
                         .single();
 
-
-                commission =
-                    fallback.data;
-
-                commissionError =
-                    fallback.error;
-
             }
 
 
             if (
-                commissionError ||
-                !commission
+                result.error ||
+                !result.data
             ) {
 
                 console.error(
                     "Supabase commission error:",
-                    commissionError
+                    result.error
                 );
 
 
@@ -672,17 +643,15 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | PREPARE EMAIL ATTACHMENTS
-            |--------------------------------------------------------------------------
-            |
-            | These use CID so the actual customer photographs appear
-            | directly inside the owner email.
+            | EMAIL IMAGE ATTACHMENTS
             |--------------------------------------------------------------------------
             */
 
             const ownerAttachments =
+
                 references.map(
-                    function (
+
+                    function(
                         reference,
                         index
                     ) {
@@ -690,26 +659,32 @@ router.post(
                         return {
 
                             filename:
+
                                 reference.fileName ||
+
                                 `reference-${index + 1}.jpg`,
 
                             content:
+
                                 stripDataUrl(
                                     reference.data
                                 ),
 
                             contentId:
+
                                 `reference-${index + 1}`
 
                         };
 
                     }
+
                 );
+
 
 
             /*
             |--------------------------------------------------------------------------
-            | BUILD OWNER EMAIL
+            | OWNER EMAIL
             |--------------------------------------------------------------------------
             */
 
@@ -741,38 +716,37 @@ router.post(
                 });
 
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | SEND OWNER EMAIL
-            |--------------------------------------------------------------------------
-            */
-
             const ownerEmailResult =
-                await resend.emails.send({
+                await resend
+                    .emails
+                    .send({
 
-                    from:
-                        "Good Ereseh <art@goodereseh.com>",
+                        from:
+                            "Good Ereseh <art@goodereseh.com>",
 
-                    to:
-                        OWNER_EMAIL,
+                        to:
+                            OWNER_EMAIL,
 
-                    replyTo:
-                        email,
+                        replyTo:
+                            email,
 
-                    subject:
-                        "New Commission | " +
-                        commissionNumber +
-                        " | " +
-                        name,
+                        subject:
 
-                    html:
-                        ownerHtml,
+                            "New Commission | " +
 
-                    attachments:
-                        ownerAttachments
+                            commissionNumber +
 
-                });
+                            " | " +
+
+                            name,
+
+                        html:
+                            ownerHtml,
+
+                        attachments:
+                            ownerAttachments
+
+                    });
 
 
             if (
@@ -780,8 +754,11 @@ router.post(
             ) {
 
                 console.error(
+
                     "Owner commission email error:",
+
                     ownerEmailResult.error
+
                 );
 
             }
@@ -790,37 +767,41 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | SEND CUSTOMER CONFIRMATION
+            | CUSTOMER EMAIL
             |--------------------------------------------------------------------------
             */
 
             const customerEmailResult =
-                await resend.emails.send({
+                await resend
+                    .emails
+                    .send({
 
-                    from:
-                        "Good Ereseh <art@goodereseh.com>",
+                        from:
+                            "Good Ereseh <art@goodereseh.com>",
 
-                    to:
-                        email,
+                        to:
+                            email,
 
-                    subject:
-                        "Your Commission Request | " +
-                        commissionNumber,
+                        subject:
 
-                    html:
-                        buildCustomerEmail({
+                            "Your Commission Request | " +
 
                             commissionNumber,
 
-                            name,
+                        html:
+                            buildCustomerEmail({
 
-                            type,
+                                commissionNumber,
 
-                            size
+                                name,
 
-                        })
+                                type,
 
-                });
+                                size
+
+                            })
+
+                    });
 
 
             if (
@@ -828,8 +809,11 @@ router.post(
             ) {
 
                 console.error(
+
                     "Customer commission email error:",
+
                     customerEmailResult.error
+
                 );
 
             }
@@ -838,7 +822,7 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | RETURN SUCCESS TO WEBSITE
+            | SUCCESS
             |--------------------------------------------------------------------------
             */
 
@@ -865,8 +849,11 @@ router.post(
         catch (error) {
 
             console.error(
+
                 "Commission route error:",
+
                 error
+
             );
 
 
@@ -880,7 +867,9 @@ router.post(
                 .json({
 
                     error:
+
                         error.message ||
+
                         "Failed to process commission request. Please email art@goodereseh.com directly."
 
                 });
@@ -894,7 +883,7 @@ router.post(
 
 /*
 |--------------------------------------------------------------------------
-| UPLOAD REFERENCE IMAGE
+| UPLOAD IMAGE
 |--------------------------------------------------------------------------
 */
 
@@ -938,7 +927,9 @@ async function uploadReferenceImage(
     if (!cleanBase64) {
 
         throw new Error(
+
             `Reference ${index + 1} does not contain image data.`
+
         );
 
     }
@@ -946,15 +937,20 @@ async function uploadReferenceImage(
 
     const buffer =
         Buffer.from(
+
             cleanBase64,
+
             "base64"
+
         );
 
 
     if (!buffer.length) {
 
         throw new Error(
+
             `Reference ${index + 1} is empty.`
+
         );
 
     }
@@ -966,7 +962,9 @@ async function uploadReferenceImage(
     ) {
 
         throw new Error(
+
             `Reference ${index + 1} is too large. Maximum size is 4 MB.`
+
         );
 
     }
@@ -984,8 +982,12 @@ async function uploadReferenceImage(
 
         "/reference-" +
 
-        String(index + 1)
-            .padStart(2, "0") +
+        String(
+            index + 1
+        ).padStart(
+            2,
+            "0"
+        ) +
 
         "-" +
 
@@ -1033,7 +1035,9 @@ async function uploadReferenceImage(
 
 
         throw new Error(
+
             `Reference ${index + 1} could not be uploaded.`
+
         );
 
     }
@@ -1042,10 +1046,12 @@ async function uploadReferenceImage(
     return {
 
         label:
+
             clean(
                 reference.label ||
                 reference.name
             ) ||
+
             `Reference ${index + 1}`,
 
         path:
@@ -1055,10 +1061,12 @@ async function uploadReferenceImage(
             mimeType,
 
         original_name:
+
             clean(
                 reference.fileName ||
                 reference.filename
             ) ||
+
             null
 
     };
@@ -1069,7 +1077,7 @@ async function uploadReferenceImage(
 
 /*
 |--------------------------------------------------------------------------
-| CLEAN UP REFERENCE PHOTOS AFTER FAILED SUBMISSION
+| CLEANUP
 |--------------------------------------------------------------------------
 */
 
@@ -1081,8 +1089,11 @@ async function cleanupUploadedReferences(
         references
 
             .map(
-                reference =>
-                    reference.path
+                function(reference) {
+
+                    return reference.path;
+
+                }
             )
 
             .filter(Boolean);
@@ -1150,7 +1161,7 @@ function buildOwnerEmail(data) {
             ? data.references
 
                 .map(
-                    function (
+                    function(
                         reference,
                         index
                     ) {
@@ -1163,23 +1174,29 @@ function buildOwnerEmail(data) {
                                 "
                             >
 
-                                <p>
+                                <p
+                                    style="
+                                        margin-bottom:8px;
+                                    "
+                                >
+
                                     <strong>
+
                                         ${escapeHtml(
                                             reference.label ||
                                             `Reference ${index + 1}`
                                         )}
+
                                     </strong>
+
                                 </p>
+
 
                                 <img
 
                                     src="cid:reference-${index + 1}"
 
-                                    alt="${escapeHtml(
-                                        reference.label ||
-                                        `Reference ${index + 1}`
-                                    )}"
+                                    alt=""
 
                                     style="
                                         display:block;
@@ -1201,11 +1218,7 @@ function buildOwnerEmail(data) {
 
                 .join("")
 
-            : `
-                <p>
-                    No reference photographs supplied.
-                </p>
-            `;
+            : "<p>No reference photographs supplied.</p>";
 
 
     return `
@@ -1250,10 +1263,7 @@ function buildOwnerEmail(data) {
 
             <p>
 
-                <strong>
-                    Name:
-                </strong>
-
+                <strong>Name:</strong>
                 ${escapeHtml(
                     data.name
                 )}
@@ -1261,10 +1271,7 @@ function buildOwnerEmail(data) {
                 <br>
 
 
-                <strong>
-                    Email:
-                </strong>
-
+                <strong>Email:</strong>
                 ${escapeHtml(
                     data.email
                 )}
@@ -1272,10 +1279,7 @@ function buildOwnerEmail(data) {
                 <br>
 
 
-                <strong>
-                    Phone:
-                </strong>
-
+                <strong>Phone:</strong>
                 ${escapeHtml(
                     data.phone
                 )}
@@ -1345,7 +1349,9 @@ function buildOwnerEmail(data) {
 
                 ${
                     data.consent
+
                         ? "Yes"
+
                         : "Not applicable / No reference photographs"
                 }
 
@@ -1427,7 +1433,7 @@ function buildOwnerEmail(data) {
 
 /*
 |--------------------------------------------------------------------------
-| CUSTOMER CONFIRMATION EMAIL
+| CUSTOMER EMAIL
 |--------------------------------------------------------------------------
 */
 
@@ -1465,11 +1471,9 @@ function buildCustomerEmail(data) {
 
             <p>
 
-                Thank you for sharing your idea with
-                Good Ereseh Studio.
+                Thank you for sharing your idea with Good Ereseh Studio.
 
-                Your commission request has been
-                received for review.
+                Your commission request has been received for review.
 
             </p>
 
@@ -1515,30 +1519,24 @@ function buildCustomerEmail(data) {
 
             <p>
 
-                Good Ereseh will review your
-                commission brief and any reference
-                photographs you supplied.
+                Good Ereseh will review your commission brief and any reference photographs you supplied.
 
             </p>
 
 
             <p>
 
-                If a visual concept is required,
-                it will be prepared for your review.
+                If a visual concept is required, it will be prepared for your review.
 
-                Once the concept, quotation and
-                expected completion time are agreed,
-                you will receive a private payment
-                link.
+                Once the concept, quotation and expected completion time are agreed,
+                you will receive a private payment link.
 
             </p>
 
 
             <p>
 
-                Please keep your commission reference
-                for future correspondence.
+                Please keep your commission reference for future correspondence.
 
             </p>
 
@@ -1568,7 +1566,7 @@ function buildCustomerEmail(data) {
 
 /*
 |--------------------------------------------------------------------------
-| NORMALISE REFERENCES
+| REFERENCES
 |--------------------------------------------------------------------------
 */
 
@@ -1628,7 +1626,7 @@ function normaliseReferences(value) {
         .filter(Boolean)
 
         .map(
-            function (
+            function(
                 reference,
                 index
             ) {
@@ -1713,8 +1711,163 @@ function normaliseReferences(value) {
         )
 
         .filter(
-            reference =>
-                reference.data
+            function(reference) {
+
+                return reference.data;
+
+            }
+        );
+
+}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| CONVERSATION
+|--------------------------------------------------------------------------
+*/
+
+function normaliseConversation(value) {
+
+    if (!value) {
+
+        return [];
+
+    }
+
+
+    let conversation =
+        value;
+
+
+    if (
+        typeof conversation ===
+        "string"
+    ) {
+
+        try {
+
+            conversation =
+                JSON.parse(
+                    conversation
+                );
+
+        }
+
+        catch {
+
+            return [
+
+                {
+
+                    role:
+                        "user",
+
+                    text:
+                        conversation
+
+                }
+
+            ];
+
+        }
+
+    }
+
+
+    if (
+        !Array.isArray(
+            conversation
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return conversation
+
+        .map(
+            function(item) {
+
+                if (!item) {
+
+                    return null;
+
+                }
+
+
+                if (
+                    typeof item ===
+                    "string"
+                ) {
+
+                    return {
+
+                        role:
+                            "user",
+
+                        text:
+                            clean(
+                                item
+                            )
+
+                    };
+
+                }
+
+
+                const role =
+
+                    item.role ===
+                    "assistant" ||
+
+                    item.role ===
+                    "model"
+
+                        ? "assistant"
+
+                        : "user";
+
+
+                const text =
+                    clean(
+
+                        item.text ||
+
+                        item.content ||
+
+                        ""
+
+                    );
+
+
+                if (!text) {
+
+                    return null;
+
+                }
+
+
+                return {
+
+                    role:
+                        role,
+
+                    text:
+                        text
+
+                };
+
+            }
+        )
+
+        .filter(Boolean)
+
+        .slice(
+            -100
         );
 
 }
@@ -1744,46 +1897,82 @@ function normaliseAddress(body) {
     return {
 
         line1:
+
             clean(
+
                 source.line1 ||
+
                 body.addressLine1 ||
+
                 body.address_line1
+
             ),
+
 
         line2:
+
             clean(
+
                 source.line2 ||
+
                 body.addressLine2 ||
+
                 body.address_line2
+
             ),
+
 
         city:
+
             clean(
+
                 source.city ||
+
                 body.city
+
             ),
+
 
         county:
+
             clean(
+
                 source.county ||
+
                 source.region ||
+
                 body.county ||
+
                 body.region
+
             ),
+
 
         postcode:
+
             clean(
+
                 source.postcode ||
+
                 source.postal_code ||
+
                 body.postcode ||
+
                 body.postalCode ||
+
                 body.postal_code
+
             ),
 
+
         country:
+
             clean(
+
                 source.country ||
+
                 body.country
+
             )
 
     };
@@ -1794,7 +1983,7 @@ function normaliseAddress(body) {
 
 /*
 |--------------------------------------------------------------------------
-| COMMISSION NUMBER
+| HELPERS
 |--------------------------------------------------------------------------
 */
 
@@ -1830,13 +2019,6 @@ function createCommissionNumber() {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| HELPERS
-|--------------------------------------------------------------------------
-*/
-
 function clean(value) {
 
     return String(
@@ -1861,9 +2043,13 @@ function toBoolean(value) {
     return [
 
         "true",
+
         "1",
+
         "yes",
+
         "on",
+
         "confirmed"
 
     ].includes(
@@ -1879,7 +2065,9 @@ function toBoolean(value) {
 function isValidEmail(value) {
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(value);
+        .test(
+            value
+        );
 
 }
 
@@ -1898,9 +2086,7 @@ function stripDataUrl(value) {
 }
 
 
-function getMimeTypeFromDataUrl(
-    value
-) {
+function getMimeTypeFromDataUrl(value) {
 
     const match =
 
@@ -1926,15 +2112,22 @@ function getExtensionFromMimeType(
     mimeType
 ) {
 
-    switch (mimeType) {
+    switch (
+        mimeType
+    ) {
 
         case "image/png":
+
             return "png";
 
+
         case "image/webp":
+
             return "webp";
 
+
         default:
+
             return "jpg";
 
     }
@@ -1950,26 +2143,39 @@ function escapeHtml(value) {
 
         /[&<>"']/g,
 
-        function (character) {
+        function(character) {
 
-            switch (character) {
+            switch (
+                character
+            ) {
 
                 case "&":
+
                     return "&amp;";
 
+
                 case "<":
+
                     return "&lt;";
 
+
                 case ">":
+
                     return "&gt;";
 
+
                 case '"':
+
                     return "&quot;";
 
+
                 case "'":
+
                     return "&#39;";
 
+
                 default:
+
                     return character;
 
             }
@@ -2007,7 +2213,9 @@ function formatAddressHtml(
             escapeHtml
         )
 
-        .join("<br>");
+        .join(
+            "<br>"
+        );
 
 }
 
@@ -2075,11 +2283,5 @@ function isMissingColumnError(
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| EXPORT
-|--------------------------------------------------------------------------
-*/
-
-module.exports = router;
+module.exports =
+    router;
