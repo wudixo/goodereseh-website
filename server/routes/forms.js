@@ -679,34 +679,51 @@ router.post("/commission", async (req, res) => {
 
             });
 
+            const ownerAttachments = references.map(function(reference, index) {
+
+    const cleanBase64 =
+        stripDataUrl(reference.data);
+
+    return {
+        filename:
+            reference.fileName ||
+            `reference-${index + 1}.jpg`,
+
+        content:
+            cleanBase64,
+
+        content_id:
+            `reference-${index + 1}`
+    };
+
+});
 
 
         const ownerEmailResult =
-            await resend.emails.send({
+    await resend.emails.send({
 
-                from:
-                    "Good Ereseh <art@goodereseh.com>",
+        from:
+            "Good Ereseh <art@goodereseh.com>",
 
-                to:
-                    OWNER_EMAIL,
+        to:
+            OWNER_EMAIL,
 
-                replyTo:
-                    email,
+        replyTo:
+            email,
 
-                subject:
+        subject:
+            "New Commission | " +
+            commissionNumber +
+            " | " +
+            name,
 
-                    "New Commission | " +
+        html:
+            ownerHtml,
 
-                    commissionNumber +
+        attachments:
+            ownerAttachments
 
-                    " | " +
-
-                    name,
-
-                html:
-                    ownerHtml
-
-            });
+    });
 
 
 
@@ -1205,110 +1222,53 @@ async function cleanupUploadedReferences(
 |--------------------------------------------------------------------------
 */
 
-function buildOwnerEmail(data) {
+const referenceList =
 
+    data.references.length
 
-    const referenceList =
+        ? data.references
 
-        data.references.length
+            .map(function(reference, index) {
 
-            ?
+                return `
 
-            data.references
-
-                .map(
-
-                    (
-                        reference,
-                        index
-                    ) => `
-
-                        <li>
-
-                            ${escapeHtml(
-
-                                reference.label ||
-
-                                `Reference ${index + 1}`
-
-                            )}
-
-                            <br>
-
-                            <small>
-
-                                Secure storage path:
-
-                                ${escapeHtml(
-                                    reference.path
-                                )}
-
-                            </small>
-
-                        </li>
-
-                    `
-
-                )
-
-                .join("")
-
-
-            :
-
-            "<li>No reference photographs supplied</li>";
-
-
-
-    const conversationHtml =
-
-        data.conversation.length
-
-            ?
-
-            data.conversation
-
-                .map(
-
-                    item => `
+                    <div style="margin-bottom:24px;">
 
                         <p>
-
                             <strong>
-
                                 ${escapeHtml(
-
-                                    item.role === "assistant"
-
-                                        ? "Studio AI"
-
-                                        : "Customer"
-
-                                )}:
-
+                                    reference.label ||
+                                    `Reference ${index + 1}`
+                                )}
                             </strong>
-
-                            <br>
-
-                            ${escapeHtml(
-                                item.text
-                            ).replace(
-                                /\n/g,
-                                "<br>"
-                            )}
-
                         </p>
 
-                    `
+                        <img
+                            src="cid:reference-${index + 1}"
+                            alt="${escapeHtml(
+                                reference.label ||
+                                `Reference ${index + 1}`
+                            )}"
+                            style="
+                                max-width:420px;
+                                width:100%;
+                                height:auto;
+                                border-radius:8px;
+                                display:block;
+                            "
+                        >
 
-                )
+                    </div>
 
-                .join("")
+                `;
+
+            })
+
+            .join("")
+
+        : "<p>No reference photographs supplied.</p>";
 
 
-            :
-
-            "<p>No conversation transcript supplied.</p>";
 
 
 
@@ -1418,35 +1378,6 @@ function buildOwnerEmail(data) {
                 <br>
 
 
-                <strong>Framing:</strong>
-
-                ${escapeHtml(
-                    data.framing ||
-                    "Not specified"
-                )}
-
-                <br>
-
-
-                <strong>Requested date:</strong>
-
-                ${escapeHtml(
-                    data.deadline ||
-                    "Not specified"
-                )}
-
-                <br>
-
-
-                <strong>Service:</strong>
-
-                ${escapeHtml(
-                    data.serviceLevel
-                )}
-
-                <br>
-
-
                 <strong>
                     Photo permission confirmed:
                 </strong>
@@ -1464,24 +1395,25 @@ function buildOwnerEmail(data) {
 
 
             <h3>
-                Customer Brief
-            </h3>
+    Commission Brief
+</h3>
 
-
-            <p>
-
-                ${escapeHtml(
-
-                    data.message ||
-
-                    "No separate written brief supplied."
-
-                ).replace(
-                    /\n/g,
-                    "<br>"
-                )}
-
-            </p>
+<div
+    style="
+        background:#f7f4ef;
+        padding:16px;
+        border-radius:8px;
+        line-height:1.7;
+    "
+>
+    ${escapeHtml(
+        data.message ||
+        "No commission brief supplied."
+    ).replace(
+        /\n/g,
+        "<br>"
+    )}
+</div>
 
 
 
@@ -1490,20 +1422,11 @@ function buildOwnerEmail(data) {
             </h3>
 
 
-            <ol>
-
                 ${referenceList}
 
-            </ol>
 
 
-
-            <h3>
-                AI Studio Conversation
-            </h3>
-
-
-            ${conversationHtml}
+            
 
 
 
