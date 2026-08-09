@@ -544,18 +544,7 @@ function showBriefForm(){
       <input class="bf-inp" type="text" id="bfCounty" placeholder="County / Region" autocomplete="address-level1">
       <input class="bf-inp" type="text" id="bfPost" placeholder="Postcode" autocomplete="postal-code">
       <input class="bf-inp" type="text" id="bfCountry" placeholder="Country" autocomplete="country-name">
-      <select class="bf-inp" id="bfFrame">
-        <option value="">Framing preference</option>
-        <option value="Unframed">Unframed</option>
-        <option value="Framed">Framed</option>
-        <option value="Artist recommendation">Artist recommendation</option>
-      </select>
-      <input class="bf-inp" type="date" id="bfDeadline" title="Preferred completion date">
-      <select class="bf-inp" id="bfService">
-        <option value="Standard">Standard service</option>
-        <option value="Priority">Priority service requested</option>
-        <option value="Express">Express service requested</option>
-      </select>
+
       <textarea class="bf-inp" id="bfNotes" rows="3" placeholder="Final notes or delivery instructions"></textarea>
       <label style="display:flex;gap:8px;align-items:flex-start;font-size:10px;color:var(--g2);line-height:1.55;">
         <input type="checkbox" id="bfConsent" style="margin-top:3px;">
@@ -579,9 +568,6 @@ async function submitBrief(){
   var county=document.getElementById('bfCounty').value.trim();
   var postcode=document.getElementById('bfPost').value.trim();
   var country=document.getElementById('bfCountry').value.trim();
-  var framing=document.getElementById('bfFrame').value;
-  var deadline=document.getElementById('bfDeadline').value;
-  var service=document.getElementById('bfService').value;
   var notes=document.getElementById('bfNotes').value.trim();
   var consent=document.getElementById('bfConsent').checked;
   var err=document.getElementById('bfErr');
@@ -622,9 +608,7 @@ async function submitBrief(){
     postcode:postcode,
     country:country
 },
-        framing:framing,
-        deadline:deadline,
-        serviceLevel:service,
+      
         notes:notes,
         referenceConsent:consent
       })
