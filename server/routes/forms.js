@@ -7,20 +7,29 @@ const { Resend } = require("resend");
 const supabase = require("../supabase");
 
 const router = express.Router();
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+const resend = new Resend(
+    process.env.RESEND_API_KEY
+);
 
 const OWNER_EMAIL =
-    process.env.OWNER_EMAIL || "goodereseh@gmail.com";
+    process.env.OWNER_EMAIL ||
+    "goodereseh@gmail.com";
 
-const STORAGE_BUCKET = "commission-references";
+const STORAGE_BUCKET =
+    "commission-references";
+
 const MAX_REFERENCES = 6;
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
-const ALLOWED_IMAGE_TYPES = new Set([
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-]);
+const MAX_IMAGE_BYTES =
+    4 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES =
+    new Set([
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ]);
 
 
 /*
@@ -29,88 +38,139 @@ const ALLOWED_IMAGE_TYPES = new Set([
 |--------------------------------------------------------------------------
 */
 
-router.post("/contact", async (req, res) => {
+router.post(
+    "/contact",
+    async (req, res) => {
 
-    const {
-        name,
-        email,
-        message
-    } = req.body || {};
+        const {
+            name,
+            email,
+            message
+        } = req.body || {};
 
 
-    if (!name || !email || !message) {
+        if (
+            !name ||
+            !email ||
+            !message
+        ) {
 
-        return res.status(400).json({
-            error: "Name, email and message are required."
-        });
+            return res
+                .status(400)
+                .json({
+                    error:
+                        "Name, email and message are required."
+                });
+
+        }
+
+
+        try {
+
+            const result =
+                await resend.emails.send({
+
+                    from:
+                        "Good Ereseh Website <art@goodereseh.com>",
+
+                    to:
+                        OWNER_EMAIL,
+
+                    replyTo:
+                        email,
+
+                    subject:
+                        "New Contact Message | " +
+                        name,
+
+                    html: `
+
+                        <div
+                            style="
+                                max-width:650px;
+                                margin:0 auto;
+                                padding:30px;
+                                font-family:Arial,sans-serif;
+                                color:#1a1812;
+                                line-height:1.7;
+                            "
+                        >
+
+                            <h2>
+                                New Website Message
+                            </h2>
+
+                            <p>
+                                <strong>Name:</strong>
+                                ${escapeHtml(name)}
+                            </p>
+
+                            <p>
+                                <strong>Email:</strong>
+                                ${escapeHtml(email)}
+                            </p>
+
+                            <p>
+                                <strong>Message:</strong>
+                            </p>
+
+                            <p>
+                                ${escapeHtml(message)
+                                    .replace(
+                                        /\n/g,
+                                        "<br>"
+                                    )}
+                            </p>
+
+                        </div>
+
+                    `
+
+                });
+
+
+            if (result.error) {
+
+                console.error(
+                    "Contact email error:",
+                    result.error
+                );
+
+                return res
+                    .status(500)
+                    .json({
+                        error:
+                            "Failed to send message."
+                    });
+
+            }
+
+
+            return res.json({
+                success: true
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Contact form error:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .json({
+                    error:
+                        "Failed to send message."
+                });
+
+        }
 
     }
-
-
-    try {
-
-        await resend.emails.send({
-
-            from:
-                "Good Ereseh Website <art@goodereseh.com>",
-
-            to:
-                OWNER_EMAIL,
-
-            replyTo:
-                email,
-
-            subject:
-                "New Contact Message | " + name,
-
-            html: `
-
-                <h2>New Website Message</h2>
-
-                <p>
-                    <strong>Name:</strong>
-                    ${escapeHtml(name)}
-                </p>
-
-                <p>
-                    <strong>Email:</strong>
-                    ${escapeHtml(email)}
-                </p>
-
-                <p>
-                    <strong>Message:</strong>
-                </p>
-
-                <p>
-                    ${escapeHtml(message).replace(/\n/g, "<br>")}
-                </p>
-
-            `
-
-        });
-
-
-        return res.json({
-            success: true
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Contact form error:",
-            error
-        );
-
-
-        return res.status(500).json({
-            error: "Failed to send message."
-        });
-
-    }
-
-});
+);
 
 
 
@@ -118,314 +178,151 @@ router.post("/contact", async (req, res) => {
 |--------------------------------------------------------------------------
 | COMMISSION REQUEST
 |--------------------------------------------------------------------------
-|
-| IMPORTANT:
-|
-| This submits the commission for review.
-|
-| It does NOT:
-|
-| - charge the customer
-| - create a Stripe session
-| - generate an AI artwork
-|
-|--------------------------------------------------------------------------
 */
 
-router.post("/commission", async (req, res) => {
-
-    const body = req.body || {};
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CUSTOMER
-    |--------------------------------------------------------------------------
-    */
-
-    const name =
-        clean(body.name);
-
-    const email =
-        clean(body.email);
-
-    const phone =
-        clean(body.phone);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | COMMISSION
-    |--------------------------------------------------------------------------
-    */
-
-    const type =
-        clean(
-            body["commission-type"] ||
-            body.commissionType ||
-            body.type
-        );
-
-
-    const size =
-        clean(body.size);
-
-
-    const framing =
-        clean(body.framing);
-
-
-    const deadline =
-        clean(
-            body.deadline ||
-            body.requiredBy ||
-            body.required_by
-        );
-
-
-    const serviceLevel =
-        normaliseServiceLevel(
-            body.serviceLevel ||
-            body.service_level ||
-            body.priority
-        );
-
-
-    const message =
-        clean(
-            body.message ||
-            body.brief ||
-            body.description
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | AI CONVERSATION
-    |--------------------------------------------------------------------------
-    */
-
-    const conversation =
-        normaliseConversation(
-            body.conversation ||
-            body.messages ||
-            body.chatHistory
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADDRESS
-    |--------------------------------------------------------------------------
-    */
-
-    const address =
-        normaliseAddress(body);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | REFERENCE CONSENT
-    |--------------------------------------------------------------------------
-    */
-
-    const consent =
-        toBoolean(
-
-            body.referenceConsent ??
-
-            body.reference_consent ??
-
-            body.photoConsent ??
-
-            body.photo_consent ??
-
-            body.consent
-
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | REFERENCE PHOTOS
-    |--------------------------------------------------------------------------
-    */
-
-    let references =
-        normaliseReferences(
-
-            body.references ||
-
-            body.referenceImages ||
-
-            body.reference_images
-
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUPPORT OLD SINGLE IMAGE FORMAT
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-        !references.length &&
-        body.imageB64
-    ) {
-
-        references = [
-
-            {
-
-                data:
-                    body.imageB64,
-
-                mimeType:
-                    body.imageType ||
-                    "image/jpeg",
-
-                name:
-                    "Reference 1"
-
-            }
-
-        ];
-
-    }
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATION
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-        !name ||
-        !email ||
-        !phone
-    ) {
-
-        return res.status(400).json({
-
-            error:
-                "Name, email and phone number are required."
-
-        });
-
-    }
-
-
-    if (!isValidEmail(email)) {
-
-        return res.status(400).json({
-
-            error:
-                "Please enter a valid email address."
-
-        });
-
-    }
-
-
-    if (
-        !address.line1 ||
-        !address.city ||
-        !address.postcode ||
-        !address.country
-    ) {
-
-        return res.status(400).json({
-
-            error:
-                "Address line 1, city, postcode and country are required."
-
-        });
-
-    }
-
-
-    if (
-        references.length >
-        MAX_REFERENCES
-    ) {
-
-        return res.status(400).json({
-
-            error:
-                `You can upload a maximum of ${MAX_REFERENCES} reference images.`
-
-        });
-
-    }
-
-
-    if (
-        references.length &&
-        !consent
-    ) {
-
-        return res.status(400).json({
-
-            error:
-                "Please confirm that you have permission to provide and use the reference photographs."
-
-        });
-
-    }
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE COMMISSION NUMBER
-    |--------------------------------------------------------------------------
-    */
-
-    const commissionNumber =
-        createCommissionNumber();
-
-
-    const uploadedReferences = [];
-
-
-
-    try {
+router.post(
+    "/commission",
+    async (req, res) => {
+
+        const body =
+            req.body || {};
 
 
         /*
         |--------------------------------------------------------------------------
-        | UPLOAD REFERENCE PHOTOS
+        | CUSTOMER DETAILS
         |--------------------------------------------------------------------------
         */
 
-        for (
-            let index = 0;
-            index < references.length;
-            index++
+        const name =
+            clean(body.name);
+
+        const email =
+            clean(body.email);
+
+        const phone =
+            clean(body.phone);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | COMMISSION DETAILS
+        |--------------------------------------------------------------------------
+        */
+
+        const type =
+            clean(
+                body["commission-type"] ||
+                body.commissionType ||
+                body.type
+            );
+
+
+        const size =
+            clean(body.size);
+
+
+        const message =
+            clean(
+                body.message ||
+                body.brief ||
+                body.description
+            );
+
+
+        const notes =
+            clean(body.notes);
+
+
+        const completeBrief =
+            notes
+                ? message +
+                    "\n\nFinal notes:\n" +
+                    notes
+                : message;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DELIVERY ADDRESS
+        |--------------------------------------------------------------------------
+        */
+
+        const address =
+            normaliseAddress(body);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | REFERENCE PHOTO CONSENT
+        |--------------------------------------------------------------------------
+        */
+
+        const consent =
+            toBoolean(
+
+                body.referenceConsent ??
+
+                body.reference_consent ??
+
+                body.photoConsent ??
+
+                body.photo_consent ??
+
+                body.consent
+
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | REFERENCE PHOTOS
+        |--------------------------------------------------------------------------
+        */
+
+        let references =
+            normaliseReferences(
+
+                body.references ||
+
+                body.referenceImages ||
+
+                body.reference_images
+
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUPPORT OLD SINGLE IMAGE PAYLOAD
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            !references.length &&
+            body.imageB64
         ) {
 
-            const reference =
-                references[index];
+            references = [
 
+                {
 
-            const uploaded =
-                await uploadReferenceImage(
+                    data:
+                        body.imageB64,
 
-                    commissionNumber,
+                    mimeType:
+                        body.imageType ||
+                        "image/jpeg",
 
-                    reference,
+                    label:
+                        "Reference 1",
 
-                    index
+                    fileName:
+                        "reference-1.jpg"
 
-                );
+                }
 
-
-            uploadedReferences.push(
-                uploaded
-            );
+            ];
 
         }
 
@@ -433,193 +330,543 @@ router.post("/commission", async (req, res) => {
 
         /*
         |--------------------------------------------------------------------------
-        | BASIC DATABASE RECORD
-        |--------------------------------------------------------------------------
-        */
-
-        const baseRecord = {
-
-            commission_number:
-                commissionNumber,
-
-            customer_name:
-                name,
-
-            customer_email:
-                email,
-
-            customer_phone:
-                phone,
-
-            description:
-                message,
-
-            reference_images:
-                uploadedReferences,
-
-            generated_concept_image:
-                null,
-
-            artwork_size:
-                size,
-
-            medium:
-                "Charcoal and Graphite",
-
-            payment_status:
-                "unpaid",
-
-            commission_status:
-                "requested"
-
-        };
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | COMPLETE DATABASE RECORD
-        |--------------------------------------------------------------------------
-        */
-
-        const expandedRecord = {
-
-            ...baseRecord,
-
-
-            customer_address:
-                address,
-
-
-            framing:
-                framing || null,
-
-
-            requested_deadline:
-                deadline || null,
-
-
-            service_level:
-                serviceLevel,
-
-
-            reference_consent:
-                consent,
-
-
-            conversation:
-                conversation,
-
-
-            commission_brief:
-                buildBrief({
-
-                    type,
-
-                    size,
-
-                    framing,
-
-                    deadline,
-
-                    serviceLevel,
-
-                    message,
-
-                    references:
-                        uploadedReferences,
-
-                    conversation
-
-                })
-
-        };
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE COMMISSION TO SUPABASE
-        |--------------------------------------------------------------------------
-        */
-
-        let commissionResult =
-            await supabase
-
-                .from("commissions")
-
-                .insert(
-                    expandedRecord
-                )
-
-                .select()
-
-                .single();
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FALLBACK FOR OLD DATABASE SCHEMA
+        | VALIDATION
         |--------------------------------------------------------------------------
         */
 
         if (
-
-            commissionResult.error &&
-
-            isMissingColumnError(
-                commissionResult.error
-            )
-
+            !name ||
+            !email ||
+            !phone
         ) {
 
-            console.warn(
+            return res
+                .status(400)
+                .json({
 
-                "Commission table needs new columns. Saving compatible record:",
+                    error:
+                        "Name, email and phone number are required."
 
-                commissionResult.error.message
+                });
 
-            );
+        }
 
 
-            commissionResult =
+        if (
+            !isValidEmail(email)
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "Please enter a valid email address."
+
+                });
+
+        }
+
+
+        if (
+            !address.line1 ||
+            !address.city ||
+            !address.postcode ||
+            !address.country
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "Address line 1, city, postcode and country are required."
+
+                });
+
+        }
+
+
+        if (
+            references.length >
+            MAX_REFERENCES
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        `You can upload a maximum of ${MAX_REFERENCES} reference images.`
+
+                });
+
+        }
+
+
+        if (
+            references.length &&
+            !consent
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "Please confirm that you have permission to provide and use the reference photographs."
+
+                });
+
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE COMMISSION REFERENCE NUMBER
+        |--------------------------------------------------------------------------
+        */
+
+        const commissionNumber =
+            createCommissionNumber();
+
+
+        const uploadedReferences =
+            [];
+
+
+        try {
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPLOAD PHOTOS TO PRIVATE SUPABASE STORAGE
+            |--------------------------------------------------------------------------
+            */
+
+            for (
+                let index = 0;
+                index < references.length;
+                index++
+            ) {
+
+                const uploaded =
+                    await uploadReferenceImage(
+
+                        commissionNumber,
+
+                        references[index],
+
+                        index
+
+                    );
+
+
+                uploadedReferences.push(
+                    uploaded
+                );
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SAVE COMMISSION TO SUPABASE
+            |--------------------------------------------------------------------------
+            */
+
+            const databaseRecord = {
+
+                commission_number:
+                    commissionNumber,
+
+                customer_name:
+                    name,
+
+                customer_email:
+                    email,
+
+                customer_phone:
+                    phone,
+
+                customer_address:
+                    address,
+
+                description:
+                    completeBrief,
+
+                reference_images:
+                    uploadedReferences,
+
+                generated_concept_image:
+                    null,
+
+                artwork_size:
+                    size,
+
+                medium:
+                    "Charcoal and Graphite",
+
+                reference_consent:
+                    consent,
+
+                commission_brief: {
+
+                    commission_type:
+                        type || null,
+
+                    artwork_size:
+                        size || null,
+
+                    medium:
+                        "Charcoal and Graphite",
+
+                    customer_description:
+                        completeBrief || null,
+
+                    references:
+                        uploadedReferences
+
+                },
+
+                payment_status:
+                    "unpaid",
+
+                commission_status:
+                    "requested"
+
+            };
+
+
+            let {
+                data: commission,
+                error: commissionError
+            } =
                 await supabase
 
-                    .from("commissions")
+                    .from(
+                        "commissions"
+                    )
 
                     .insert(
-                        baseRecord
+                        databaseRecord
                     )
 
                     .select()
 
                     .single();
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | FALLBACK IF SOME NEW COLUMNS ARE NOT AVAILABLE
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                commissionError &&
+                isMissingColumnError(
+                    commissionError
+                )
+            ) {
+
+                console.warn(
+                    "Using compatible commission schema:",
+                    commissionError.message
+                );
+
+
+                const basicRecord = {
+
+                    commission_number:
+                        commissionNumber,
+
+                    customer_name:
+                        name,
+
+                    customer_email:
+                        email,
+
+                    customer_phone:
+                        phone,
+
+                    description:
+                        completeBrief,
+
+                    reference_images:
+                        uploadedReferences,
+
+                    generated_concept_image:
+                        null,
+
+                    artwork_size:
+                        size,
+
+                    medium:
+                        "Charcoal and Graphite",
+
+                    payment_status:
+                        "unpaid",
+
+                    commission_status:
+                        "requested"
+
+                };
+
+
+                const fallback =
+                    await supabase
+
+                        .from(
+                            "commissions"
+                        )
+
+                        .insert(
+                            basicRecord
+                        )
+
+                        .select()
+
+                        .single();
+
+
+                commission =
+                    fallback.data;
+
+                commissionError =
+                    fallback.error;
+
+            }
+
+
+            if (
+                commissionError ||
+                !commission
+            ) {
+
+                console.error(
+                    "Supabase commission error:",
+                    commissionError
+                );
+
+
+                await cleanupUploadedReferences(
+                    uploadedReferences
+                );
+
+
+                return res
+                    .status(500)
+                    .json({
+
+                        error:
+                            "Unable to save commission request."
+
+                    });
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PREPARE EMAIL ATTACHMENTS
+            |--------------------------------------------------------------------------
+            |
+            | These use CID so the actual customer photographs appear
+            | directly inside the owner email.
+            |--------------------------------------------------------------------------
+            */
+
+            const ownerAttachments =
+                references.map(
+                    function (
+                        reference,
+                        index
+                    ) {
+
+                        return {
+
+                            filename:
+                                reference.fileName ||
+                                `reference-${index + 1}.jpg`,
+
+                            content:
+                                stripDataUrl(
+                                    reference.data
+                                ),
+
+                            contentId:
+                                `reference-${index + 1}`
+
+                        };
+
+                    }
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | BUILD OWNER EMAIL
+            |--------------------------------------------------------------------------
+            */
+
+            const ownerHtml =
+                buildOwnerEmail({
+
+                    commissionNumber,
+
+                    name,
+
+                    email,
+
+                    phone,
+
+                    type,
+
+                    size,
+
+                    message:
+                        completeBrief,
+
+                    address,
+
+                    consent,
+
+                    references:
+                        uploadedReferences
+
+                });
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SEND OWNER EMAIL
+            |--------------------------------------------------------------------------
+            */
+
+            const ownerEmailResult =
+                await resend.emails.send({
+
+                    from:
+                        "Good Ereseh <art@goodereseh.com>",
+
+                    to:
+                        OWNER_EMAIL,
+
+                    replyTo:
+                        email,
+
+                    subject:
+                        "New Commission | " +
+                        commissionNumber +
+                        " | " +
+                        name,
+
+                    html:
+                        ownerHtml,
+
+                    attachments:
+                        ownerAttachments
+
+                });
+
+
+            if (
+                ownerEmailResult.error
+            ) {
+
+                console.error(
+                    "Owner commission email error:",
+                    ownerEmailResult.error
+                );
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SEND CUSTOMER CONFIRMATION
+            |--------------------------------------------------------------------------
+            */
+
+            const customerEmailResult =
+                await resend.emails.send({
+
+                    from:
+                        "Good Ereseh <art@goodereseh.com>",
+
+                    to:
+                        email,
+
+                    subject:
+                        "Your Commission Request | " +
+                        commissionNumber,
+
+                    html:
+                        buildCustomerEmail({
+
+                            commissionNumber,
+
+                            name,
+
+                            type,
+
+                            size
+
+                        })
+
+                });
+
+
+            if (
+                customerEmailResult.error
+            ) {
+
+                console.error(
+                    "Customer commission email error:",
+                    customerEmailResult.error
+                );
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RETURN SUCCESS TO WEBSITE
+            |--------------------------------------------------------------------------
+            */
+
+            return res
+                .status(201)
+                .json({
+
+                    success:
+                        true,
+
+                    commissionNumber:
+                        commissionNumber,
+
+                    status:
+                        "requested",
+
+                    message:
+                        "Your commission request has been received. Good Ereseh will review your brief before a concept, quotation or payment link is issued."
+
+                });
+
         }
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATABASE FAILURE
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-
-            commissionResult.error ||
-
-            !commissionResult.data
-
-        ) {
+        catch (error) {
 
             console.error(
-
-                "Supabase commission error:",
-
-                commissionResult.error
-
+                "Commission route error:",
+                error
             );
 
 
@@ -628,232 +875,20 @@ router.post("/commission", async (req, res) => {
             );
 
 
-            return res.status(500).json({
+            return res
+                .status(500)
+                .json({
 
-                error:
-                    "Unable to save commission request."
+                    error:
+                        error.message ||
+                        "Failed to process commission request. Please email art@goodereseh.com directly."
 
-            });
-
-        }
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | EMAIL GOOD ERESEH
-        |--------------------------------------------------------------------------
-        */
-
-        const ownerHtml =
-            buildOwnerEmail({
-
-                commissionNumber,
-
-                name,
-
-                email,
-
-                phone,
-
-                type,
-
-                size,
-
-                framing,
-
-                deadline,
-
-                serviceLevel,
-
-                message,
-
-                address,
-
-                consent,
-
-                references:
-                    uploadedReferences,
-
-                conversation
-
-            });
-
-            const ownerAttachments = references.map(function(reference, index) {
-
-    const cleanBase64 =
-        stripDataUrl(reference.data);
-
-    return {
-        filename:
-            reference.fileName ||
-            `reference-${index + 1}.jpg`,
-
-        content:
-            cleanBase64,
-
-        content_id:
-            `reference-${index + 1}`
-    };
-
-});
-
-
-        const ownerEmailResult =
-    await resend.emails.send({
-
-        from:
-            "Good Ereseh <art@goodereseh.com>",
-
-        to:
-            OWNER_EMAIL,
-
-        replyTo:
-            email,
-
-        subject:
-            "New Commission | " +
-            commissionNumber +
-            " | " +
-            name,
-
-        html:
-            ownerHtml,
-
-        attachments:
-            ownerAttachments
-
-    });
-
-
-
-        if (ownerEmailResult.error) {
-
-            console.error(
-
-                "Owner commission email error:",
-
-                ownerEmailResult.error
-
-            );
+                });
 
         }
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CUSTOMER CONFIRMATION EMAIL
-        |--------------------------------------------------------------------------
-        */
-
-        const customerEmailResult =
-            await resend.emails.send({
-
-                from:
-                    "Good Ereseh <art@goodereseh.com>",
-
-                to:
-                    email,
-
-                subject:
-
-                    "Your Commission Request | " +
-
-                    commissionNumber,
-
-                html:
-                    buildCustomerEmail({
-
-                        commissionNumber,
-
-                        name,
-
-                        type,
-
-                        size,
-
-                        deadline,
-
-                        serviceLevel
-
-                    })
-
-            });
-
-
-
-        if (customerEmailResult.error) {
-
-            console.error(
-
-                "Customer commission email error:",
-
-                customerEmailResult.error
-
-            );
-
-        }
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SUCCESS
-        |--------------------------------------------------------------------------
-        |
-        | No Stripe payment is created here.
-        |--------------------------------------------------------------------------
-        */
-
-        return res.status(201).json({
-
-            success:
-                true,
-
-
-            commissionNumber:
-                commissionNumber,
-
-
-            status:
-                "requested",
-
-
-            message:
-                "Your commission request has been received. Good Ereseh will review your brief before a concept, quotation or payment link is issued."
-
-        });
 
     }
-
-
-    catch (error) {
-
-        console.error(
-
-            "Commission route error:",
-
-            error
-
-        );
-
-
-        await cleanupUploadedReferences(
-            uploadedReferences
-        );
-
-
-        return res.status(500).json({
-
-            error:
-                "Failed to process commission request. Please email art@goodereseh.com directly."
-
-        });
-
-    }
-
-});
+);
 
 
 
@@ -864,15 +899,10 @@ router.post("/commission", async (req, res) => {
 */
 
 async function uploadReferenceImage(
-
     commissionNumber,
-
     reference,
-
     index
-
 ) {
-
 
     const mimeType =
 
@@ -886,13 +916,6 @@ async function uploadReferenceImage(
         );
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATE FILE TYPE
-    |--------------------------------------------------------------------------
-    */
-
     if (
         !ALLOWED_IMAGE_TYPES.has(
             mimeType
@@ -900,20 +923,11 @@ async function uploadReferenceImage(
     ) {
 
         throw new Error(
-
             "Reference images must be JPEG, PNG or WebP."
-
         );
 
     }
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CLEAN BASE64
-    |--------------------------------------------------------------------------
-    */
 
     const cleanBase64 =
         stripDataUrl(
@@ -924,63 +938,27 @@ async function uploadReferenceImage(
     if (!cleanBase64) {
 
         throw new Error(
-
             `Reference ${index + 1} does not contain image data.`
-
         );
 
     }
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE BUFFER
-    |--------------------------------------------------------------------------
-    */
-
-    let buffer;
-
-
-    try {
-
-        buffer =
-            Buffer.from(
-                cleanBase64,
-                "base64"
-            );
-
-    }
-
-    catch {
-
-        throw new Error(
-
-            `Reference ${index + 1} could not be read.`
-
+    const buffer =
+        Buffer.from(
+            cleanBase64,
+            "base64"
         );
-
-    }
-
 
 
     if (!buffer.length) {
 
         throw new Error(
-
             `Reference ${index + 1} is empty.`
-
         );
 
     }
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | MAXIMUM FILE SIZE
-    |--------------------------------------------------------------------------
-    */
 
     if (
         buffer.length >
@@ -988,33 +966,17 @@ async function uploadReferenceImage(
     ) {
 
         throw new Error(
-
             `Reference ${index + 1} is too large. Maximum size is 4 MB.`
-
         );
 
     }
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | FILE EXTENSION
-    |--------------------------------------------------------------------------
-    */
 
     const extension =
         getExtensionFromMimeType(
             mimeType
         );
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | STORAGE PATH
-    |--------------------------------------------------------------------------
-    */
 
     const path =
 
@@ -1034,17 +996,9 @@ async function uploadReferenceImage(
         extension;
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPLOAD TO SUPABASE STORAGE
-    |--------------------------------------------------------------------------
-    */
-
     const {
         error: uploadError
     } =
-
         await supabase.storage
 
             .from(
@@ -1070,61 +1024,41 @@ async function uploadReferenceImage(
             );
 
 
-
     if (uploadError) {
 
         console.error(
-
-            "Reference image upload error:",
-
+            "Reference upload error:",
             uploadError
-
         );
 
 
         throw new Error(
-
             `Reference ${index + 1} could not be uploaded.`
-
         );
 
     }
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | RETURN STORAGE INFORMATION
-    |--------------------------------------------------------------------------
-    */
-
     return {
 
         label:
-
             clean(
                 reference.label ||
                 reference.name
             ) ||
-
             `Reference ${index + 1}`,
-
 
         path:
             path,
 
-
         mime_type:
             mimeType,
 
-
         original_name:
-
             clean(
                 reference.fileName ||
                 reference.filename
             ) ||
-
             null
 
     };
@@ -1135,18 +1069,13 @@ async function uploadReferenceImage(
 
 /*
 |--------------------------------------------------------------------------
-| CLEAN UP UPLOADED IMAGES
-|--------------------------------------------------------------------------
-|
-| If the database submission fails, remove the images that were already
-| uploaded so we do not leave unused customer photographs in storage.
+| CLEAN UP REFERENCE PHOTOS AFTER FAILED SUBMISSION
 |--------------------------------------------------------------------------
 */
 
 async function cleanupUploadedReferences(
     references
 ) {
-
 
     const paths =
         references
@@ -1159,7 +1088,6 @@ async function cleanupUploadedReferences(
             .filter(Boolean);
 
 
-
     if (!paths.length) {
 
         return;
@@ -1167,13 +1095,11 @@ async function cleanupUploadedReferences(
     }
 
 
-
     try {
 
         const {
             error
         } =
-
             await supabase.storage
 
                 .from(
@@ -1188,26 +1114,19 @@ async function cleanupUploadedReferences(
         if (error) {
 
             console.error(
-
                 "Reference cleanup error:",
-
                 error
-
             );
 
         }
 
     }
 
-
     catch (error) {
 
         console.error(
-
             "Reference cleanup exception:",
-
             error
-
         );
 
     }
@@ -1218,58 +1137,75 @@ async function cleanupUploadedReferences(
 
 /*
 |--------------------------------------------------------------------------
-| EMAIL TO GOOD ERESEH
+| OWNER EMAIL
 |--------------------------------------------------------------------------
 */
 
-const referenceList =
+function buildOwnerEmail(data) {
 
-    data.references.length
+    const referenceList =
 
-        ? data.references
+        data.references.length
 
-            .map(function(reference, index) {
+            ? data.references
 
-                return `
+                .map(
+                    function (
+                        reference,
+                        index
+                    ) {
 
-                    <div style="margin-bottom:24px;">
+                        return `
 
-                        <p>
-                            <strong>
-                                ${escapeHtml(
-                                    reference.label ||
-                                    `Reference ${index + 1}`
-                                )}
-                            </strong>
-                        </p>
+                            <div
+                                style="
+                                    margin-bottom:28px;
+                                "
+                            >
 
-                        <img
-                            src="cid:reference-${index + 1}"
-                            alt="${escapeHtml(
-                                reference.label ||
-                                `Reference ${index + 1}`
-                            )}"
-                            style="
-                                max-width:420px;
-                                width:100%;
-                                height:auto;
-                                border-radius:8px;
-                                display:block;
-                            "
-                        >
+                                <p>
+                                    <strong>
+                                        ${escapeHtml(
+                                            reference.label ||
+                                            `Reference ${index + 1}`
+                                        )}
+                                    </strong>
+                                </p>
 
-                    </div>
+                                <img
 
-                `;
+                                    src="cid:reference-${index + 1}"
 
-            })
+                                    alt="${escapeHtml(
+                                        reference.label ||
+                                        `Reference ${index + 1}`
+                                    )}"
 
-            .join("")
+                                    style="
+                                        display:block;
+                                        width:100%;
+                                        max-width:420px;
+                                        height:auto;
+                                        border-radius:8px;
+                                        border:1px solid #ddd6ce;
+                                    "
 
-        : "<p>No reference photographs supplied.</p>";
+                                >
 
+                            </div>
 
+                        `;
 
+                    }
+                )
+
+                .join("")
+
+            : `
+                <p>
+                    No reference photographs supplied.
+                </p>
+            `;
 
 
     return `
@@ -1277,10 +1213,12 @@ const referenceList =
         <div
 
             style="
-                font-family:Arial,sans-serif;
-                line-height:1.6;
-                color:#1a1812;
                 max-width:760px;
+                margin:0 auto;
+                padding:32px;
+                font-family:Arial,sans-serif;
+                color:#1a1812;
+                line-height:1.7;
             "
 
         >
@@ -1312,18 +1250,35 @@ const referenceList =
 
             <p>
 
-                <strong>Name:</strong>
-                ${escapeHtml(data.name)}
+                <strong>
+                    Name:
+                </strong>
+
+                ${escapeHtml(
+                    data.name
+                )}
 
                 <br>
 
-                <strong>Email:</strong>
-                ${escapeHtml(data.email)}
+
+                <strong>
+                    Email:
+                </strong>
+
+                ${escapeHtml(
+                    data.email
+                )}
 
                 <br>
 
-                <strong>Phone:</strong>
-                ${escapeHtml(data.phone)}
+
+                <strong>
+                    Phone:
+                </strong>
+
+                ${escapeHtml(
+                    data.phone
+                )}
 
             </p>
 
@@ -1351,7 +1306,9 @@ const referenceList =
 
             <p>
 
-                <strong>Type:</strong>
+                <strong>
+                    Type:
+                </strong>
 
                 ${escapeHtml(
                     data.type ||
@@ -1361,7 +1318,9 @@ const referenceList =
                 <br>
 
 
-                <strong>Size:</strong>
+                <strong>
+                    Size:
+                </strong>
 
                 ${escapeHtml(
                     data.size ||
@@ -1371,7 +1330,9 @@ const referenceList =
                 <br>
 
 
-                <strong>Medium:</strong>
+                <strong>
+                    Medium:
+                </strong>
 
                 Charcoal and Graphite
 
@@ -1384,10 +1345,8 @@ const referenceList =
 
                 ${
                     data.consent
-
                         ? "Yes"
-
-                        : "Not applicable / No references"
+                        : "Not applicable / No reference photographs"
                 }
 
             </p>
@@ -1395,25 +1354,31 @@ const referenceList =
 
 
             <h3>
-    Commission Brief
-</h3>
+                Commission Brief
+            </h3>
 
-<div
-    style="
-        background:#f7f4ef;
-        padding:16px;
-        border-radius:8px;
-        line-height:1.7;
-    "
->
-    ${escapeHtml(
-        data.message ||
-        "No commission brief supplied."
-    ).replace(
-        /\n/g,
-        "<br>"
-    )}
-</div>
+
+            <div
+
+                style="
+                    background:#f7f4ef;
+                    padding:18px;
+                    border-radius:8px;
+                    line-height:1.75;
+                    margin-bottom:24px;
+                "
+
+            >
+
+                ${escapeHtml(
+                    data.message ||
+                    "No commission brief supplied."
+                ).replace(
+                    /\n/g,
+                    "<br>"
+                )}
+
+            </div>
 
 
 
@@ -1422,16 +1387,17 @@ const referenceList =
             </h3>
 
 
-                ${referenceList}
+            ${referenceList}
 
 
 
-            
-
-
-
-            <hr>
-
+            <hr
+                style="
+                    border:none;
+                    border-top:1px solid #ddd6ce;
+                    margin:30px 0;
+                "
+            >
 
 
             <p>
@@ -1440,14 +1406,13 @@ const referenceList =
                     Next step:
                 </strong>
 
-                Review the brief and references.
+                Review the commission brief and reference photographs.
 
                 No payment has been requested.
 
-                Prepare or approve a concept,
-                confirm the quotation and deadline,
-                then issue the customer a private
-                payment link.
+                Prepare the concept where needed,
+                confirm the quotation,
+                then send the customer their private payment link.
 
             </p>
 
@@ -1467,7 +1432,6 @@ const referenceList =
 */
 
 function buildCustomerEmail(data) {
-
 
     return `
 
@@ -1492,22 +1456,22 @@ function buildCustomerEmail(data) {
 
             <p>
 
-                Dear ${escapeHtml(data.name)},
+                Dear ${escapeHtml(
+                    data.name
+                )},
 
             </p>
-
 
 
             <p>
 
-                Thank you for sharing your idea with the
+                Thank you for sharing your idea with
                 Good Ereseh Studio.
 
-                Your commission request has been received
-                for review.
+                Your commission request has been
+                received for review.
 
             </p>
-
 
 
             <p>
@@ -1521,7 +1485,6 @@ function buildCustomerEmail(data) {
                 )}
 
             </p>
-
 
 
             <p>
@@ -1547,85 +1510,29 @@ function buildCustomerEmail(data) {
                     "Not selected"
                 )}
 
-                <br>
-
-
-                <strong>
-                    Requested completion date:
-                </strong>
-
-                ${escapeHtml(
-                    data.deadline ||
-                    "Not specified"
-                )}
-
-                <br>
-
-
-                <strong>
-                    Service request:
-                </strong>
-
-                ${escapeHtml(
-                    data.serviceLevel
-                )}
-
             </p>
-
 
 
             <p>
 
-                Good Ereseh will review your brief
-                and reference photographs.
+                Good Ereseh will review your
+                commission brief and any reference
+                photographs you supplied.
 
-                If a visual concept is needed,
+            </p>
+
+
+            <p>
+
+                If a visual concept is required,
                 it will be prepared for your review.
 
-            </p>
-
-
-
-            <p>
-
-                Once the concept, price and expected
-                completion date are agreed, you will
-                receive a private payment link.
+                Once the concept, quotation and
+                expected completion time are agreed,
+                you will receive a private payment
+                link.
 
             </p>
-
-
-
-            ${
-
-                data.serviceLevel === "Priority" ||
-
-                data.serviceLevel === "Express"
-
-                    ? `
-
-                        <p>
-
-                            Your request includes
-
-                            ${escapeHtml(
-                                data.serviceLevel
-                            )}
-
-                            service.
-
-                            Availability and any priority
-                            charge will be confirmed before
-                            payment.
-
-                        </p>
-
-                    `
-
-                    : ""
-
-            }
-
 
 
             <p>
@@ -1634,7 +1541,6 @@ function buildCustomerEmail(data) {
                 for future correspondence.
 
             </p>
-
 
 
             <p>
@@ -1662,64 +1568,11 @@ function buildCustomerEmail(data) {
 
 /*
 |--------------------------------------------------------------------------
-| BUILD COMMISSION BRIEF
-|--------------------------------------------------------------------------
-*/
-
-function buildBrief(data) {
-
-
-    return {
-
-        commission_type:
-            data.type || null,
-
-
-        artwork_size:
-            data.size || null,
-
-
-        medium:
-            "Charcoal and Graphite",
-
-
-        framing:
-            data.framing || null,
-
-
-        requested_deadline:
-            data.deadline || null,
-
-
-        service_level:
-            data.serviceLevel,
-
-
-        customer_description:
-            data.message || null,
-
-
-        references:
-            data.references,
-
-
-        conversation:
-            data.conversation
-
-    };
-
-}
-
-
-
-/*
-|--------------------------------------------------------------------------
-| NORMALISE REFERENCE PHOTOS
+| NORMALISE REFERENCES
 |--------------------------------------------------------------------------
 */
 
 function normaliseReferences(value) {
-
 
     if (!value) {
 
@@ -1732,18 +1585,10 @@ function normaliseReferences(value) {
         value;
 
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | JSON STRING
-    |--------------------------------------------------------------------------
-    */
-
     if (
         typeof references ===
         "string"
     ) {
-
 
         try {
 
@@ -1754,29 +1599,15 @@ function normaliseReferences(value) {
 
         }
 
-
         catch {
 
             references = [
-
-                {
-
-                    data:
-                        references,
-
-                    mimeType:
-                        getMimeTypeFromDataUrl(
-                            references
-                        )
-
-                }
-
+                references
             ];
 
         }
 
     }
-
 
 
     if (
@@ -1792,24 +1623,15 @@ function normaliseReferences(value) {
     }
 
 
-
     return references
 
         .filter(Boolean)
 
         .map(
-
-            (
+            function (
                 reference,
                 index
-            ) => {
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | SIMPLE STRING
-                |--------------------------------------------------------------------------
-                */
+            ) {
 
                 if (
                     typeof reference ===
@@ -1821,42 +1643,39 @@ function normaliseReferences(value) {
                         data:
                             reference,
 
-
                         mimeType:
                             getMimeTypeFromDataUrl(
                                 reference
                             ),
 
-
                         label:
-                            `Reference ${index + 1}`
+                            `Reference ${index + 1}`,
+
+                        fileName:
+                            `reference-${index + 1}.jpg`
 
                     };
 
                 }
 
 
+                const imageData =
 
-                /*
-                |--------------------------------------------------------------------------
-                | OBJECT
-                |--------------------------------------------------------------------------
-                */
+                    reference.data ||
+
+                    reference.base64 ||
+
+                    reference.imageB64 ||
+
+                    reference.src ||
+
+                    "";
+
 
                 return {
 
                     data:
-
-                        reference.data ||
-
-                        reference.base64 ||
-
-                        reference.imageB64 ||
-
-                        reference.src ||
-
-                        "",
-
+                        imageData,
 
                     mimeType:
 
@@ -1869,28 +1688,14 @@ function normaliseReferences(value) {
                         reference.type ||
 
                         getMimeTypeFromDataUrl(
-
-                            reference.data ||
-
-                            reference.base64 ||
-
-                            reference.imageB64 ||
-
-                            reference.src ||
-
-                            ""
-
+                            imageData
                         ),
-
 
                     label:
 
                         reference.label ||
 
-                        reference.name ||
-
                         `Reference ${index + 1}`,
-
 
                     fileName:
 
@@ -1898,19 +1703,18 @@ function normaliseReferences(value) {
 
                         reference.filename ||
 
-                        ""
+                        reference.name ||
+
+                        `reference-${index + 1}.jpg`
 
                 };
 
             }
-
         )
 
         .filter(
-
             reference =>
                 reference.data
-
         );
 
 }
@@ -1919,247 +1723,11 @@ function normaliseReferences(value) {
 
 /*
 |--------------------------------------------------------------------------
-| NORMALISE AI CONVERSATION
-|--------------------------------------------------------------------------
-*/
-
-function normaliseConversation(value) {
-
-
-    if (!value) {
-
-        return [];
-
-    }
-
-
-    let conversation =
-        value;
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | JSON STRING
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-        typeof conversation ===
-        "string"
-    ) {
-
-
-        try {
-
-            conversation =
-                JSON.parse(
-                    conversation
-                );
-
-        }
-
-
-        catch {
-
-            return [
-
-                {
-
-                    role:
-                        "user",
-
-                    text:
-                        conversation
-
-                }
-
-            ];
-
-        }
-
-    }
-
-
-
-    if (
-        !Array.isArray(
-            conversation
-        )
-    ) {
-
-        return [];
-
-    }
-
-
-
-    return conversation
-
-        .map(
-
-            item => {
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | SIMPLE STRING
-                |--------------------------------------------------------------------------
-                */
-
-                if (
-                    typeof item ===
-                    "string"
-                ) {
-
-                    return {
-
-                        role:
-                            "user",
-
-                        text:
-                            item
-
-                    };
-
-                }
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | ROLE
-                |--------------------------------------------------------------------------
-                */
-
-                const role =
-
-                    item.role ===
-                    "assistant" ||
-
-                    item.role ===
-                    "model"
-
-                        ? "assistant"
-
-                        : "user";
-
-
-
-                let text = "";
-
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | STRING CONTENT
-                |--------------------------------------------------------------------------
-                */
-
-                if (
-                    typeof item.content ===
-                    "string"
-                ) {
-
-                    text =
-                        item.content;
-
-                }
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | TEXT PROPERTY
-                |--------------------------------------------------------------------------
-                */
-
-                else if (
-                    typeof item.text ===
-                    "string"
-                ) {
-
-                    text =
-                        item.text;
-
-                }
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | MULTIMODAL CONTENT
-                |--------------------------------------------------------------------------
-                */
-
-                else if (
-                    Array.isArray(
-                        item.content
-                    )
-                ) {
-
-                    text =
-                        item.content
-
-                            .filter(
-
-                                part =>
-
-                                    part &&
-
-                                    part.type ===
-                                    "text" &&
-
-                                    part.text
-
-                            )
-
-                            .map(
-
-                                part =>
-                                    part.text
-
-                            )
-
-                            .join("\n");
-
-                }
-
-
-
-                return {
-
-                    role:
-                        role,
-
-                    text:
-                        clean(text)
-
-                };
-
-            }
-
-        )
-
-        .filter(
-
-            item =>
-                item.text
-
-        )
-
-        .slice(-100);
-
-}
-
-
-
-/*
-|--------------------------------------------------------------------------
-| NORMALISE ADDRESS
+| ADDRESS
 |--------------------------------------------------------------------------
 */
 
 function normaliseAddress(body) {
-
 
     const source =
 
@@ -2173,92 +1741,49 @@ function normaliseAddress(body) {
             : {};
 
 
-
     return {
 
-
         line1:
-
             clean(
-
                 source.line1 ||
-
                 body.addressLine1 ||
-
                 body.address_line1
-
             ),
-
-
 
         line2:
-
             clean(
-
                 source.line2 ||
-
                 body.addressLine2 ||
-
                 body.address_line2
-
             ),
-
-
 
         city:
-
             clean(
-
                 source.city ||
-
                 body.city
-
             ),
-
-
 
         county:
-
             clean(
-
                 source.county ||
-
                 source.region ||
-
                 body.county ||
-
                 body.region
-
             ),
-
-
 
         postcode:
-
             clean(
-
                 source.postcode ||
-
                 source.postal_code ||
-
                 body.postcode ||
-
                 body.postalCode ||
-
                 body.postal_code
-
             ),
 
-
-
         country:
-
             clean(
-
                 source.country ||
-
                 body.country
-
             )
 
     };
@@ -2269,52 +1794,11 @@ function normaliseAddress(body) {
 
 /*
 |--------------------------------------------------------------------------
-| SERVICE LEVEL
-|--------------------------------------------------------------------------
-*/
-
-function normaliseServiceLevel(value) {
-
-
-    const service =
-        clean(value)
-            .toLowerCase();
-
-
-    if (
-        service ===
-        "priority"
-    ) {
-
-        return "Priority";
-
-    }
-
-
-    if (
-        service ===
-        "express"
-    ) {
-
-        return "Express";
-
-    }
-
-
-    return "Standard";
-
-}
-
-
-
-/*
-|--------------------------------------------------------------------------
-| CREATE COMMISSION NUMBER
+| COMMISSION NUMBER
 |--------------------------------------------------------------------------
 */
 
 function createCommissionNumber() {
-
 
     const random =
 
@@ -2328,7 +1812,6 @@ function createCommissionNumber() {
             )
 
             .toUpperCase();
-
 
 
     return (
@@ -2350,7 +1833,7 @@ function createCommissionNumber() {
 
 /*
 |--------------------------------------------------------------------------
-| CLEAN STRING
+| HELPERS
 |--------------------------------------------------------------------------
 */
 
@@ -2363,15 +1846,7 @@ function clean(value) {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| BOOLEAN
-|--------------------------------------------------------------------------
-*/
-
 function toBoolean(value) {
-
 
     if (
         value === true ||
@@ -2383,40 +1858,25 @@ function toBoolean(value) {
     }
 
 
-    const normalised =
-
-        clean(value)
-            .toLowerCase();
-
-
     return [
 
         "true",
-
         "1",
-
         "yes",
-
         "on",
-
         "confirmed"
 
     ].includes(
-        normalised
+
+        clean(value)
+            .toLowerCase()
+
     );
 
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| EMAIL VALIDATION
-|--------------------------------------------------------------------------
-*/
-
 function isValidEmail(value) {
-
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         .test(value);
@@ -2424,44 +1884,32 @@ function isValidEmail(value) {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| REMOVE DATA URL PREFIX
-|--------------------------------------------------------------------------
-*/
-
 function stripDataUrl(value) {
 
+    return clean(value)
+        .replace(
 
-    return clean(value).replace(
+            /^data:[^;]+;base64,/,
 
-        /^data:[^;]+;base64,/,
+            ""
 
-        ""
-
-    );
+        );
 
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| GET MIME TYPE FROM DATA URL
-|--------------------------------------------------------------------------
-*/
-
-function getMimeTypeFromDataUrl(value) {
-
+function getMimeTypeFromDataUrl(
+    value
+) {
 
     const match =
 
-        clean(value).match(
+        clean(value)
+            .match(
 
-            /^data:([^;]+);base64,/
+                /^data:([^;]+);base64,/
 
-        );
+            );
 
 
     return match
@@ -2474,33 +1922,19 @@ function getMimeTypeFromDataUrl(value) {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| FILE EXTENSION
-|--------------------------------------------------------------------------
-*/
-
 function getExtensionFromMimeType(
     mimeType
 ) {
 
-
     switch (mimeType) {
 
-
         case "image/png":
-
             return "png";
 
-
         case "image/webp":
-
             return "webp";
 
-
         default:
-
             return "jpg";
 
     }
@@ -2508,15 +1942,7 @@ function getExtensionFromMimeType(
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| ESCAPE HTML
-|--------------------------------------------------------------------------
-*/
-
 function escapeHtml(value) {
-
 
     return String(
         value ?? ""
@@ -2526,37 +1952,24 @@ function escapeHtml(value) {
 
         function (character) {
 
-
             switch (character) {
 
-
                 case "&":
-
                     return "&amp;";
 
-
                 case "<":
-
                     return "&lt;";
 
-
                 case ">":
-
                     return "&gt;";
 
-
                 case '"':
-
                     return "&quot;";
 
-
                 case "'":
-
                     return "&#39;";
 
-
                 default:
-
                     return character;
 
             }
@@ -2568,15 +1981,9 @@ function escapeHtml(value) {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| FORMAT ADDRESS FOR EMAIL
-|--------------------------------------------------------------------------
-*/
-
-function formatAddressHtml(address) {
-
+function formatAddressHtml(
+    address
+) {
 
     return [
 
@@ -2605,15 +2012,9 @@ function formatAddressHtml(address) {
 }
 
 
-
-/*
-|--------------------------------------------------------------------------
-| DETECT OLD SUPABASE SCHEMA
-|--------------------------------------------------------------------------
-*/
-
-function isMissingColumnError(error) {
-
+function isMissingColumnError(
+    error
+) {
 
     if (!error) {
 
@@ -2622,26 +2023,23 @@ function isMissingColumnError(error) {
     }
 
 
-    const text =
+    const text = [
 
-        [
+        error.code,
 
-            error.code,
+        error.message,
 
-            error.message,
+        error.details,
 
-            error.details,
+        error.hint
 
-            error.hint
+    ]
 
-        ]
+        .filter(Boolean)
 
-            .filter(Boolean)
+        .join(" ")
 
-            .join(" ")
-
-            .toLowerCase();
-
+        .toLowerCase();
 
 
     return (
@@ -2680,7 +2078,7 @@ function isMissingColumnError(error) {
 
 /*
 |--------------------------------------------------------------------------
-| EXPORT ROUTER
+| EXPORT
 |--------------------------------------------------------------------------
 */
 
