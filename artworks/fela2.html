@@ -21,16 +21,18 @@
 /* SOLD badge on image */
 .sold-badge{
   position:absolute;
-  top:36px;right:36px;
+  top:36px;
+  right:36px;
   z-index:3;
-  background:var(--ink);
-  border:1px solid rgba(189,179,168,.25);
-  padding:10px 20px;
-  font-size:9px;
-  font-weight:400;
+  background:#b32020;
+  border:1px solid #d34a4a;
+  padding:12px 24px;
+  font-size:10px;
+  font-weight:500;
   letter-spacing:.32em;
   text-transform:uppercase;
-  color:var(--g3);
+  color:#fff;
+  box-shadow:0 8px 24px rgba(0,0,0,.28);
 }
 
 .artwork-body{display:grid;grid-template-columns:1fr 420px;gap:80px;padding:100px 64px;align-items:start;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07);}
@@ -46,24 +48,39 @@
 .purchase-sub{font-size:11px;color:var(--g1);margin-bottom:24px;line-height:1.7;}
 .purchase-options{display:flex;flex-direction:column;gap:2px;}
 
-/* SOLD option row */
-.purchase-option{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;background:var(--c1);border:1px solid rgba(189,179,168,.06);opacity:.65;}
+/* Fine art print purchase rows */
+.purchase-option{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 24px;
+  background:var(--c1);
+  border:1px solid rgba(189,179,168,.06);
+  color:inherit;
+  font-family:var(--sans);
+  text-align:left;
+  cursor:pointer;
+  transition:background .25s,border-color .25s,transform .25s;
+}
+.purchase-option:hover{
+  background:var(--c2);
+  border-color:rgba(189,179,168,.22);
+  transform:translateY(-1px);
+}
 .option-info{flex:1;}
 .option-name{font-size:13px;color:var(--p1);letter-spacing:.03em;margin-bottom:3px;}
 .option-sub{font-size:9px;color:var(--g1);letter-spacing:.12em;text-transform:uppercase;}
-.option-price{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--g1);margin:0 20px;text-decoration:line-through;}
-.option-sold{
-  padding:10px 20px;
-  background:transparent;
-  border:1px solid rgba(189,179,168,.15);
-  color:var(--g1);
+.option-price{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p1);margin:0 20px;text-decoration:none;}
+.option-buy{
+  padding:10px 18px;
+  border:1px solid rgba(189,179,168,.22);
+  color:var(--p1);
   font-size:8px;
   font-weight:400;
   letter-spacing:.22em;
   text-transform:uppercase;
-  font-family:var(--sans);
   white-space:nowrap;
-  cursor:default;
 }
 
 /* SOLD notice below options */
@@ -138,7 +155,7 @@
       Unlike a straightforward likeness, this portrait leans into atmosphere and presence &mdash; capturing not just Fela&rsquo;s features but his unmistakable poise and confidence. The result is a moody, richly detailed tribute to a cultural icon.
     </p>
     <p>
-      The original is sold. Limited edition fine art prints were available on archival cotton paper. To be notified of future works, <a href="/contact" style="color:var(--g2);text-decoration:underline;">get in touch</a>.
+      The original is sold. Fine art prints remain available on archival cotton paper. To be notified of future works, <a href="/contact" style="color:var(--g2);text-decoration:underline;">get in touch</a>.
     </p>
     <div class="artwork-meta">
       <div class="meta-item"><div class="meta-label">Category</div><div class="meta-value">Portrait · Charcoal Study</div></div>
@@ -153,36 +170,36 @@
 
   <div class="purchase-sidebar reveal d2">
     <h3>This Work</h3>
-    <p class="purchase-sub">The original and all limited edition prints are now sold.</p>
+    <p class="purchase-sub">The original artwork is sold. Fine art prints remain available to collect.</p>
 
     <div class="purchase-options">
-      <div class="purchase-option">
+      <button class="purchase-option" data-name="Fine Art Print A4" data-price="95">
         <div class="option-info"><div class="option-name">Fine Art Print A4</div><div class="option-sub">210 &times; 297mm &middot; Archival</div></div>
         <div class="option-price">&pound;95</div>
-        <span class="option-sold">Sold</span>
-      </div>
-      <div class="purchase-option">
+        <span class="option-buy">Select</span>
+      </button>
+      <button class="purchase-option" data-name="Fine Art Print A3" data-price="175">
         <div class="option-info"><div class="option-name">Fine Art Print A3</div><div class="option-sub">297 &times; 420mm &middot; Archival</div></div>
         <div class="option-price">&pound;175</div>
-        <span class="option-sold">Sold</span>
-      </div>
-      <div class="purchase-option">
+        <span class="option-buy">Select</span>
+      </button>
+      <button class="purchase-option" data-name="Fine Art Print A2" data-price="325">
         <div class="option-info"><div class="option-name">Fine Art Print A2</div><div class="option-sub">420 &times; 594mm &middot; Archival</div></div>
         <div class="option-price">&pound;325</div>
-        <span class="option-sold">Sold</span>
-      </div>
-      <div class="purchase-option">
+        <span class="option-buy">Select</span>
+      </button>
+      <button class="purchase-option" data-name="Fine Art Print A1" data-price="550">
         <div class="option-info"><div class="option-name">Fine Art Print A1</div><div class="option-sub">594 &times; 841mm &middot; Archival</div></div>
         <div class="option-price">&pound;550</div>
-        <span class="option-sold">Sold</span>
-      </div>
+        <span class="option-buy">Select</span>
+      </button>
     </div>
 
-    <!-- SOLD notice under the prices -->
+    <!-- ORIGINAL SOLD notice -->
     <div class="sold-notice">
-      <div class="sold-notice-title">Sold Out</div>
+      <div class="sold-notice-title">Original Sold</div>
       <p class="sold-notice-body">
-        This work is no longer available. To commission a similar portrait or join the waiting list for future releases, <a href="/commissions">start a commission</a> or <a href="/contact">get in touch</a>.
+        The original artwork has been sold. Fine art prints remain available above. To commission a similar portrait, <a href="/commissions">start a commission</a> or <a href="/contact">get in touch</a>.
       </p>
     </div>
 
@@ -242,6 +259,15 @@ if(window.matchMedia('(pointer: fine)').matches){
 }
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+document.querySelectorAll('.purchase-option[data-name]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const name=btn.dataset.name;
+    const price=btn.dataset.price;
+    window.location.href='/contact?artwork='+encodeURIComponent('The Stance - '+name)+'&price='+encodeURIComponent(price);
+  });
+});
+
 </script>
 </body>
 </html>

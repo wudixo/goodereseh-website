@@ -13,17 +13,19 @@
 <style>
 /* ── TOKENS ──────────────────────────────────────────────── */
 :root {
-  --ink:    #0f0d0b;
-  --c1:     #181512;
-  --c2:     #221e19;
-  --c3:     #2c271f;
-  --g0:     #3d3830;
-  --g1:     #5c5449;
-  --g2:     #8c8278;
-  --g3:     #bdb3a8;
-  --p1:     #e4dbd0;
-  --p2:     #f0e8d8;
-  --gold:   #b09060;
+  --ink:    #0b0a08;
+  --c1:     #13110f;
+  --c2:     #1a1714;
+  --c3:     #24201b;
+
+  --g0:     #918980;
+  --g1:     #b9b0a7;
+  --g2:     #d4cabf;
+  --g3:     #eadfce;
+
+  --p1:     #f8f2ea;
+  --p2:     #fffaf2;
+  --gold:   #c1a06b;
 
   --serif:  'Cormorant Garamond', Georgia, serif;
   --sans:   'Inter', system-ui, sans-serif;
@@ -50,8 +52,8 @@ body {
 }
 
 img { display: block; max-width: 100%; }
-a { color: inherit; text-decoration: none; cursor: none; }
-button { cursor: none; }
+a { color: inherit; text-decoration: none; cursor: pointer; }
+button { cursor: pointer; }
 
 /* ── PAPER GRAIN ─────────────────────────────────────────── */
 body::after {
@@ -161,7 +163,7 @@ nav.scrolled {
   font-weight: 400;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--g1);
+  color: var(--g2);
   margin-top: 3px;
 }
 
@@ -177,7 +179,7 @@ nav.scrolled {
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--g2);
+  color: var(--p1);
   position: relative;
   transition: color 0.3s;
 }
@@ -353,7 +355,7 @@ nav.scrolled {
   font-weight: 300;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--g1);
+  color: var(--p1);
   transition: color 0.3s;
 }
 
@@ -377,7 +379,7 @@ nav.scrolled {
   font-size: 8px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--g1);
+  color: var(--p1);
 }
 
 .hero-location-line {
@@ -407,7 +409,7 @@ nav.scrolled {
   font-weight: 400;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--g2);
+  color: var(--p1);
   display: flex;
   align-items: center;
   gap: 28px;
@@ -416,7 +418,7 @@ nav.scrolled {
 .ticker-diamond {
   width: 3px;
   height: 3px;
-  background: var(--g2);
+  background: var(--p1);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -978,7 +980,7 @@ nav.scrolled {
   border-bottom: 1px solid rgba(189,179,168,0.07);
   font-size: 10px;
   letter-spacing: 0.1em;
-  color: var(--g2);
+  color: var(--p1);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1214,7 +1216,6 @@ nav.scrolled {
     <li><a href="/about">About</a></li>
     <li><a href="/commissions">Commissions</a></li>
     <li><a href="/contact">Contact</a></li>
-    <li><a href="/commissions" class="nav-commission">Commission</a></li>
   </ul>
 </nav>
 
@@ -1806,3 +1807,73 @@ revEls.forEach(el => revObs.observe(el));
 
 </body>
 </html>
+
+<style>
+/* HOME PAGE CONTRAST PATCH */
+.mark-g { color: #fffaf2; }
+.mark-sub { color: #d4cabf; }
+
+.nav-links a { color: #f8f2ea; }
+.nav-links a:hover { color: #ffffff; }
+
+.hero-pre {
+  color: #f8f2ea;
+  text-shadow: 0 2px 14px rgba(0,0,0,.8);
+}
+
+.hero-h1 {
+  color: #fffaf2;
+  text-shadow: 0 2px 22px rgba(0,0,0,.55);
+}
+
+.hero-h1 .italic { color: #f8f2ea; }
+
+.btn-line {
+  color: #fffaf2;
+  text-shadow: 0 1px 10px rgba(0,0,0,.75);
+}
+.btn-line::after { background: #fffaf2; }
+
+.btn-silent {
+  color: #fffaf2;
+  text-shadow: 0 1px 10px rgba(0,0,0,.75);
+}
+.btn-silent:hover { color: #ffffff; }
+
+.hero-location span {
+  color: #f8f2ea;
+  text-shadow: 0 1px 10px rgba(0,0,0,.75);
+}
+
+.ticker-item { color: #d4cabf; }
+.ticker-diamond { background: #d4cabf; }
+
+.viewer-type,
+.viewer-action,
+.viewer-count,
+.editorial-body p,
+.eyebrow,
+.about-p,
+.about-link,
+.material-desc,
+.packaging-p,
+.pkg-list li,
+.commission-pre,
+.commission-sub {
+  color: #d4cabf;
+}
+
+.footer-col h5 { color: #b9b0a7; }
+.footer-col a { color: #d4cabf; }
+.footer-base,
+.footer-legal a { color: #b9b0a7; }
+
+/* Make custom cursor easier to see */
+.cursor-dot {
+  background: #fffaf2;
+  box-shadow: 0 0 8px rgba(255,250,242,.45);
+}
+.cursor-ring {
+  border-color: rgba(255,250,242,.58);
+}
+</style>
