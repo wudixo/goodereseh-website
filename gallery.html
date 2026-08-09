@@ -31,7 +31,7 @@
   border-bottom: 2px solid transparent;
   transition: color .3s, border-color .3s;
   font-family: var(--sans);
-  cursor: none;
+  cursor: pointer;
 }
 
 .filter-btn.active { color: var(--p1); border-bottom-color: var(--g3); }
@@ -52,7 +52,7 @@
   overflow: hidden;
   background: var(--c2);
   display: block;
-  cursor: none;
+  cursor: pointer;
 }
 
 .gallery-card.hidden { display: none; }
@@ -149,6 +149,22 @@
   .gallery-section { padding: 60px 28px 100px; }
   .gallery-grid { grid-template-columns: 1fr; }
 }
+
+/* Keep pointer visible on interactive elements */
+a,
+button,
+.filter-btn,
+.gallery-card,
+.overlay-cta {
+  cursor: pointer;
+}
+
+.cursor-dot,
+.cursor-ring {
+  pointer-events: none;
+  z-index: 99999;
+}
+
 </style>
 </head>
 <body>
@@ -180,6 +196,10 @@
 <!-- Filter -->
 <div class="filter-bar" aria-label="Filter artworks">
   <button class="filter-btn active" data-filter="all">All Works</button>
+  <button class="filter-btn" data-filter="hyperrealistic">Hyperrealistic</button>
+  <button class="filter-btn" data-filter="portrait">Portraits</button>
+  <button class="filter-btn" data-filter="abstract">Abstract</button>
+  <button class="filter-btn" data-filter="study">Studies</button>
   <button class="filter-btn" data-filter="original">Originals</button>
   <button class="filter-btn" data-filter="print">Fine Art Prints</button>
 </div>
@@ -188,7 +208,7 @@
 <section class="gallery-section">
   <div class="gallery-grid" id="galleryGrid">
 
-    <a href="/artworks/eye" class="gallery-card reveal" data-type="original print">
+    <a href="/artworks/eye" class="gallery-card reveal" data-type="hyperrealistic study original print">
       <div class="gallery-card-img">
         <img src="https://goodereseh.com/images/artwork/eye.jpg" alt="Reflections — Hyperrealistic Eye Study">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -200,7 +220,7 @@
       </div>
     </a>
 
-    <a href="/artworks/fela" class="gallery-card reveal d1" data-type="original print">
+    <a href="/artworks/fela" class="gallery-card reveal d1" data-type="hyperrealistic portrait original print">
       <div class="gallery-card-img">
         <img src="https://goodereseh.com/images/artwork/fela.jpg" alt="Fela Kuti — Original Graphite Portrait">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -212,7 +232,7 @@
       </div>
     </a>
 
-    <a href="/artworks/fela2" class="gallery-card reveal" data-type="print">
+    <a href="/artworks/fela2" class="gallery-card reveal" data-type="portrait study print">
       <div class="gallery-card-img">
         <img src="https://goodereseh.com/images/artwork/fela2.jpg" alt="Fela Kuti: The Stance Charcoal Portrait Study">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -224,7 +244,7 @@
       </div>
     </a>
 
-    <a href="/artworks/abstract" class="gallery-card reveal d1" data-type="original print">
+    <a href="/artworks/abstract" class="gallery-card reveal d1" data-type="abstract original print">
       <div class="gallery-card-img">
         <img src="/images/artwork/abstract.jpg" alt="Fragments of Thought: Abstract Charcoal Artwork">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -236,7 +256,7 @@
       </div>
     </a>
 
-    <a href="/artworks/benjamin" class="gallery-card reveal" data-type="original print">
+    <a href="/artworks/benjamin" class="gallery-card reveal" data-type="hyperrealistic portrait original print">
       <div class="gallery-card-img">
         <img src="/images/artwork/benjamin.jpeg" alt="In God We Trust: Benjamin Franklin Charcoal Portrait">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -248,7 +268,7 @@
       </div>
     </a>
 
-    <a href="/artworks/lips" class="gallery-card reveal d1" data-type="original print">
+    <a href="/artworks/lips" class="gallery-card reveal d1" data-type="hyperrealistic study original print">
       <div class="gallery-card-img">
         <img src="/images/artwork/lips.jpg" alt="Unspoken: Graphite/Charcoal Pencil and White Ink Study">
         <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
@@ -531,7 +551,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     const f = btn.dataset.filter;
     let visible = 0;
     cards.forEach(card => {
-      const types = card.dataset.type || '';
+      const types = (card.dataset.type || '').split(/\s+/);
       const show = f === 'all' || types.includes(f);
       card.classList.toggle('hidden', !show);
       if (show) visible++;
