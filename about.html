@@ -260,6 +260,34 @@
   .about-cta { grid-template-columns: 1fr; padding: 100px 28px; gap: 48px; }
 }
 </style>
+
+<style>
+/* Navigation cursor visibility fix */
+nav,
+nav *,
+.nav-mark,
+.nav-links,
+.nav-links a {
+  cursor: pointer !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+  mix-blend-mode: normal !important;
+}
+
+.cursor-dot {
+  background: #fffaf2 !important;
+  box-shadow: 0 0 8px rgba(255,250,242,.5);
+}
+
+.cursor-ring {
+  border-color: rgba(255,250,242,.72) !important;
+}
+</style>
+
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
