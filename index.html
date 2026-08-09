@@ -311,52 +311,55 @@ nav.scrolled {
   align-items: center;
 }
 
-/* HERO CTA BUTTONS */
-.btn-line,
-.btn-silent {
+/* Animated underline CTA */
+.btn-line {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 14px;
-  padding: 13px 24px;
-  background: rgba(15, 13, 11, 0.18);
-  border: 1px solid rgba(255, 250, 242, 0.55);
-  border-radius: 5px;
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--p2);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.3s ease;
-}
-
-.btn-line:hover,
-.btn-silent:hover {
-  background: rgba(255, 250, 242, 0.12);
-  border-color: var(--p2);
-  color: #ffffff;
-  transform: translateY(-2px);
+  position: relative;
+  padding-bottom: 6px;
 }
 
 .btn-line::after {
-  display: none;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--p2);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease);
+}
+
+.btn-line:hover::after {
+  transform-origin: left;
+  transform: scaleX(1.0);
 }
 
 .btn-line .arr {
   font-size: 16px;
-  letter-spacing: 0;
   transition: transform 0.35s var(--ease);
+  letter-spacing: 0;
 }
 
-.btn-line:hover .arr {
-  transform: translateX(4px);
+.btn-line:hover .arr { transform: translateX(5px); }
+
+.btn-silent {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--p1);
+  transition: color 0.3s;
 }
+
+.btn-silent:hover { color: var(--g3); }
 
 /* Hero location badge */
 .hero-location {
@@ -1195,6 +1198,26 @@ nav.scrolled {
   .viewer-slide { transition: none; }
 }
 </style>
+
+<style>
+/* Hero CTA button treatment */
+.btn-line,
+.btn-silent {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:13px 24px;
+  background:rgba(15,13,11,.18);
+  border:1px solid rgba(255,250,242,.55);
+  border-radius:5px;
+  color:var(--p2);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.btn-line::after { display:none; }
+</style>
+
 </head>
 <body>
 
@@ -1323,7 +1346,7 @@ nav.scrolled {
       <a href="/artworks/benjamin" class="viewer-action">View artwork →</a>
     </div>
     <div class="viewer-right">
-      <img src="/images/artwork/benjamin.jpeg" alt="In God We Trust">
+      <img src="/images/artwork/benjamin.jpg" alt="In God We Trust">
     </div>
   </div>
 
@@ -1339,6 +1362,20 @@ nav.scrolled {
       <img src="/images/artwork/lips.jpg" alt="Unspoken">
     </div>
   </div>
+
+  <div class="viewer-slide" data-index="6">
+    <div class="viewer-left">
+      <div class="viewer-num">07</div>
+      <div class="viewer-title">The Gaze Within</div>
+      <div class="viewer-type">Hyperrealistic Eye Study</div>
+      <div class="viewer-price">Original Artwork £1,200 · Prints from £85</div>
+      <a href="/artworks/gaze" class="viewer-action">View artwork →</a>
+    </div>
+    <div class="viewer-right">
+      <img src="/images/artwork/gaze.jpg" alt="The Gaze Within">
+    </div>
+  </div>
+
 
   <div class="viewer-controls">
     <button class="viewer-btn" id="viewerPrev" aria-label="Previous artwork">←</button>
