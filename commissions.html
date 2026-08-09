@@ -106,11 +106,6 @@ html,body{height:100%;overflow:hidden;}
 <body>
 <div class="cursor-dot" id="cDot"></div>
 <div class="cursor-ring" id="cRing"></div>
-<div class="go" id="genOv">
-  <div class="gf"><div class="gc tl"></div><div class="gc tr"></div><div class="gc bl"></div><div class="gc br"></div><div class="gs"></div><div class="gn" id="gNoise"></div><img class="gp" id="gPic" src="" alt=""></div>
-  <div class="gb"><div class="gbf" id="gFill"></div></div>
-  <div class="gi"><div class="gl">Good Ereseh &middot; Commission Assistant</div><div class="gst" id="gStat">Analysing your description</div><div class="gd"><span></span><span></span><span></span></div></div>
-</div>
 <div class="cp">
   <nav id="nav">
     <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
@@ -153,14 +148,155 @@ html,body{height:100%;overflow:hidden;}
 </div>
 <script>
 var RAIL = 'https://goodereseh-website-production.up.railway.app';
-var SYS = "You are the commission assistant for Good Ereseh, a hyperrealistic charcoal portrait artist in London. Be warm, professional, and concise.\n\nIMPORTANT: When giving options, always format them exactly like this so buttons appear:\nA) Option text\nB) Option text\n\nCOMMISSION FLOW - follow this order:\n1. Ask what type of commission:\nA) Personal Portrait\nB) Family Artwork\nC) Memorial Piece\n\n2. Ask who the portrait is of and details about them.\n\n3. Ask what mood the artwork should communicate. Offer 5 options labelled A-E.\n\n4. Ask about size:\nA) A4 Portrait - from 250 GBP\nB) A3 Portrait - from 500 GBP\nC) A2 Collector Piece - from 900 GBP\nD) Large Custom - from 1500 GBP\n\n5. Ask for a description or reference photo.\n\n6. When you have enough, write GENERATE_CONCEPT on its own line, then PROMPT: followed by a detailed charcoal portrait prompt.\n\n7. After concept shown ask if they are happy. When satisfied write COLLECT_DETAILS on its own line.";
 
-var chatHistory     = [];
-var imgB64      = null, imgType = null, imgName = '';
-var imgAnalysis = '';
-var lastGenUrl  = null;
-var collecting  = false;
-var recog = null, recOn = false;
+var SYS = `
+You are the Good Ereseh Commission Assistant.
+
+You are not a generic chatbot and you are not an automatic image generator.
+
+Your job is to help customers develop a clear, thoughtful commission brief for Good Ereseh, a London-based charcoal and graphite artist.
+
+BRAND
+
+Good Ereseh creates hand-drawn charcoal and graphite artworks with a focus on portraiture, emotion, memory, identity, presence and strong visual storytelling.
+
+You should sound warm, intelligent, concise, creative, professional, calm and helpful.
+Do not sound robotic. Do not over-explain. Do not pressure the customer. Do not pretend to be Good Ereseh himself. You are his studio commission assistant.
+
+CORE RULE
+
+Your purpose is to understand what the customer wants and help them shape the idea into something Good Ereseh can review and create by hand.
+You may advise the customer when they are unsure.
+Ask intelligent follow-up questions rather than repeating generic questions.
+Ask one or two focused questions at a time.
+Remember earlier answers and do not ask the same question again unless clarification is genuinely needed.
+
+REFERENCE PHOTOS
+
+If a customer uploads a photograph:
+1. Treat it as a reference image.
+2. Never regenerate, replace or recreate it.
+3. Keep it as part of the commission brief.
+4. Analyse it only to understand composition, pose, expression, lighting, clothing, background, facial detail and suitability for charcoal artwork.
+5. Refer to it by the exact reference label provided in the user's message, such as Reference 1 or Reference 2.
+
+If the customer uploads a second or later photograph, acknowledge that there are multiple references and ask how they should be used.
+Offer useful options such as:
+A) Use the first image as the main reference
+B) Use the newest image as the main reference
+C) Combine elements from both
+D) Use one image for the face and another for pose, clothing or background
+
+If one image appears clearer for facial likeness, you may recommend it, but never make the final decision for the customer.
+
+CUSTOMERS WITHOUT REFERENCE PHOTOS
+
+If the customer does not upload a photograph, help them develop the concept through conversation.
+Ask about subject, number of people, pose, expression, clothing, setting, background, mood, symbolism, occasion, meaning, intended display location, preferred size and deadline.
+Do not generate an image. Your goal is to create a detailed concept brief for Good Ereseh to review.
+
+CUSTOMERS WHO DO NOT KNOW WHAT THEY WANT
+
+Act as an art adviser. Help them discover the idea.
+You can explore whether the artwork should represent a person, memory, relationship, achievement, grief, family, identity, legacy, ambition, culture, a life event or a symbolic idea.
+Offer creative suggestions based on what the customer tells you.
+
+COMMISSION TYPES
+
+A) Personal Portrait
+B) Family Artwork
+C) Couple Portrait
+D) Memorial Piece
+E) Conceptual Artwork
+F) Gift Commission
+G) Cultural or Legacy Piece
+H) Other
+
+ARTISTIC GUIDANCE
+
+You may advise on whether a photo is suitable for hyperrealistic work, whether the face has enough detail, whether lighting is strong enough, whether a crop would work better, whether a larger size would suit multiple subjects, whether a simpler background would improve impact, and whether another reference image would help.
+Be clear that Good Ereseh makes the final artistic decision.
+
+MEDIUM
+
+Default medium: charcoal and graphite on archival cotton paper.
+Do not promise another medium unless Good Ereseh has confirmed it.
+
+SIZE
+
+Use A4, A3, A2, A1 or Large Custom.
+Do not invent final prices.
+Explain that larger sizes, more subjects, more complex backgrounds and priority deadlines can affect pricing.
+
+DEADLINE AND PRIORITY SERVICE
+
+Ask when the customer needs the artwork.
+Never guarantee an urgent deadline.
+If the deadline appears short, say: "Your requested date may require Priority Service. I will include the deadline in your brief for Good to confirm availability and any additional priority charge."
+Possible service levels are Standard, Priority and Express.
+Do not quote a priority fee unless pricing rules are explicitly provided.
+
+PAYMENT
+
+Do not ask the customer to pay immediately after the conversation.
+The correct flow is:
+1. Gather the commission brief
+2. Gather customer and delivery details
+3. Submit the request
+4. Good Ereseh reviews it
+5. A concept may be prepared privately
+6. Customer approves the concept
+7. Good Ereseh confirms the quote and deadline
+8. Customer receives a private payment link
+
+Do not claim a commission is confirmed until payment has been made.
+
+FINAL CUSTOMER DETAILS
+
+Before submission, collect full name, email, phone number, address line 1, address line 2 if applicable, city, county or region, postcode and country.
+Also confirm artwork type, number of subjects, selected reference image or images, size, framing preference, deadline, Standard or Priority request and special instructions.
+
+REFERENCE IMAGE CONSENT
+
+Before submission, confirm that the customer has permission to provide and use the reference photographs.
+
+OPTIONS
+
+When giving selectable options, always format them exactly like this:
+A) Option text
+B) Option text
+C) Option text
+Do not put bullets before A), B), C).
+
+COMMISSION BRIEF
+
+As the conversation develops, keep track of commission type, subject, number of subjects, reference images, primary reference, secondary references, purpose, mood, pose, expression, clothing, background, composition, symbolism, size, framing, deadline, service level and special instructions.
+
+When enough information has been collected, write COLLECT_DETAILS on its own line.
+Never write GENERATE_CONCEPT.
+Never write PROMPT:.
+The customer-facing assistant must never generate artwork.
+
+LIVE INFORMATION
+
+If a customer asks about current events, current public figures, sports results, recent cultural events or other time-sensitive information, do not pretend you know the latest information unless live search results have been provided. Tell the customer Good Ereseh will verify the current reference before preparing the concept.
+
+SAFETY AND QUALITY
+
+Do not invent customer facts.
+Do not claim information has been saved until the website actually submits it.
+Do not claim payment has succeeded unless payment confirmation is available.
+Do not claim a commission has been accepted by Good Ereseh unless it has actually been reviewed.
+
+Your goal is to make the customer feel guided by a real art studio assistant while producing a detailed commission brief that Good Ereseh can act on.
+`;
+
+var chatHistory = [];
+var references = [];
+var pendingRef = null;
+var collecting = false;
+var recog = null;
+var recOn = false;
 
 var cmIn  = document.getElementById('cmIn');
 var cmOut = document.getElementById('cmOut');
@@ -170,8 +306,8 @@ var hint  = document.getElementById('ibHint');
 
 function wait(ms){ return new Promise(function(r){setTimeout(r,ms);}); }
 function sb(){ setTimeout(function(){ cmOut.scrollTop=cmOut.scrollHeight; },60); }
-function esc(s){ return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
-function cur(el){ el.querySelectorAll('button,input,textarea').forEach(function(e){
+function esc(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; }
+function cur(el){ el.querySelectorAll('button,input,textarea,select').forEach(function(e){
   e.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});
   e.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});
 }); }
@@ -181,82 +317,80 @@ function addAI(html){
   d.innerHTML='<div class="mav">G</div><div class="bbl">'+html+'</div>';
   cmIn.appendChild(d); sb(); cur(d); return d;
 }
-function addUser(text, imgUrl){
+
+function addUser(text, imgUrl, label){
   var d=document.createElement('div'); d.className='msg u';
-  var img=imgUrl?'<div class="ref-thumb"><img src="'+imgUrl+'" alt="Ref"></div>':'';
+  var img=imgUrl?'<div class="ref-thumb"><div style="font-size:10px;color:var(--g1);margin-bottom:5px;">'+esc(label||'Reference')+'</div><img src="'+imgUrl+'" alt="'+esc(label||'Reference')+'"></div>':'';
   d.innerHTML='<div class="bbl">'+img+(text?'<p>'+esc(text)+'</p>':'')+'</div>';
   cmIn.appendChild(d); sb(); return d;
 }
+
 async function aiTyping(ms){
   var t=document.createElement('div'); t.className='msg ai';
   t.innerHTML='<div class="mav">G</div><div class="bbl"><div class="ty"><span></span><span></span><span></span></div></div>';
   cmIn.appendChild(t); sb();
-  await wait(ms||900);
+  await wait(ms||700);
   t.remove();
 }
 
 function renderAI(text){
-  var lines=text.split('\n');
+  var lines=String(text||'').split('\n');
   var html='', inP=false;
   lines.forEach(function(line){
-    var m=line.match(/^([A-F])\)\s+(.+)$/);
+    var m=line.match(/^([A-H])\)\s+(.+)$/);
     if(m){
       if(inP){html+='</p>';inP=false;}
       html+='<button class="opt-btn" data-letter="'+m[1]+'" data-full="'+esc(m[1]+') '+m[2])+'" onclick="pickOpt(this)"><span class="ol">'+m[1]+'</span>'+esc(m[2])+'</button>';
     } else {
       var s=line.trim();
-      if(s==='GENERATE_CONCEPT'||s.startsWith('PROMPT:')||s==='COLLECT_DETAILS') return;
+      if(s==='COLLECT_DETAILS') return;
       if(s){if(!inP){html+='<p>';inP=true;}else{html+=' ';}html+=esc(s);}
-      else{if(inP){html+='</p>';inP=false;}}
+      else if(inP){html+='</p>';inP=false;}
     }
   });
   if(inP)html+='</p>';
   return html;
 }
 
-async function callAI(userText, b64, type){
+async function callAI(userText, refObj){
   var content=[];
-  if(b64&&type) content.push({type:'image',source:{type:'base64',media_type:type,data:b64}});
+  if(refObj && refObj.b64 && refObj.type){
+    content.push({type:'image',source:{type:'base64',media_type:refObj.type,data:refObj.b64}});
+  }
   if(userText) content.push({type:'text',text:userText});
   if(!content.length) return null;
 
-  chatHistory.push({ role:'user', content: content.length===1&&content[0].type==='text' ? userText : content });
+  chatHistory.push({
+    role:'user',
+    content:content.length===1 && content[0].type==='text' ? userText : content
+  });
 
   try{
     var res=await fetch(RAIL+'/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ system:SYS, messages:chatHistory })
+      body:JSON.stringify({system:SYS,messages:chatHistory})
     });
     var data=await res.json();
     if(!res.ok) throw new Error(data.error||'Error');
     chatHistory.push({role:'assistant',content:data.text});
     return data.text;
   }catch(err){
-    console.error('callAI error:', err.message);
-    var msg = 'Something went wrong connecting to the AI. Please try typing your message again.';
-    if (err.message) msg += ' ('+err.message+')';
-    return msg;
+    console.error('callAI error:',err.message);
+    return 'The studio assistant is temporarily unavailable. Please wait a moment and try again.';
   }
 }
 
 async function processAI(text){
-  if(!text || !text.trim()){
+  if(!text || !String(text).trim()){
     addAI(renderAI('I did not quite catch that. Could you please try again or rephrase your message?'));
     return;
   }
   if(text.includes('COLLECT_DETAILS')){
     var clean=text.replace('COLLECT_DETAILS','').trim();
     if(clean) addAI(renderAI(clean));
-    await wait(300);
+    await wait(250);
     showBriefForm();
-    return;
-  }
-  if(text.includes('GENERATE_CONCEPT')){
-    var pm=text.match(/PROMPT:\s*(.+)/s);
-    var clean=text.split('GENERATE_CONCEPT')[0].trim();
-    if(clean) addAI(renderAI(clean));
-    if(pm){ await wait(300); await runGen(pm[1].trim()); }
     return;
   }
   addAI(renderAI(text));
@@ -269,27 +403,43 @@ function pickOpt(btn){
   var full=btn.dataset.full||btn.textContent.trim();
   addUser(full);
   disableInput();
-  sendToAI(full, null, null);
+  sendToAI(full,null);
 }
 
 function doSend(){
   if(collecting) return;
   var text=ibTa.value.trim();
-  var hasImg=!!imgB64;
-  if(!text&&!hasImg) return;
-  var b64=imgB64, type=imgType;
-  var prev=b64?'data:'+type+';base64,'+b64:null;
-  ibTa.value=''; ibTa.style.height='auto'; refreshSend();
-  if(hasImg) clearImg();
-  addUser(text, prev);
+  if(!text && !pendingRef) return;
+
+  var ref=pendingRef;
+  var refLabel=ref ? ref.label : null;
+  var preview=ref ? ref.preview : null;
+
+  ibTa.value='';
+  ibTa.style.height='auto';
+  if(ref) clearPendingRef(false);
+  refreshSend();
+
+  addUser(text,preview,refLabel);
   disableInput();
-  sendToAI(text||(hasImg?'I have attached a reference photo.':''), b64, type);
+
+  var aiText=text;
+  if(ref){
+    var refCount=references.length;
+    var context='The customer has uploaded '+refLabel+'. This image is an original reference photograph. Do not regenerate or replace it. Analyse it only for the commission. ';
+    if(refCount>1){
+      context+='There are now '+refCount+' reference photographs in this commission. Ask the customer which reference should be primary or whether elements from multiple references should be combined. ';
+    }
+    aiText=context+(text?('Customer message: '+text):'Ask how they would like this reference used in the artwork.');
+  }
+
+  sendToAI(aiText,ref);
 }
 
-async function sendToAI(text, b64, type){
+async function sendToAI(text,refObj){
   if(collecting) return;
-  await aiTyping(900);
-  var aiText=await callAI(text, b64, type);
+  await aiTyping(700);
+  var aiText=await callAI(text,refObj);
   await processAI(aiText);
   enableInput();
 }
@@ -299,109 +449,199 @@ ibTa.addEventListener('input',function(){
   ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px';
   refreshSend();
 });
+
 ibTa.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&!e.shiftKey&&!ibUp.disabled){e.preventDefault();doSend();}
 });
-function refreshSend(){ var ok=ibTa.value.trim().length>0||!!imgB64; ibUp.disabled=!ok; ibUp.classList.toggle('on',ok); }
-function enableInput(){ ibTa.disabled=false; hint.textContent=''; setTimeout(function(){ibTa.focus();},80); }
-function disableInput(){ ibTa.disabled=true; ibUp.disabled=true; ibUp.classList.remove('on'); hint.textContent=''; }
+
+function refreshSend(){
+  var ok=ibTa.value.trim().length>0||!!pendingRef;
+  ibUp.disabled=!ok;
+  ibUp.classList.toggle('on',ok);
+}
+function enableInput(){ibTa.disabled=false;hint.textContent='';setTimeout(function(){ibTa.focus();},80);refreshSend();}
+function disableInput(){ibTa.disabled=true;ibUp.disabled=true;ibUp.classList.remove('on');hint.textContent='';}
 
 function onFile(input){
   var file=input.files[0]; if(!file) return;
-  var canvas=document.createElement('canvas'), ctx=canvas.getContext('2d'), img=new Image();
+  if(references.length>=6){
+    addAI('<p>You can attach up to 6 reference photographs to one commission request.</p>');
+    input.value='';
+    return;
+  }
+
+  var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image();
   img.onload=function(){
-    var w=img.width, h=img.height;
-    if(w>800){h=Math.round(h*800/w);w=800;}
-    if(h>800){w=Math.round(w*800/h);h=800;}
-    canvas.width=w; canvas.height=h; ctx.drawImage(img,0,0,w,h);
-    var du=canvas.toDataURL('image/jpeg',0.78);
-    imgB64=du.split(',')[1]; imgType='image/jpeg'; imgName=file.name;
-    document.getElementById('ipThumb').src=du;
-    document.getElementById('ipName').textContent=file.name;
-    document.getElementById('imgStrip').classList.add('on');
+    var w=img.width,h=img.height;
+    var max=1200;
+    if(w>max){h=Math.round(h*max/w);w=max;}
+    if(h>max){w=Math.round(w*max/h);h=max;}
+    canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);
+    var du=canvas.toDataURL('image/jpeg',0.82);
+    var ref={
+      id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+      label:'Reference '+(references.length+1),
+      name:file.name,
+      b64:du.split(',')[1],
+      type:'image/jpeg',
+      preview:du
+    };
+    references.push(ref);
+    pendingRef=ref;
+    updatePendingStrip();
     refreshSend();
-    analyseImg(imgB64);
+    input.value='';
   };
   img.src=URL.createObjectURL(file);
 }
-function clearImg(){ imgB64=null; imgType=null; imgName=''; document.getElementById('imgStrip').classList.remove('on'); document.getElementById('fIn').value=''; refreshSend(); }
 
-async function analyseImg(b64){
-  try{
-    var res=await fetch(RAIL+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:'Analyse this reference photo for a charcoal portrait commission. Describe the person\'s face shape, features, hair, expression, and lighting in 3-4 sentences. Be specific.',
-        messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Analyse this reference photo.'}]}]})
-    });
-    if(res.ok){ var d=await res.json(); imgAnalysis=d.text||''; }
-  }catch(e){}
+function updatePendingStrip(){
+  var strip=document.getElementById('imgStrip');
+  if(!pendingRef){strip.classList.remove('on');return;}
+  document.getElementById('ipThumb').src=pendingRef.preview;
+  document.getElementById('ipName').textContent=pendingRef.label+' · '+pendingRef.name;
+  strip.classList.add('on');
 }
 
-async function runGen(basePrompt){
-  var ov=document.getElementById('genOv'), st=document.getElementById('gStat'), fill=document.getElementById('gFill'), pic=document.getElementById('gPic'), noise=document.getElementById('gNoise');
-  var prompt='hyperrealistic charcoal graphite portrait, '+(imgAnalysis?imgAnalysis+', ':'')+basePrompt+', black and white fine art, cotton paper, dramatic lighting, detailed eyes';
-  var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt)+'?width=520&height=650&nologo=true&seed='+Math.floor(Math.random()*99999);
-  lastGenUrl=url;
-  pic.style.opacity='0'; noise.style.opacity='1'; fill.style.width='0%';
-  ov.classList.add('on'); pic.src=url;
-  var phases=[{t:'Reading your reference',p:15},{t:'Composing portrait',p:42},{t:'Rendering textures',p:68},{t:'Finalising',p:94}];
-  for(var i=0;i<phases.length;i++){
-    st.style.opacity='0'; await wait(200);
-    st.textContent=phases[i].t; st.style.opacity='1';
-    fill.style.width=phases[i].p+'%'; await wait(1100);
+function clearPendingRef(removeFromReferences){
+  if(pendingRef && removeFromReferences!==false){
+    references=references.filter(function(r){return r.id!==pendingRef.id;});
   }
-  await new Promise(function(r){ if(pic.complete&&pic.naturalWidth>0){r();return;} pic.onload=r; pic.onerror=r; setTimeout(r,30000); });
-  st.textContent='Concept ready'; fill.style.width='100%';
-  noise.style.opacity='0'; pic.style.opacity='1';
-  await wait(2000); ov.classList.remove('on');
-  var blk=document.createElement('div'); blk.className='img-block';
-  blk.innerHTML='<div class="img-wrap"><img src="'+url+'" alt="Concept" onerror="this.style.display=\'none\'"><div class="img-note">AI concept based on your description. The actual charcoal artwork will be far richer.</div></div>';
-  cmIn.appendChild(blk); sb();
-  await wait(300);
-  var followText=await callAI('[The concept image has been shown. Ask if it captures their vision. If not, what to change. When happy, write COLLECT_DETAILS]',null,null);
-  await processAI(followText);
-  enableInput();
+  pendingRef=null;
+  document.getElementById('imgStrip').classList.remove('on');
+  refreshSend();
+}
+
+function clearImg(){clearPendingRef(true);}
+
+function buildConversationSummary(){
+  return chatHistory.map(function(m){
+    var speaker=m.role==='assistant'?'Assistant':'Customer';
+    if(typeof m.content==='string') return speaker+': '+m.content;
+    if(Array.isArray(m.content)){
+      var txt=m.content.filter(function(p){return p.type==='text';}).map(function(p){return p.text;}).join(' ');
+      return speaker+': '+txt;
+    }
+    return '';
+  }).filter(Boolean).join('\n\n');
 }
 
 function showBriefForm(){
+  if(collecting) return;
   collecting=true;
-  var blk=document.createElement('div'); blk.className='bf-block';
-  blk.innerHTML='<div class="bf-card" id="bfCard"><input class="bf-inp" type="text" id="bfN" placeholder="Full name" autocomplete="name"><input class="bf-inp" type="email" id="bfE" placeholder="Email address" autocomplete="email"><input class="bf-inp" type="tel" id="bfP" placeholder="Phone number" autocomplete="tel"><button class="bf-btn" onclick="submitBrief()">Send Brief \u2192</button><div class="bf-err" id="bfErr"></div></div><div id="payWrap" style="display:none;"></div>';
-  cmIn.appendChild(blk); sb(); cur(blk); disableInput();
+  var blk=document.createElement('div');
+  blk.className='bf-block';
+  blk.innerHTML=`
+    <div class="bf-card" id="bfCard" style="max-width:430px;">
+      <div style="font-family:var(--serif);font-size:18px;color:var(--p2);margin-bottom:4px;">Your details</div>
+      <div style="font-size:11px;color:var(--g1);line-height:1.6;margin-bottom:5px;">Your commission is not confirmed yet. Good Ereseh will review the brief, prepare the concept where needed, and send your quote and private payment link after approval.</div>
+      <input class="bf-inp" type="text" id="bfN" placeholder="Full name" autocomplete="name">
+      <input class="bf-inp" type="email" id="bfE" placeholder="Email address" autocomplete="email">
+      <input class="bf-inp" type="tel" id="bfP" placeholder="Phone number" autocomplete="tel">
+      <input class="bf-inp" type="text" id="bfA1" placeholder="Address line 1" autocomplete="address-line1">
+      <input class="bf-inp" type="text" id="bfA2" placeholder="Address line 2 (optional)" autocomplete="address-line2">
+      <input class="bf-inp" type="text" id="bfCity" placeholder="City" autocomplete="address-level2">
+      <input class="bf-inp" type="text" id="bfCounty" placeholder="County / Region" autocomplete="address-level1">
+      <input class="bf-inp" type="text" id="bfPost" placeholder="Postcode" autocomplete="postal-code">
+      <input class="bf-inp" type="text" id="bfCountry" placeholder="Country" autocomplete="country-name">
+      <select class="bf-inp" id="bfFrame">
+        <option value="">Framing preference</option>
+        <option value="Unframed">Unframed</option>
+        <option value="Framed">Framed</option>
+        <option value="Artist recommendation">Artist recommendation</option>
+      </select>
+      <input class="bf-inp" type="date" id="bfDeadline" title="Preferred completion date">
+      <select class="bf-inp" id="bfService">
+        <option value="Standard">Standard service</option>
+        <option value="Priority">Priority service requested</option>
+        <option value="Express">Express service requested</option>
+      </select>
+      <textarea class="bf-inp" id="bfNotes" rows="3" placeholder="Final notes or delivery instructions"></textarea>
+      <label style="display:flex;gap:8px;align-items:flex-start;font-size:10px;color:var(--g2);line-height:1.55;">
+        <input type="checkbox" id="bfConsent" style="margin-top:3px;">
+        <span>I confirm I have permission to provide and use any reference photographs submitted with this commission.</span>
+      </label>
+      <button class="bf-btn" onclick="submitBrief()">Submit Commission Request →</button>
+      <div class="bf-err" id="bfErr"></div>
+    </div>
+    <div id="payWrap" style="display:none;"></div>
+  `;
+  cmIn.appendChild(blk);sb();cur(blk);disableInput();
 }
 
 async function submitBrief(){
   var name=document.getElementById('bfN').value.trim();
   var email=document.getElementById('bfE').value.trim();
   var phone=document.getElementById('bfP').value.trim();
-  var err=document.getElementById('bfErr'), btn=document.querySelector('.bf-btn');
-  if(!name||!email){err.textContent='Please enter name and email.';err.style.display='block';return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Invalid email.';err.style.display='block';return;}
-  var summary=chatHistory.filter(function(m){return m.role==='assistant';}).slice(-5).map(function(m){return typeof m.content==='string'?m.content:'';}).join('\n');
-  btn.textContent='Sending\u2026'; btn.disabled=true; err.style.display='none';
+  var address1=document.getElementById('bfA1').value.trim();
+  var address2=document.getElementById('bfA2').value.trim();
+  var city=document.getElementById('bfCity').value.trim();
+  var county=document.getElementById('bfCounty').value.trim();
+  var postcode=document.getElementById('bfPost').value.trim();
+  var country=document.getElementById('bfCountry').value.trim();
+  var framing=document.getElementById('bfFrame').value;
+  var deadline=document.getElementById('bfDeadline').value;
+  var service=document.getElementById('bfService').value;
+  var notes=document.getElementById('bfNotes').value.trim();
+  var consent=document.getElementById('bfConsent').checked;
+  var err=document.getElementById('bfErr');
+  var btn=document.querySelector('.bf-btn');
+
+  if(!name||!email||!phone||!address1||!city||!postcode||!country){
+    err.textContent='Please complete your contact and delivery details.';err.style.display='block';return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent='Please enter a valid email address.';err.style.display='block';return;
+  }
+  if(!consent){
+    err.textContent='Please confirm the reference-photo permission statement.';err.style.display='block';return;
+  }
+
+  var summary=buildConversationSummary();
+  var referencePayload=references.map(function(r){return {label:r.label,name:r.name,imageB64:r.b64,imageType:r.type};});
+
+  btn.textContent='Submitting…';btn.disabled=true;err.style.display='none';
+
   try{
-    var res=await fetch(RAIL+'/commission',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,phone:phone,'commission-type':'AI Commission',size:'',message:summary,imageB64:imgB64||undefined,imageType:imgType||undefined,conceptUrl:lastGenUrl||undefined})
+    var res=await fetch(RAIL+'/commission',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:name,
+        email:email,
+        phone:phone,
+        'commission-type':'AI Guided Commission',
+        size:'',
+        message:summary,
+        references:referencePayload,
+        delivery:{address1:address1,address2:address2,city:city,county:county,postcode:postcode,country:country},
+        framing:framing,
+        deadline:deadline,
+        serviceLevel:service,
+        notes:notes,
+        referenceConsent:true
+      })
     });
+
     var data=await res.json();
-    if(!res.ok) throw new Error(data.error||'Error');
+    if(!res.ok) throw new Error(data.error||'Unable to submit commission request.');
+
     document.getElementById('bfCard').style.display='none';
-    var pw=document.getElementById('payWrap'); pw.style.display='block';
-    pw.innerHTML=data.paymentUrl
-      ?'<p style="font-size:13px;color:var(--p1);line-height:1.7;margin-bottom:10px;">Brief received. Secure your commission slot with the \u00a350 booking deposit:</p><a href="'+data.paymentUrl+'" class="pay-btn" target="_blank">Pay \u00a350 Deposit \u2192 Stripe</a><p style="font-size:10px;color:var(--g1);margin-top:8px;">Good Ereseh will confirm your full quote within two business days.</p>'
-      :'<p style="font-size:14px;color:var(--p2);font-family:var(--serif);font-weight:300;">Brief received.</p><p style="font-size:13px;color:var(--g2);margin-top:8px;line-height:1.75;">Good Ereseh will be in touch within two business days with your invoice.</p>';
+    var pw=document.getElementById('payWrap');pw.style.display='block';
+    pw.innerHTML='<div class="bf-card" style="max-width:430px;"><div style="font-family:var(--serif);font-size:19px;color:var(--p2);">Commission request received.</div><p style="font-size:12px;color:var(--g2);line-height:1.75;margin-top:8px;">'+(data.commissionNumber?('Reference: <strong>'+esc(data.commissionNumber)+'</strong><br><br>'):'')+'Good Ereseh will review your brief and reference photographs. If a concept is required, it will be prepared and sent to you for approval. Your final quote, turnaround and private payment link will follow after review.</p></div>';
     sb();
   }catch(e){
-    err.textContent=e.message||'Error. Email art@goodereseh.com'; err.style.display='block';
-    btn.textContent='Send Brief \u2192'; btn.disabled=false;
+    err.textContent=e.message||'Error. Email art@goodereseh.com';err.style.display='block';
+    btn.textContent='Submit Commission Request →';btn.disabled=false;
   }
 }
 
 function toggleMic(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   var micBtn=document.getElementById('micBtn');
-  if(!SR){addAI('<p>Voice input requires Chrome or iOS Safari.</p>');return;}
+  if(!SR){addAI('<p>Voice input is not supported in this browser. Please type your message instead.</p>');return;}
   if(recOn){if(recog)recog.stop();recOn=false;micBtn.classList.remove('rc');return;}
-  recog=new SR(); recog.lang='en-GB'; recog.continuous=false; recog.interimResults=true;
+  recog=new SR();recog.lang='en-GB';recog.continuous=false;recog.interimResults=true;
   recog.onstart=function(){recOn=true;micBtn.classList.add('rc');};
   recog.onresult=function(e){var t=Array.from(e.results).map(function(r){return r[0].transcript;}).join('');ibTa.value=t;ibTa.style.height='auto';ibTa.style.height=Math.min(ibTa.scrollHeight,120)+'px';refreshSend();};
   recog.onend=function(){recOn=false;micBtn.classList.remove('rc');};
@@ -419,20 +659,23 @@ if(window.matchMedia('(pointer: fine)').matches){
   document.querySelectorAll('a,button').forEach(function(el){el.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});el.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});});
 }
 
-/* START — hardcoded opening (instant, no API wait)
-   Real AI kicks in from the user's first message */
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded',function(){
   setTimeout(function(){
     addAI(renderAI(
-      "Hello. I am the commission assistant for Good Ereseh.\n\n" +
-      "I will help you design your portrait brief and generate an AI concept before you commit.\n\n" +
-      "What type of commission are you looking for?\n\n" +
-      "A) Personal Portrait\n" +
-      "B) Family Artwork\n" +
-      "C) Memorial Piece"
+      "Hello. I am the commission assistant for Good Ereseh.\n\n"+
+      "I can help you shape an idea, review your reference photographs, and prepare a clear brief for Good to review. I will not alter or regenerate any photographs you upload.\n\n"+
+      "What type of commission are you considering?\n\n"+
+      "A) Personal Portrait\n"+
+      "B) Family Artwork\n"+
+      "C) Couple Portrait\n"+
+      "D) Memorial Piece\n"+
+      "E) Conceptual Artwork\n"+
+      "F) Gift Commission\n"+
+      "G) Cultural or Legacy Piece\n"+
+      "H) I am not sure yet"
     ));
     enableInput();
-  }, 600);
+  },500);
 });
 </script>
 </body>
