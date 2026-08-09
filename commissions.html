@@ -161,11 +161,11 @@ var recog = null;
 var recOn = false;
 var finalBrief = '';
 
-var cmIn = document.getElementById('cmIn');
-var cmOut = document.getElementById('cmOut');
-var ibTa = document.getElementById('ibTa');
-var ibUp = document.getElementById('ibUp');
-var hint = document.getElementById('ibHint');
+var cmIn = null;
+var cmOut = null;
+var ibTa = null;
+var ibUp = null;
+var hint = null;
 
 
 function wait(ms) {
@@ -1116,52 +1116,6 @@ async function sendToAI(
 
 }
 
-
-ibTa.addEventListener(
-    'input',
-    function() {
-
-        ibTa.style.height =
-            'auto';
-
-
-        ibTa.style.height =
-
-            Math.min(
-                ibTa.scrollHeight,
-                120
-            ) +
-
-            'px';
-
-
-        refreshSend();
-
-    }
-);
-
-
-ibTa.addEventListener(
-    'keydown',
-    function(event) {
-
-        if (
-            event.key ===
-                'Enter' &&
-
-            !event.shiftKey &&
-
-            !ibUp.disabled
-        ) {
-
-            event.preventDefault();
-
-            doSend();
-
-        }
-
-    }
-);
 
 
 function refreshSend() {
@@ -2725,13 +2679,134 @@ if (
 
 
 window.addEventListener(
-
     'DOMContentLoaded',
-
     function() {
 
-        setTimeout(
+        /*
+        |--------------------------------------------------------------------------
+        | GET COMMISSION PAGE ELEMENTS
+        |--------------------------------------------------------------------------
+        */
 
+        cmIn =
+            document.getElementById(
+                'cmIn'
+            );
+
+        cmOut =
+            document.getElementById(
+                'cmOut'
+            );
+
+        ibTa =
+            document.getElementById(
+                'ibTa'
+            );
+
+        ibUp =
+            document.getElementById(
+                'ibUp'
+            );
+
+        hint =
+            document.getElementById(
+                'ibHint'
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAFETY CHECK
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            !cmIn ||
+            !cmOut ||
+            !ibTa ||
+            !ibUp ||
+            !hint
+        ) {
+
+            console.error(
+                'Commission Studio could not initialise.',
+                {
+                    cmIn: !!cmIn,
+                    cmOut: !!cmOut,
+                    ibTa: !!ibTa,
+                    ibUp: !!ibUp,
+                    hint: !!hint
+                }
+            );
+
+            return;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TEXT AREA
+        |--------------------------------------------------------------------------
+        */
+
+        ibTa.addEventListener(
+            'input',
+            function() {
+
+                ibTa.style.height =
+                    'auto';
+
+
+                ibTa.style.height =
+
+                    Math.min(
+                        ibTa.scrollHeight,
+                        120
+                    ) +
+
+                    'px';
+
+
+                refreshSend();
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENTER TO SEND
+        |--------------------------------------------------------------------------
+        */
+
+        ibTa.addEventListener(
+            'keydown',
+            function(event) {
+
+                if (
+                    event.key === 'Enter' &&
+                    !event.shiftKey &&
+                    !ibUp.disabled
+                ) {
+
+                    event.preventDefault();
+
+                    doSend();
+
+                }
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | OPENING MESSAGE
+        |--------------------------------------------------------------------------
+        */
+
+        setTimeout(
             function() {
 
                 addAI(
@@ -2768,10 +2843,7 @@ window.addEventListener(
             },
 
             500
-
         );
 
     }
-
 );
-</script>
