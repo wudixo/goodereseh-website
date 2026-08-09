@@ -614,12 +614,19 @@ async function submitBrief(){
         size:'',
         message:summary,
         references:referencePayload,
-        delivery:{address1:address1,address2:address2,city:city,county:county,postcode:postcode,country:country},
+        address:{
+    line1:address1,
+    line2:address2,
+    city:city,
+    county:county,
+    postcode:postcode,
+    country:country
+},
         framing:framing,
         deadline:deadline,
         serviceLevel:service,
         notes:notes,
-        referenceConsent:true
+        referenceConsent:consent
       })
     });
 
