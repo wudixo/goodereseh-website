@@ -3,323 +3,602 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Gallery &mdash; Good Ereseh. Original charcoal and graphite artworks. Hyperrealistic portraits and the Beyond the Seen conceptual line art series.">
-<title>Gallery &mdash; Good Ereseh</title>
+<meta name="description" content="The complete collection of original charcoal and graphite artworks and fine art prints by Good Ereseh.">
+<title>Gallery — Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
-.gallery-hero{padding:160px 64px 80px;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07);}
-.gallery-hero h1{font-family:var(--serif);font-size:clamp(48px,7vw,96px);font-weight:300;color:var(--p2);line-height:1;letter-spacing:-.02em;margin-bottom:20px;}
-.gallery-hero h1 em{font-style:italic;color:var(--g3);}
-.gallery-hero p{font-size:15px;color:var(--g2);line-height:1.85;max-width:520px;}
-
-.gallery-filters{padding:32px 64px;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07);display:flex;align-items:center;gap:3px;}
-.filter-btn{padding:10px 22px;background:none;border:1px solid rgba(189,179,168,.1);color:var(--g1);font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;cursor:none;transition:all .25s;}
-.filter-btn:hover{border-color:rgba(189,179,168,.25);color:var(--p1);}
-.filter-btn.active{background:var(--p2);color:var(--ink);border-color:var(--p2);}
-.filter-count{margin-left:auto;font-size:9px;color:var(--g0);letter-spacing:.12em;}
-
-.gallery-grid{padding:48px 64px 120px;background:var(--ink);display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
-
-.art-card{display:block;text-decoration:none;position:relative;overflow:hidden;background:var(--c2);transition:opacity .3s;}
-.art-card.hidden{display:none;}
-.art-card-img{position:relative;aspect-ratio:4/5;overflow:hidden;}
-.art-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .5s;filter:brightness(.82) grayscale(12%);}
-.art-card:hover .art-card-img img{transform:scale(1.04);filter:brightness(.9) grayscale(0%);}
-
-.art-card-img.light-bg{background:#f5f0e8;}
-.art-card-img.light-bg img{filter:brightness(.98) contrast(1.02);object-fit:contain;padding:24px;}
-.art-card:hover .art-card-img.light-bg img{transform:scale(1.03);filter:brightness(1) contrast(1.04);}
-
-.sold-tag{position:absolute;top:16px;right:16px;background:var(--ink);border:1px solid rgba(189,179,168,.2);padding:6px 14px;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--g2);z-index:2;}
-.series-tag{position:absolute;top:16px;left:16px;background:rgba(15,13,11,.7);backdrop-filter:blur(8px);border:1px solid rgba(189,179,168,.1);padding:6px 14px;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--g3);z-index:2;}
-
-.art-card-info{padding:18px 0 22px;border-top:1px solid rgba(189,179,168,.06);}
-.art-card-name{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p1);margin-bottom:4px;line-height:1.15;}
-.art-card-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.art-card-type{font-size:9px;color:var(--g1);letter-spacing:.14em;text-transform:uppercase;}
-.art-card-price{font-family:var(--serif);font-size:18px;font-weight:300;color:var(--g3);}
-.art-card-price.sold{color:var(--g0);text-decoration:line-through;font-size:14px;}
-
-.series-section-header{grid-column:1/-1;padding:52px 0 24px;border-top:1px solid rgba(189,179,168,.07);}
-.series-section-header:first-child{border-top:none;padding-top:0;}
-.ssh-eyebrow{font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--g0);margin-bottom:8px;}
-.ssh-title{font-family:var(--serif);font-size:clamp(28px,3vw,42px);font-weight:300;color:var(--p2);line-height:1.1;}
-.ssh-title em{font-style:italic;color:var(--g3);}
-.ssh-desc{font-size:13px;color:var(--g2);line-height:1.8;max-width:560px;margin-top:12px;}
-
-.no-results{grid-column:1/-1;padding:80px 0;text-align:center;}
-.no-results p{font-family:var(--serif);font-size:24px;font-weight:300;color:var(--g1);font-style:italic;}
-
-@media(max-width:960px){
-  .gallery-hero{padding:100px 24px 60px;}
-  .gallery-filters{padding:24px;flex-wrap:wrap;gap:6px;}
-  .gallery-grid{grid-template-columns:1fr 1fr;padding:32px 24px 80px;}
-  .filter-count{width:100%;margin-left:0;margin-top:8px;}
+/* Gallery-specific styles */
+.filter-bar {
+  padding: 0 64px;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+  display: flex;
+  gap: 0;
+  background: var(--c1);
 }
-@media(max-width:600px){
-  .gallery-grid{grid-template-columns:1fr;}
+
+.filter-btn {
+  padding: 18px 28px;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g1);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: color .3s, border-color .3s;
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+.filter-btn.active { color: var(--p1); border-bottom-color: var(--g3); }
+.filter-btn:hover { color: var(--g3); }
+
+.gallery-section {
+  padding: 80px 64px 140px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+}
+
+.gallery-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--c2);
+  display: block;
+  cursor: pointer;
+}
+
+.gallery-card.hidden { display: none; }
+
+.gallery-card-img {
+  aspect-ratio: 4/5;
+  overflow: hidden;
+}
+
+.gallery-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(.85) contrast(1.05) grayscale(10%);
+  transition: transform .9s cubic-bezier(.16,1,.3,1), filter .6s;
+}
+
+.gallery-card:hover .gallery-card-img img {
+  transform: scale(1.04);
+  filter: brightness(.92) contrast(1.05) grayscale(0%);
+}
+
+/* Overlay on hover */
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,13,11,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .4s;
+}
+
+.gallery-card:hover .gallery-card-overlay { opacity: 1; }
+
+.overlay-cta {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--p2);
+  border: 1px solid rgba(240,232,216,.3);
+  padding: 12px 28px;
+  transition: border-color .3s, background .3s;
+}
+
+.gallery-card:hover .overlay-cta {
+  border-color: var(--p2);
+  background: rgba(240,232,216,.08);
+}
+
+.gallery-card-info {
+  padding: 24px 0 28px;
+  border-bottom: 1px solid rgba(189,179,168,.07);
+}
+
+.card-label {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--g1);
+  margin-bottom: 8px;
+}
+
+.card-name {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--p2);
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+
+.card-price {
+  font-size: 12px;
+  color: var(--g2);
+  letter-spacing: .04em;
+}
+
+/* No results */
+.no-results {
+  text-align: center;
+  padding: 80px 0;
+  display: none;
+  font-size: 14px;
+  color: var(--g1);
+}
+
+@media (max-width: 960px) {
+  .filter-bar { padding: 0 28px; overflow-x: auto; }
+  .gallery-section { padding: 60px 28px 100px; }
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+
+/* Keep pointer visible on interactive elements */
+a,
+button,
+.filter-btn,
+.gallery-card,
+.overlay-cta {
+  cursor: pointer;
+}
+
+.cursor-dot,
+.cursor-ring {
+  pointer-events: none;
+  z-index: 99999;
+}
+
+</style>
+
+<style>
+/* Navigation cursor visibility fix */
+nav,
+nav *,
+.nav-mark,
+.nav-links,
+.nav-links a {
+  cursor: pointer !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  pointer-events: none !important;
+  z-index: 999999 !important;
+  mix-blend-mode: normal !important;
+}
+
+.cursor-dot {
+  background: #fffaf2 !important;
+  box-shadow: 0 0 8px rgba(255,250,242,.5);
+}
+
+.cursor-ring {
+  border-color: rgba(255,250,242,.72) !important;
 }
 </style>
+
 </head>
 <body>
+
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
 <nav id="nav">
-  <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
+  <a href="/" class="nav-mark">
+    <span class="mark-g">G · E</span>
+    <span class="mark-sub">Good Ereseh</span>
+  </a>
   <ul class="nav-links">
     <li><a href="/gallery" class="active">Gallery</a></li>
     <li><a href="/about">About</a></li>
     <li><a href="/commissions">Commissions</a></li>
     <li><a href="/contact">Contact</a></li>
-    <li><a href="/commissions" class="nav-commission">Commission</a></li>
   </ul>
 </nav>
 
-<div class="gallery-hero">
-  <p class="eyebrow">Good Ereseh</p>
-  <h1>The<br><em>Collection</em></h1>
-  <p>Original charcoal and graphite works on 100% cotton paper. Hyperrealistic portraits and the Beyond the Seen conceptual line art series.</p>
+<!-- Hero -->
+<div class="page-hero">
+  <p class="page-hero-eyebrow">Original Works &amp; Fine Art Prints</p>
+  <h1 class="page-hero-title">The<br><em>Collection.</em></h1>
+  <p class="page-hero-sub">Hyperrealistic charcoal and graphite artworks, originals and limited edition fine art prints on archival cotton paper.</p>
 </div>
 
-<div class="gallery-filters">
-  <button class="filter-btn active" data-filter="all" onclick="filter(this,'all')">All Works</button>
-  <button class="filter-btn" data-filter="portrait" onclick="filter(this,'portrait')">Portraits &amp; Figures</button>
-  <button class="filter-btn" data-filter="beyond" onclick="filter(this,'beyond')">Beyond the Seen</button>
-  <button class="filter-btn" data-filter="available" onclick="filter(this,'available')">Available</button>
-  <button class="filter-btn" data-filter="sold" onclick="filter(this,'sold')">Sold</button>
-  <span class="filter-count" id="filterCount">10 works</span>
+<!-- Filter -->
+<div class="filter-bar" aria-label="Filter artworks">
+  <button class="filter-btn active" data-filter="all">All Works</button>
+  <button class="filter-btn" data-filter="hyperrealistic">Hyperrealistic</button>
+  <button class="filter-btn" data-filter="portrait">Portraits</button>
+  <button class="filter-btn" data-filter="abstract">Abstract</button>
+  <button class="filter-btn" data-filter="study">Studies</button>
+  <button class="filter-btn" data-filter="original">Originals</button>
+  <button class="filter-btn" data-filter="print">Fine Art Prints</button>
 </div>
 
-<div class="gallery-grid" id="galleryGrid">
+<!-- Grid -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid">
 
-  <!-- ── BEYOND THE SEEN SERIES ── -->
-  <div class="series-section-header" data-cat="beyond" id="sectionBeyond">
-    <div class="ssh-eyebrow">Series</div>
-    <h2 class="ssh-title">Beyond<br><em>the Seen</em></h2>
-    <p class="ssh-desc">Four original conceptual line art works. Draw less, speak loudest. Each piece belongs to the person who stands in front of it &mdash; collectors finish the drawing with their own eyes.</p>
+
+    <a href="/artworks/gaze" class="gallery-card reveal" data-type="hyperrealistic study original print">
+      <div class="gallery-card-img">
+        <img src="/images/artwork/gaze.jpg" alt="The Gaze Within — Hyperrealistic Eye Study">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Hyperrealistic Eye Study</div>
+        <div class="card-name">The Gaze Within</div>
+        <div class="card-price">Original - £500 &nbsp;·&nbsp; Prints from £85</div>
+      </div>
+    </a>
+
+    <a href="/artworks/eye" class="gallery-card reveal" data-type="hyperrealistic study original print">
+      <div class="gallery-card-img">
+        <img src="https://goodereseh.com/images/artwork/eye.jpg" alt="Reflections — Hyperrealistic Eye Study">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Hyperrealistic Eye Study</div>
+        <div class="card-name">Reflections</div>
+        <div class="card-price">Original - £3,000 &nbsp;·&nbsp; Prints from £85</div>
+      </div>
+    </a>
+
+    <a href="/artworks/fela" class="gallery-card reveal d1" data-type="hyperrealistic portrait original print">
+      <div class="gallery-card-img">
+        <img src="https://goodereseh.com/images/artwork/fela.jpg" alt="Fela Kuti — Original Graphite Portrait">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Original Graphite Portrait</div>
+        <div class="card-name">Fela Kuti</div>
+        <div class="card-price">Original - £4,500 &nbsp;·&nbsp; Prints from £95</div>
+      </div>
+    </a>
+
+    <a href="/artworks/fela2" class="gallery-card reveal" data-type="portrait study print">
+      <div class="gallery-card-img">
+        <img src="https://goodereseh.com/images/artwork/fela2.jpg" alt="Fela Kuti: The Stance Charcoal Portrait Study">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Charcoal Portrait Study</div>
+        <div class="card-name">Fela Anikulapo kuti: The Stance</div>
+        <div class="card-price">Original Sold - Fine Art Prints from £95</div>
+      </div>
+    </a>
+
+    <a href="/artworks/abstract" class="gallery-card reveal d1" data-type="abstract original print">
+      <div class="gallery-card-img">
+        <img src="/images/artwork/abstract.jpg" alt="Fragments of Thought: Abstract Charcoal Artwork">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Abstract Charcoal Artwork</div>
+        <div class="card-name">Fragments of Thought</div>
+        <div class="card-price">Original - £400 &nbsp;·&nbsp; Prints from £50</div>
+      </div>
+    </a>
+
+    <a href="/artworks/benjamin" class="gallery-card reveal" data-type="hyperrealistic portrait original print">
+      <div class="gallery-card-img">
+        <img src="/images/artwork/benjamin.jpg" alt="In God We Trust: Benjamin Franklin Charcoal Portrait">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Charcoal &amp; Graphite Portrait</div>
+        <div class="card-name">Benjamin Franklin: In God We Trust</div>
+        <div class="card-price">Original - £4,000 &nbsp;·&nbsp; Prints from £95</div>
+      </div>
+    </a>
+
+    <a href="/artworks/lips" class="gallery-card reveal d1" data-type="hyperrealistic study original print">
+      <div class="gallery-card-img">
+        <img src="/images/artwork/lips.jpg" alt="Unspoken: Graphite/Charcoal Pencil and White Ink Study">
+        <div class="gallery-card-overlay"><span class="overlay-cta">View Artwork</span></div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="card-label">Charcoal &amp; White Ink Study</div>
+        <div class="card-name">Unspoken</div>
+        <div class="card-price">Original - £3,500 &nbsp;·&nbsp; Prints from £85</div>
+      </div>
+    </a>
+
   </div>
+  <div class="no-results" id="noResults">No works match this filter.</div>
+</section>
 
-  <a href="/artworks/still" class="art-card reveal" data-cat="beyond" data-available="available">
-    <div class="art-card-img light-bg">
-      <span class="series-tag">I of IV</span>
-      <img src="/images/artwork/beyondtheseen1.jpg" alt="Still &mdash; Beyond the Seen I">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Still</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Conceptual Line Art</span>
-        <span class="art-card-price">&pound;3,200</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/weight-of-water" class="art-card reveal d1" data-cat="beyond" data-available="available">
-    <div class="art-card-img light-bg">
-      <span class="series-tag">II of IV</span>
-      <img src="/images/artwork/beyondtheseen2.jpg" alt="The Weight of Water &mdash; Beyond the Seen II">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">The Weight of Water</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Conceptual Line Art</span>
-        <span class="art-card-price">&pound;3,200</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/between" class="art-card reveal d2" data-cat="beyond" data-available="available">
-    <div class="art-card-img light-bg">
-      <span class="series-tag">III of IV</span>
-      <img src="/images/artwork/beyondtheseen3.jpg" alt="Between &mdash; Beyond the Seen III">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Between</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Conceptual Line Art</span>
-        <span class="art-card-price">&pound;3,200</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/keeper" class="art-card reveal d3" data-cat="beyond" data-available="available">
-    <div class="art-card-img light-bg">
-      <span class="series-tag">IV of IV</span>
-      <img src="/images/artwork/beyondtheseen4.jpg" alt="The Keeper &mdash; Beyond the Seen IV">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">The Keeper</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Conceptual Line Art</span>
-        <span class="art-card-price">&pound;3,200</span>
-      </div>
-    </div>
-  </a>
-
-  <!-- ── PORTRAITS & FIGURES ── -->
-  <div class="series-section-header" data-cat="portrait" id="sectionPortrait">
-    <div class="ssh-eyebrow">Collection</div>
-    <h2 class="ssh-title">Portraits<br>&amp; <em>Figures</em></h2>
-    <p class="ssh-desc">Hyperrealistic charcoal and graphite portraits. Every mark made by hand on heavy cotton paper. Original works and limited edition fine art prints.</p>
-  </div>
-
-  <a href="/artworks/eye" class="art-card reveal" data-cat="portrait" data-available="available">
-    <div class="art-card-img">
-      <img src="/images/artwork/eye.jpg" alt="Reflections">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Reflections</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Hyperrealistic Portrait</span>
-        <span class="art-card-price">&pound;3,000</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/fela" class="art-card reveal d1" data-cat="portrait" data-available="available">
-    <div class="art-card-img">
-      <img src="/images/artwork/fela.jpg" alt="Fela Kuti">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Fela Kuti</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Original Graphite Portrait</span>
-        <span class="art-card-price">&pound;4,500</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/fela2" class="art-card reveal d2" data-cat="portrait" data-available="sold">
-    <div class="art-card-img">
-      <span class="sold-tag">Sold</span>
-      <img src="/images/artwork/fela2.jpg" alt="The Stance">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">The Stance</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Charcoal Portrait Study</span>
-        <span class="art-card-price sold">&pound;4,500</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/abstract" class="art-card reveal d3" data-cat="portrait" data-available="available">
-    <div class="art-card-img">
-      <img src="/images/artwork/abstract.jpg" alt="Fragments of Thought">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Fragments of Thought</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Abstract Charcoal Artwork</span>
-        <span class="art-card-price">&pound;400</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/benjamin" class="art-card reveal d1" data-cat="portrait" data-available="available">
-    <div class="art-card-img">
-      <img src="/images/artwork/benjamin.jpeg" alt="In God We Trust">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">In God We Trust</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Conceptual Charcoal Portrait</span>
-        <span class="art-card-price">&pound;4,000</span>
-      </div>
-    </div>
-  </a>
-
-  <a href="/artworks/lips" class="art-card reveal d2" data-cat="portrait" data-available="available">
-    <div class="art-card-img">
-      <img src="/images/artwork/lips.jpg" alt="Unspoken">
-    </div>
-    <div class="art-card-info">
-      <div class="art-card-name">Unspoken</div>
-      <div class="art-card-meta">
-        <span class="art-card-type">Hyperrealistic Charcoal Study</span>
-        <span class="art-card-price">&pound;3,500</span>
-      </div>
-    </div>
-  </a>
-
-  <!-- No results message -->
-  <div class="no-results" id="noResults" style="display:none;">
-    <p>No works match this filter.</p>
-  </div>
-
-</div>
-
+<!-- Footer -->
+<!-- FOOTER ──────────────────────────────────────────────── -->
 <footer class="footer-mono">
-  <div class="footer-glyph" aria-hidden="true">G &middot; E</div>
+
+  <div class="footer-glyph" aria-hidden="true">
+    G · E
+  </div>
+
+  <!-- SOCIAL MEDIA -->
   <div class="footer-social">
-    <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-    <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
-    <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg></a>
-    <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+
+    <a
+      href="https://www.instagram.com/gooderese"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+
+    <a
+      href="https://www.youtube.com/@gooderese"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="YouTube"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+        <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+
+    <a
+      href="https://www.tiktok.com/@gooderese"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="TikTok"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        stroke="none"
+      >
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+      </svg>
+    </a>
+
+    <a
+      href="https://www.facebook.com/profile.php?id=61589305444829"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      </svg>
+    </a>
+
   </div>
+
+
+  <!-- FOOTER COLUMNS -->
   <div class="footer-grid">
-    <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Beyond the Seen</h5><ul><li><a href="/artworks/still">Still</a></li><li><a href="/artworks/weight-of-water">The Weight of Water</a></li><li><a href="/artworks/between">Between</a></li><li><a href="/artworks/keeper">The Keeper</a></li></ul></div>
-    <div class="footer-col"><h5>Portraits</h5><ul><li><a href="/artworks/eye">Reflections</a></li><li><a href="/artworks/fela">Fela Kuti</a></li><li><a href="/artworks/benjamin">In God We Trust</a></li><li><a href="/artworks/lips">Unspoken</a></li></ul></div>
+
+    <!-- NAVIGATE -->
+    <div class="footer-col">
+      <h5>Navigate</h5>
+
+      <ul>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/commissions">Commissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+
+    <!-- COLLECT -->
+    <div class="footer-col">
+      <h5>Collect</h5>
+
+      <ul>
+        <li><a href="/artworks/eye">Reflections</a></li>
+        <li><a href="/artworks/fela">Fela Kuti</a></li>
+        <li><a href="/artworks/benjamin">Benjamin Franklin</a></li>
+        <li><a href="/artworks/lips">Unspoken</a></li>
+      </ul>
+    </div>
+
+
+    <!-- COMMISSIONS -->
+    <div class="footer-col">
+      <h5>Studio</h5>
+
+      <ul>
+        <li>
+          <a href="/commissions">
+            Commission an Artwork
+          </a>
+        </li>
+
+        <li>
+          <a href="/commission-terms">
+            Commission Terms
+          </a>
+        </li>
+
+        <li>
+          <a href="/ai-policy">
+            AI Commission Studio
+          </a>
+        </li>
+
+        <li>
+          <a href="mailto:art@goodereseh.com">
+            art@goodereseh.com
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <!-- LEGAL -->
+    <div class="footer-col">
+      <h5>Legal</h5>
+
+      <ul>
+
+        <li>
+          <a href="/terms-and-conditions">
+            Terms &amp; Conditions
+          </a>
+        </li>
+
+        <li>
+          <a href="/privacy-policy">
+            Privacy Policy
+          </a>
+        </li>
+
+        <li>
+          <a href="/returns-refunds">
+            Returns &amp; Refunds
+          </a>
+        </li>
+
+        <li>
+          <a href="/shipping-delivery">
+            Shipping &amp; Delivery
+          </a>
+        </li>
+
+        <li>
+          <a href="/cookie-policy">
+            Cookie Policy
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
   </div>
-  <div class="footer-base"><span>&copy; 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/legal.html">Policies</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-and-conditions.html">Terms</a></div></div>
+
+
+  <!-- FOOTER BASE -->
+  <div class="footer-base">
+
+    <span>
+      © 2026 Good Ereseh. All Rights Reserved.
+    </span>
+
+    <div class="footer-legal">
+
+      <a href="/privacy-policy">
+        Privacy
+      </a>
+
+      <a href="/terms-and-conditions">
+        Terms
+      </a>
+
+      <a href="/cookie-policy">
+        Cookies
+      </a>
+
+    </div>
+
+  </div>
+
 </footer>
 
 <script>
-function filter(btn, cat) {
-  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
+/* Nav */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
 
-  var cards    = document.querySelectorAll('.art-card');
-  var sections = document.querySelectorAll('.series-section-header');
-  var visible  = 0;
-
-  cards.forEach(function(card) {
-    var cardCat  = card.dataset.cat;
-    var cardAvail= card.dataset.available;
-    var show = false;
-
-    if (cat === 'all')       show = true;
-    else if (cat === 'beyond')    show = cardCat === 'beyond';
-    else if (cat === 'portrait')  show = cardCat === 'portrait';
-    else if (cat === 'available') show = cardAvail === 'available';
-    else if (cat === 'sold')      show = cardAvail === 'sold';
-
-    card.classList.toggle('hidden', !show);
-    if (show) visible++;
+/* Cursor */
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0,tt=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    clearTimeout(tt);
+    tt = setTimeout(()=>{
+      const t=document.createElement('div');
+      t.className='cursor-trail';
+      t.style.left=mx+'px'; t.style.top=my+'px';
+      document.body.appendChild(t);
+      t.addEventListener('animationend',()=>t.remove());
+    },16);
   });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+}
 
-  // Show/hide section headers
-  sections.forEach(function(sec) {
-    var secCat = sec.dataset.cat;
-    var hasVisible = false;
-    document.querySelectorAll('.art-card[data-cat="'+secCat+'"]').forEach(function(c){
-      if (!c.classList.contains('hidden')) hasVisible = true;
+/* Reveal */
+const obs = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Filter */
+const cards = document.querySelectorAll('.gallery-card');
+const noResults = document.getElementById('noResults');
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    let visible = 0;
+    cards.forEach(card => {
+      const types = (card.dataset.type || '').split(/\s+/);
+      const show = f === 'all' || types.includes(f);
+      card.classList.toggle('hidden', !show);
+      if (show) visible++;
     });
-    sec.style.display = hasVisible ? '' : 'none';
+    noResults.style.display = visible === 0 ? 'block' : 'none';
   });
-
-  // No results
-  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
-
-  // Count
-  document.getElementById('filterCount').textContent = visible + (visible === 1 ? ' work' : ' works');
-}
-
-var nav = document.getElementById('nav');
-window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', scrollY > 60); }, {passive:true});
-var dot=document.getElementById('cursorDot'), ring=document.getElementById('cursorRing');
-if(window.matchMedia('(pointer: fine)').matches){
-  var mx=0,my=0,rx=0,ry=0,tt=0;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(function(){var t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',function(){t.remove();});},16);});
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
-  document.querySelectorAll('a,button').forEach(function(el){el.addEventListener('mouseenter',function(){document.body.classList.add('cursor-hover');});el.addEventListener('mouseleave',function(){document.body.classList.remove('cursor-hover');});});
-}
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.08});
-document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+});
 </script>
 </body>
 </html>
