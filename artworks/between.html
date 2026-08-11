@@ -3,81 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Between &mdash; Beyond the Seen series by Good Ereseh. Original conceptual line art in charcoal on 100% cotton paper.">
-<title>Between &mdash; Good Ereseh</title>
+<meta name="description" content="Between — Beyond the Seen series by Good Ereseh. Original conceptual charcoal line artwork on 100% cotton paper.">
+<title>Between — Good Ereseh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/v3.css">
 <style>
-.artwork-hero{height:88vh;min-height:640px;position:relative;overflow:hidden;background:#f8f6f1;}
-.artwork-hero img{width:100%;height:100%;object-fit:cover;object-position:center;}
-.artwork-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,13,11,.15) 0%,transparent 25%,transparent 55%,rgba(15,13,11,.97) 100%);}
-.artwork-hero-info{position:absolute;bottom:60px;left:64px;z-index:2;}
-.artwork-hero-title{font-family:var(--serif);font-size:clamp(52px,8vw,100px);font-weight:300;color:var(--p2);line-height:.95;letter-spacing:-.02em;}
-.artwork-hero-title em{font-style:italic;color:var(--g3);display:block;}
-
-.series-badge{display:inline-flex;align-items:center;gap:12px;margin-bottom:20px;}
-.series-badge-text{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--g1);}
-.series-badge-sep{width:32px;height:1px;background:var(--g0);}
-.series-num{font-family:var(--serif);font-size:11px;color:var(--g0);letter-spacing:.1em;}
-
-.artwork-body{display:grid;grid-template-columns:1fr 420px;gap:80px;padding:100px 64px;align-items:start;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07);}
-.artwork-desc h2{font-family:var(--serif);font-size:clamp(26px,3vw,38px);font-weight:300;color:var(--p2);margin-bottom:28px;line-height:1.2;}
-.artwork-desc p{font-size:15px;color:var(--g2);line-height:1.95;margin-bottom:18px;}
-.artwork-desc p:last-child{margin-bottom:0;}
-.artwork-meta{margin-top:52px;border-top:1px solid rgba(189,179,168,.07);}
-.meta-row{display:grid;grid-template-columns:1fr 1fr;}
-.meta-item{padding:18px 0;border-bottom:1px solid rgba(189,179,168,.06);}
-.meta-label{font-size:8px;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:var(--g0);margin-bottom:6px;}
-.meta-value{font-size:13px;color:var(--p1);letter-spacing:.02em;}
-.meta-value.highlight{color:var(--g3);font-family:var(--serif);font-size:16px;font-style:italic;}
-
-.purchase-sidebar{position:sticky;top:100px;}
-.purchase-header{padding-bottom:20px;border-bottom:1px solid rgba(189,179,168,.07);margin-bottom:24px;}
-.purchase-title{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p2);margin-bottom:6px;}
-.purchase-series{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--g1);}
-.purchase-original{background:var(--c1);border:1px solid rgba(189,179,168,.08);padding:24px;margin-bottom:3px;}
-.purchase-original-label{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--g0);margin-bottom:12px;}
-.purchase-original-price{font-family:var(--serif);font-size:48px;font-weight:300;color:var(--p2);line-height:1;margin-bottom:6px;}
-.purchase-original-note{font-size:11px;color:var(--g1);margin-bottom:20px;line-height:1.6;}
-.purchase-prints{margin-top:20px;}
-.purchase-prints-label{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--g0);margin-bottom:8px;}
-.print-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(189,179,168,.05);}
-.print-row:last-child{border-bottom:none;}
-.print-size{font-size:12px;color:var(--g2);}
-.print-price{font-size:12px;color:var(--p1);}
-
-.series-strip{padding:60px 64px;background:var(--c1);border-bottom:1px solid rgba(189,179,168,.07);}
-.series-strip-inner{display:flex;align-items:center;justify-content:space-between;}
-.series-strip-info h3{font-family:var(--serif);font-size:28px;font-weight:300;color:var(--p2);margin-bottom:6px;}
-.series-strip-info p{font-size:13px;color:var(--g2);line-height:1.7;max-width:480px;}
-.series-links{display:flex;gap:3px;}
-.series-link{padding:12px 20px;background:var(--c2);border:1px solid rgba(189,179,168,.08);font-family:var(--serif);font-size:18px;font-weight:300;color:var(--g2);font-style:italic;transition:background .3s,color .3s,border-color .3s;text-decoration:none;}
-.series-link:hover,.series-link.active{background:var(--p2);color:var(--ink);border-color:var(--p2);}
-
-.related{padding:100px 64px;background:var(--ink);}
-.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:48px;}
-.related-card{display:block;position:relative;overflow:hidden;background:var(--c2);text-decoration:none;}
-.related-card-img{aspect-ratio:4/5;overflow:hidden;background:#f5f0e8;}
-.related-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease);}
-.related-card:hover .related-card-img img{transform:scale(1.04);}
-.related-card-info{padding:18px 0 20px;}
-.related-card-name{font-family:var(--serif);font-size:20px;font-weight:300;color:var(--p1);margin-bottom:4px;}
-.related-card-sub{font-size:9px;color:var(--g1);letter-spacing:.14em;text-transform:uppercase;}
-
-.tagline-strip{padding:80px 64px;background:var(--c1);text-align:center;border-bottom:1px solid rgba(189,179,168,.07);}
-.tagline-strip blockquote{font-family:var(--serif);font-size:clamp(22px,3vw,36px);font-weight:300;font-style:italic;color:var(--g3);line-height:1.5;max-width:680px;margin:0 auto;}
-
-@media(max-width:960px){
+.artwork-hero { height: 80vh; min-height: 600px; position: relative; overflow: hidden; background: var(--c2); }
+.artwork-hero img { width: 100%; height: 100%; object-fit: contain; object-position: center; filter: brightness(.92) contrast(1.04); }
+.artwork-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,13,11,.25) 0%, transparent 30%, transparent 60%, rgba(15,13,11,.94) 100%); pointer-events:none; }
+.artwork-hero-info { position: absolute; bottom: 60px; left: 64px; z-index: 2; }
+.artwork-hero-info .tag { margin-bottom: 14px; }
+.artwork-hero-title { font-family: var(--serif); font-size: clamp(52px,8vw,100px); font-weight: 300; color: var(--p2); line-height: .95; letter-spacing: -.02em; }
+.artwork-hero-title em { font-style: italic; color: var(--g3); display: block; }
+.artwork-body { display: grid; grid-template-columns: 1fr 420px; gap: 80px; padding: 100px 64px; align-items: start; background: var(--ink); border-bottom: 1px solid rgba(189,179,168,.07); }
+.artwork-desc h2 { font-family: var(--serif); font-size: clamp(28px,3vw,40px); font-weight: 300; color: var(--p2); margin-bottom: 24px; line-height: 1.2; }
+.artwork-desc p { font-size: 15px; color: var(--g2); line-height: 1.9; margin-bottom: 16px; }
+.artwork-meta { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid rgba(189,179,168,.07); }
+.meta-item { padding: 20px 0; border-bottom: 1px solid rgba(189,179,168,.07); }
+.meta-label { font-size: 8px; font-weight: 400; letter-spacing: .25em; text-transform: uppercase; color: var(--g1); margin-bottom: 6px; }
+.meta-value { font-size: 13px; color: var(--p1); letter-spacing: .02em; }
+.purchase-sidebar { position: sticky; top: 100px; }
+.purchase-sidebar h3 { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--p2); margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid rgba(189,179,168,.07); }
+.purchase-options { display: flex; flex-direction: column; gap: 2px; }
+.purchase-option { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: var(--c1); border: 1px solid rgba(189,179,168,.06); transition: border-color .3s, background .3s; }
+.purchase-option:hover { border-color: rgba(189,179,168,.15); background: var(--c2); }
+.option-info { flex: 1; }
+.option-name { font-size: 13px; color: var(--p1); letter-spacing: .03em; margin-bottom: 3px; }
+.option-sub { font-size: 9px; color: var(--g1); letter-spacing: .12em; text-transform: uppercase; }
+.option-price { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--g3); margin: 0 20px; }
+.option-buy { padding: 10px 20px; background: var(--p2); color: var(--ink); font-size: 8px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; border: none; font-family: var(--sans); transition: background .3s; white-space: nowrap; cursor: pointer; }
+.option-buy:hover { background: var(--g3); }
+.purchase-note { margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(189,179,168,.07); font-size: 11px; color: var(--g1); line-height: 1.8; }
+.purchase-note a { color: var(--g2); text-decoration: underline; }
+.related { padding: 100px 64px; background: var(--c1); }
+.related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; margin-top: 48px; }
+.related-card { display: block; position: relative; overflow: hidden; background: var(--c2); }
+.related-card-img { aspect-ratio: 4/5; overflow: hidden; }
+.related-card-img img { width: 100%; height: 100%; object-fit: contain; background:var(--c2); filter: brightness(.9); transition: transform .8s var(--ease), filter .5s; }
+.related-card:hover .related-card-img img { transform: scale(1.03); filter: brightness(.96); }
+.related-card-info { padding: 18px 0 20px; }
+.related-card-name { font-family: var(--serif); font-size: 20px; font-weight: 300; color: var(--p1); margin-bottom: 4px; }
+.related-card-sub { font-size: 9px; color: var(--g1); letter-spacing: .15em; text-transform: uppercase; }
+@media (max-width:960px) {
   .artwork-hero-info{left:28px;bottom:40px;}
   .artwork-body{grid-template-columns:1fr;padding:60px 28px;gap:48px;}
   .purchase-sidebar{position:static;}
-  .series-strip{padding:48px 28px;}
-  .series-strip-inner{flex-direction:column;align-items:flex-start;gap:28px;}
   .related{padding:60px 28px;}
   .related-grid{grid-template-columns:1fr;}
-  .tagline-strip{padding:60px 28px;}
+  .purchase-option{flex-wrap:wrap;gap:12px;}
+  .option-price{margin:0;}
 }
 </style>
 </head>
@@ -86,173 +62,120 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <nav id="nav">
-  <a href="/" class="nav-mark"><span class="mark-g">G &middot; E</span><span class="mark-sub">Good Ereseh</span></a>
+  <a href="/" class="nav-mark"><span class="mark-g">G · E</span><span class="mark-sub">Good Ereseh</span></a>
   <ul class="nav-links">
     <li><a href="/gallery" class="active">Gallery</a></li>
     <li><a href="/about">About</a></li>
     <li><a href="/commissions">Commissions</a></li>
     <li><a href="/contact">Contact</a></li>
-    <li><a href="/commissions" class="nav-commission">Commission</a></li>
   </ul>
 </nav>
 
 <div class="artwork-hero">
-  <img src="/images/artwork/beyondtheseen3.jpg" alt="Between &mdash; Beyond the Seen series by Good Ereseh">
+  <img src="/images/artwork/beyondtheseen3.jpg" alt="Between — Beyond the Seen series by Good Ereseh">
   <div class="artwork-hero-info">
-    <div class="series-badge">
-      <span class="series-num">III of IV</span>
-      <span class="series-badge-sep"></span>
-      <span class="series-badge-text">Beyond the Seen</span>
-    </div>
+    <span class="tag">Conceptual Line Art · Beyond the Seen · III of IV</span>
     <h1 class="artwork-hero-title"><em>Between</em></h1>
   </div>
 </div>
 
-<div class="tagline-strip">
-  <blockquote>&ldquo;A line that connects nothing explicitly. It simply passes through. What you see between them is yours alone.&rdquo;</blockquote>
-</div>
-
 <section class="artwork-body">
   <div class="artwork-desc reveal">
-    <h2>What you see is yours alone.<br>No other viewer will see exactly this.</h2>
-    
-    <p>A line rises from below, curves at its peak, and descends &mdash; fluid, unhurried, alive. Two eye-lines float above it, and a smaller mark rests beneath, like a breath caught mid-exhale.</p>
-    <p>This is the most architectural of the four. The central line might be the bridge of a nose. It might be the spine of a person bowing. It might be the road between two people who no longer speak &mdash; visible from above, from the distance of memory.</p>
-    <p>The line connects nothing explicitly. It simply passes through.</p>
-    <p><em>Between</em> asks what lives in the space between two people when one of them is gone. Not in the dramatic aftermath, not in the acute wound of loss, but in the ordinary middle of a Tuesday afternoon when you reach for your phone to tell them something, and remember. That moment &mdash; the reaching &mdash; is what this drawing holds.</p>
-    <p>The eyes do not explain the line. The line does not explain the eyes. The artist drew what she could and left the rest to you. What you see between them is yours alone. No other viewer will see exactly what you see. That is not a flaw in the work. That is the work.</p>
-
+    <h2>What you see is yours alone.<br/>No other viewer will see exactly this.</h2>
+    <p>A line rises from below, curves at its peak, and descends — fluid, unhurried, alive. Two eye-lines float above it, and a smaller mark rests beneath, like a breath caught mid-exhale.</p>
+<p>This is the most architectural of the four. The central line might be the bridge of a nose. It might be the spine of a person bowing. It might be the road between two people who no longer speak — visible from above, from the distance of memory.</p>
+<p>The line connects nothing explicitly. It simply passes through.</p>
+<p><em>Between</em> asks what lives in the space between two people when one of them is gone. Not in the dramatic aftermath, not in the acute wound of loss, but in the ordinary middle of a Tuesday afternoon when you reach for your phone to tell them something, and remember. That moment — the reaching — is what this drawing holds.</p>
+<p>The eyes do not explain the line. The line does not explain the eyes. The artist drew what she could and left the rest to you. What you see between them is yours alone. No other viewer will see exactly what you see. That is not a flaw in the work. That is the work.</p>
     <div class="artwork-meta">
-      <div class="meta-row">
-        <div class="meta-item"><div class="meta-label">Category</div><div class="meta-value">Conceptual Line Art</div></div>
-        <div class="meta-item"><div class="meta-label">Style</div><div class="meta-value">Abstract Expressionism</div></div>
-      </div>
-      <div class="meta-row">
-        <div class="meta-item"><div class="meta-label">Medium</div><div class="meta-value">Charcoal pencil</div></div>
-        <div class="meta-item"><div class="meta-label">Surface</div><div class="meta-value">100% cotton paper</div></div>
-      </div>
-      <div class="meta-row">
-        <div class="meta-item"><div class="meta-label">Paper size</div><div class="meta-value">A1 (594 &times; 841mm)</div></div>
-        <div class="meta-item"><div class="meta-label">Perceived size</div><div class="meta-value highlight">Unmeasurable</div></div>
-      </div>
-      <div class="meta-row">
-        <div class="meta-item"><div class="meta-label">Series</div><div class="meta-value">Beyond the Seen</div></div>
-        <div class="meta-item"><div class="meta-label">Edition</div><div class="meta-value">Original &mdash; one only</div></div>
-      </div>
+      <div class="meta-item"><div class="meta-label">Category</div><div class="meta-value">Conceptual Line Art</div></div>
+      <div class="meta-item"><div class="meta-label">Style</div><div class="meta-value">Abstract Expressionism</div></div>
+      <div class="meta-item"><div class="meta-label">Paper Size</div><div class="meta-value">A1 · 594 × 841mm</div></div>
+      <div class="meta-item"><div class="meta-label">Artwork Size</div><div class="meta-value">Free-form composition</div></div>
+      <div class="meta-item"><div class="meta-label">Medium</div><div class="meta-value">Charcoal pencil</div></div>
+      <div class="meta-item"><div class="meta-label">Surface</div><div class="meta-value">100% cotton paper</div></div>
+      <div class="meta-item"><div class="meta-label">Series</div><div class="meta-value">Beyond the Seen · III of IV</div></div>
+      <div class="meta-item"><div class="meta-label">Edition</div><div class="meta-value">1 original · 4 print sizes</div></div>
     </div>
   </div>
 
   <div class="purchase-sidebar reveal d2">
-    <div class="purchase-header">
-      <div class="purchase-title">Between</div>
-      <div class="purchase-series">Beyond the Seen &middot; III of IV &middot; Original</div>
-    </div>
-
-    <div class="purchase-original">
-      <div class="purchase-original-label">Original artwork</div>
-      <div class="purchase-original-price">&pound;3,200</div>
-      <p class="purchase-original-note">
-        One original. No edition. No reproduction. Delivered in a black presentation box with Certificate of Authenticity and wax seal.
-      </p>
-      <a href="/purchase?product=beyond_between_original" class="btn-primary" style="display:block;text-align:center;padding:16px;">Purchase Original &rarr;</a>
-    </div>
-
-    <div class="purchase-prints">
-      <div class="purchase-prints-label">Fine art prints &mdash; archival cotton</div>
-      <div class="print-row">
-        <span class="print-size">A4 print <span style="color:var(--g0);font-size:10px;">&mdash; 210&times;297mm</span></span>
-        <a href="/purchase?product=beyond_between_print_A4" style="font-size:12px;color:var(--g2);text-decoration:underline;">&pound;85</a>
+    <h3>Collect This Work</h3>
+    <div class="purchase-options">
+      <div class="purchase-option">
+        <div class="option-info"><div class="option-name">Original Artwork</div><div class="option-sub">One of a kind · Signed · Certificate</div></div>
+        <div class="option-price">£3,200</div>
+        <a href="/purchase?product=beyond_between_original" class="option-buy">Purchase</a>
       </div>
-      <div class="print-row">
-        <span class="print-size">A3 print <span style="color:var(--g0);font-size:10px;">&mdash; 297&times;420mm</span></span>
-        <a href="/purchase?product=beyond_between_print_A3" style="font-size:12px;color:var(--g2);text-decoration:underline;">&pound;150</a>
+      <div class="purchase-option">
+        <div class="option-info"><div class="option-name">Fine Art Print A4</div><div class="option-sub">210 × 297mm · Archival</div></div>
+        <div class="option-price">£85</div>
+        <a href="/purchase?product=beyond_between_print_A4" class="option-buy">Purchase</a>
       </div>
-      <div class="print-row">
-        <span class="print-size">A2 print <span style="color:var(--g0);font-size:10px;">&mdash; 420&times;594mm</span></span>
-        <a href="/purchase?product=beyond_between_print_A2" style="font-size:12px;color:var(--g2);text-decoration:underline;">&pound;275</a>
+      <div class="purchase-option">
+        <div class="option-info"><div class="option-name">Fine Art Print A3</div><div class="option-sub">297 × 420mm · Archival</div></div>
+        <div class="option-price">£150</div>
+        <a href="/purchase?product=beyond_between_print_A3" class="option-buy">Purchase</a>
       </div>
-      <div class="print-row">
-        <span class="print-size">A1 print <span style="color:var(--g0);font-size:10px;">&mdash; 594&times;841mm</span></span>
-        <a href="/purchase?product=beyond_between_print_A1" style="font-size:12px;color:var(--g2);text-decoration:underline;">&pound;450</a>
+      <div class="purchase-option">
+        <div class="option-info"><div class="option-name">Fine Art Print A2</div><div class="option-sub">420 × 594mm · Archival</div></div>
+        <div class="option-price">£275</div>
+        <a href="/purchase?product=beyond_between_print_A2" class="option-buy">Purchase</a>
+      </div>
+      <div class="purchase-option">
+        <div class="option-info"><div class="option-name">Fine Art Print A1</div><div class="option-sub">594 × 841mm · Archival</div></div>
+        <div class="option-price">£450</div>
+        <a href="/purchase?product=beyond_between_print_A1" class="option-buy">Purchase</a>
       </div>
     </div>
-
-    <p style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(189,179,168,.07);font-size:11px;color:var(--g1);line-height:1.8;">
-      Collect the complete series of four for &pound;11,000.<br>
-      <a href="/contact" style="color:var(--g2);text-decoration:underline;">Enquire about the full series &rarr;</a>
+    <p class="purchase-note">
+      All prints are produced on archival cotton paper. The original is signed and delivered with a Certificate of Authenticity.<br><br>
+      Complete Beyond the Seen series: £11,000.<br>
+      Questions? <a href="mailto:art@goodereseh.com">art@goodereseh.com</a>
     </p>
   </div>
 </section>
 
-<div class="series-strip">
-  <div class="series-strip-inner">
-    <div class="series-strip-info">
-      <h3>Beyond the Seen &mdash; Series of Four</h3>
-      <p>Four original works. One unfinished thought. Each piece belongs to the person who stands in front of it. Together they describe something language has no word for.</p>
-    </div>
-    <div class="series-links">
-      <a href="/artworks/still" class="series-link">I</a><a href="/artworks/weight-of-water" class="series-link">II</a><a href="/artworks/keeper" class="series-link">IV</a>
-    </div>
-  </div>
-</div>
-
 <section class="related">
   <div class="section-header reveal">
-    <div><p class="eyebrow">The series</p><h2 class="section-title">Other works in<br>Beyond the Seen</h2></div>
-    <a href="/gallery" class="btn-ghost"><span class="arr">&rarr;</span> Full collection</a>
+    <div><p class="eyebrow">Beyond the Seen</p><h2 class="section-title">Explore the series</h2></div>
+    <a href="/gallery" class="btn-ghost"><span class="arr">→</span> Full collection</a>
   </div>
   <div class="related-grid">
-    <a href="/artworks/still" class="related-card reveal d1">
-      <div class="related-card-img"><img src="/images/artwork/beyondtheseen1.jpg" alt="Still"></div>
-      <div class="related-card-info">
-        <div class="related-card-name">Still</div>
-        <div class="related-card-sub">Beyond the Seen &middot; I of IV</div>
-      </div>
-    </a>
-    <a href="/artworks/weight-of-water" class="related-card reveal d2">
-      <div class="related-card-img"><img src="/images/artwork/beyondtheseen2.jpg" alt="The Weight of Water"></div>
-      <div class="related-card-info">
-        <div class="related-card-name">The Weight of Water</div>
-        <div class="related-card-sub">Beyond the Seen &middot; II of IV</div>
-      </div>
-    </a>
-    <a href="/artworks/keeper" class="related-card reveal d3">
-      <div class="related-card-img"><img src="/images/artwork/beyondtheseen4.jpg" alt="The Keeper"></div>
-      <div class="related-card-info">
-        <div class="related-card-name">The Keeper</div>
-        <div class="related-card-sub">Beyond the Seen &middot; IV of IV</div>
-      </div>
-    </a>
+    <a href="/artworks/still" class="related-card reveal"><div class="related-card-img"><img src="/images/artwork/beyondtheseen1.jpg" alt="Still"></div><div class="related-card-info"><div class="related-card-name">Still</div><div class="related-card-sub">Beyond the Seen · I of IV</div></div></a>
+<a href="/artworks/weight-of-water" class="related-card reveal"><div class="related-card-img"><img src="/images/artwork/beyondtheseen2.jpg" alt="The Weight of Water"></div><div class="related-card-info"><div class="related-card-name">The Weight of Water</div><div class="related-card-sub">Beyond the Seen · II of IV</div></div></a>
+<a href="/artworks/keeper" class="related-card reveal"><div class="related-card-img"><img src="/images/artwork/beyondtheseen4.jpg" alt="The Keeper"></div><div class="related-card-info"><div class="related-card-name">The Keeper</div><div class="related-card-sub">Beyond the Seen · IV of IV</div></div></a>
   </div>
 </section>
 
 <footer class="footer-mono">
-  <div class="footer-glyph" aria-hidden="true">G &middot; E</div>
-  <div class="footer-social">
-    <a href="https://www.instagram.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-    <a href="https://www.youtube.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
-    <a href="https://www.tiktok.com/@gooderese" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg></a>
-    <a href="https://www.facebook.com/gooderese" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-  </div>
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
   <div class="footer-grid">
     <div class="footer-col"><h5>Navigate</h5><ul><li><a href="/gallery">Gallery</a></li><li><a href="/about">About</a></li><li><a href="/commissions">Commissions</a></li><li><a href="/contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Beyond the Seen</h5><ul><li><a href="/artworks/still">Still</a></li><li><a href="/artworks/weight-of-water">The Weight of Water</a></li><li><a href="/artworks/between">Between</a></li><li><a href="/artworks/keeper">The Keeper</a></li></ul></div>
-    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission a portrait</a></li><li><a href="/legal.html">Legal &amp; Policies</a></li></ul></div>
+    <div class="footer-col"><h5>Collect</h5><ul><li><a href="/artworks/still">Still</a></li><li><a href="/artworks/weight-of-water">The Weight of Water</a></li><li><a href="/artworks/between">Between</a></li><li><a href="/artworks/keeper">The Keeper</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li><li><a href="/commissions">Commission an artwork</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms-and-conditions">Terms</a></li></ul></div>
   </div>
-  <div class="footer-base"><span>&copy; 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/legal.html">Policies</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-and-conditions.html">Terms</a></div></div>
+  <div class="footer-base"><span>© 2026 Good Ereseh. All Rights Reserved.</span><div class="footer-legal"><a href="/privacy-policy">Privacy</a><a href="/terms-and-conditions">Terms</a><a href="/cookie-policy">Cookies</a></div></div>
 </footer>
 
 <script>
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
-const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
-if(window.matchMedia('(pointer: fine)').matches){
-  let mx=0,my=0,rx=0,ry=0,tt=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';clearTimeout(tt);tt=setTimeout(()=>{const t=document.createElement('div');t.className='cursor-trail';t.style.left=mx+'px';t.style.top=my+'px';document.body.appendChild(t);t.addEventListener('animationend',()=>t.remove());},16);});
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
-  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    if(dot){dot.style.left=mx+'px';dot.style.top=my+'px';}
+  });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;if(ring){ring.style.left=rx+'px';ring.style.top=ry+'px';}requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
 }
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}){threshold:.08});
+const obs = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
