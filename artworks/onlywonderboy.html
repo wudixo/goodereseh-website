@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Only Wonder Boy — a private commissioned charcoal and graphite portrait by Good Ereseh.">
+<title>Only Wonder Boy — Good Ereseh</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/v3.css">
+
+<style>
+.artwork-hero{height:80vh;min-height:600px;position:relative;overflow:hidden;background:var(--c2)}
+.artwork-hero img{width:100%;height:100%;object-fit:contain;object-position:center;background:var(--c2);filter:brightness(.94) contrast(1.04)}
+.artwork-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,13,11,.2) 0%,transparent 30%,transparent 60%,rgba(15,13,11,.94) 100%);pointer-events:none}
+.artwork-hero-info{position:absolute;bottom:60px;left:64px;z-index:2}
+.artwork-hero-info .tag{margin-bottom:14px}
+.artwork-hero-title{font-family:var(--serif);font-size:clamp(52px,8vw,100px);font-weight:300;color:var(--p2);line-height:.95;letter-spacing:-.02em}
+.artwork-hero-title em{font-style:italic;color:var(--g3);display:block}
+
+.artwork-body{display:grid;grid-template-columns:1fr 420px;gap:80px;padding:100px 64px;align-items:start;background:var(--ink);border-bottom:1px solid rgba(189,179,168,.07)}
+.artwork-desc h2{font-family:var(--serif);font-size:clamp(28px,3vw,40px);font-weight:300;color:var(--p2);margin-bottom:24px;line-height:1.2}
+.artwork-desc p{font-size:15px;color:var(--g2);line-height:1.9;margin-bottom:16px}
+.artwork-meta{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(189,179,168,.07)}
+.meta-item{padding:20px 0;border-bottom:1px solid rgba(189,179,168,.07)}
+.meta-label{font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--g1);margin-bottom:6px}
+.meta-value{font-size:13px;color:var(--p1);letter-spacing:.02em}
+
+.commission-sidebar{position:sticky;top:100px}
+.commission-sidebar h3{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--p2);margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(189,179,168,.07)}
+.private-box{padding:28px;background:var(--c1);border:1px solid rgba(189,179,168,.12);margin-bottom:22px}
+.private-label{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--g3);margin-bottom:14px}
+.private-title{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--p2);margin-bottom:16px}
+.private-line{font-size:11px;color:var(--g2);line-height:1.9;border-top:1px solid rgba(189,179,168,.07);padding-top:14px;margin-top:14px}
+.commission-cta{display:block;text-align:center;padding:15px 22px;background:var(--p2);color:var(--ink);font-size:9px;letter-spacing:.2em;text-transform:uppercase;transition:background .3s;cursor:pointer}
+.commission-cta:hover{background:var(--g3)}
+.commission-note{margin-top:20px;font-size:11px;color:var(--g1);line-height:1.8}
+
+@media(max-width:960px){
+.artwork-hero-info{left:28px;bottom:40px}
+.artwork-body{grid-template-columns:1fr;padding:60px 28px;gap:48px}
+.commission-sidebar{position:static}
+}
+</style>
+</head>
+
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="nav">
+  <a href="/" class="nav-mark">
+    <span class="mark-g">G · E</span>
+    <span class="mark-sub">Good Ereseh</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/gallery" class="active">Gallery</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/commissions">Commissions</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="artwork-hero">
+  <img src="/images/artwork/onlywonderboy.jpg" alt="Only Wonder Boy — commissioned portrait by Good Ereseh">
+  <div class="artwork-hero-info">
+    <span class="tag">Private Commission · Sweden</span>
+    <h1 class="artwork-hero-title"><em>Only Wonder Boy</em></h1>
+  </div>
+</div>
+
+<section class="artwork-body">
+
+  <div class="artwork-desc reveal">
+    <h2>A personal portrait built around presence, expression and character.</h2>
+
+    <p>
+      <em>Only Wonder Boy</em> is a commissioned portrait created for a private collector in Sweden.
+    </p>
+
+    <p>
+      The composition places the subject close to the viewer, framed by the dark folds of his hood. His direct gaze becomes the centre of the work, while the deep charcoal surrounding the face creates contrast against the softer graphite transitions of the skin.
+    </p>
+
+    <p>
+      Created over 18 hours using charcoal and graphite pencil, the portrait focuses on expression, texture and presence. The close composition gives the work an intimate quality, capturing not only physical likeness but the character and confidence carried in the subject's expression.
+    </p>
+
+    <p>
+      Created as a personal commission, this original belongs to a private collection in Sweden and is not available for sale or reproduction.
+    </p>
+
+    <div class="artwork-meta">
+      <div class="meta-item"><div class="meta-label">Category</div><div class="meta-value">Commissioned Portrait</div></div>
+      <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">Private Commission</div></div>
+      <div class="meta-item"><div class="meta-label">Subject</div><div class="meta-value">Only Wonder Boy</div></div>
+      <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Sweden</div></div>
+      <div class="meta-item"><div class="meta-label">Medium</div><div class="meta-value">Charcoal and graphite pencil</div></div>
+      <div class="meta-item"><div class="meta-label">Surface</div><div class="meta-value">Paper</div></div>
+      <div class="meta-item"><div class="meta-label">Time to Create</div><div class="meta-value">18 hours</div></div>
+      <div class="meta-item"><div class="meta-label">Availability</div><div class="meta-value">Private Collection · Not for Sale</div></div>
+    </div>
+  </div>
+
+  <aside class="commission-sidebar reveal d2">
+    <h3>Commissioned Work</h3>
+
+    <div class="private-box">
+      <div class="private-label">Private Commission</div>
+      <div class="private-title">Not For Sale</div>
+      <div class="private-line">
+        Original artwork commissioned for a private collector in Sweden.<br>
+        No prints or reproductions are available.
+      </div>
+    </div>
+
+    <a href="/commissions" class="commission-cta">Commission Your Portrait</a>
+
+    <p class="commission-note">
+      Personal portrait commissions are created individually from approved reference photographs and tailored to the collector's brief.
+    </p>
+  </aside>
+
+</section>
+
+<footer class="footer-mono">
+  <div class="footer-glyph" aria-hidden="true">G · E</div>
+
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/commissions">Commissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:art@goodereseh.com">art@goodereseh.com</a></li>
+        <li><a href="/commissions">Commission a portrait</a></li>
+        <li><a href="/privacy-policy">Privacy</a></li>
+        <li><a href="/terms-and-conditions">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-base">
+    <span>© 2026 Good Ereseh. All Rights Reserved.</span>
+    <div class="footer-legal">
+      <a href="/privacy-policy">Privacy</a>
+      <a href="/terms-and-conditions">Terms</a>
+      <a href="/cookie-policy">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+if(nav){
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+}
+
+const dot=document.getElementById('cursorDot');
+const ring=document.getElementById('cursorRing');
+
+if(window.matchMedia('(pointer: fine)').matches){
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    if(dot){dot.style.left=mx+'px';dot.style.top=my+'px';}
+  });
+
+  (function loop(){
+    rx+=(mx-rx)*.12;
+    ry+=(my-ry)*.12;
+    if(ring){ring.style.left=rx+'px';ring.style.top=ry+'px';}
+    requestAnimationFrame(loop);
+  })();
+
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+}
+
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting){
+    e.target.classList.add('in');
+    obs.unobserve(e.target);
+  }
+}),{threshold:.08});
+
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
